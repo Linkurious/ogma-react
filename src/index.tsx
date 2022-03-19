@@ -1,3 +1,1 @@
-export * from "./map";
-export * from "./geojson";
-export * from "./popup";
+export { Ogma } from "./ogma";

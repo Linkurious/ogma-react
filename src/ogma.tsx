@@ -1,66 +1,68 @@
-import React from "react";
-import mapboxgl, { MapboxOptions } from "mapbox-gl";
-import { MapContext } from "./context";
+import React, { useState, useEffect, useLayoutEffect, FC } from "react";
+import OgmaLib, { Options as OgmaOptions } from "@linkurious/ogma";
+import { OgmaContext } from "./context";
 
-export interface MapboxMapProps {
-  token: string;
-  mapboxOptions: Partial<MapboxOptions>;
-  onStyleLoad?: (
-    map: mapboxgl.Map,
-    evt: mapboxgl.MapboxEvent<undefined> & mapboxgl.EventData
-  ) => null;
-  control?: string;
-  scrollZoom?: boolean;
+interface OgmaProps {
+  options: Partial<OgmaOptions>;
+  // onEvent?: (
+  //   //evt: OgmaEvent<undefined>
+  //   ogma: OgmaLib
+  // ) => null;
+  onReady?: (ogma: OgmaLib) => void;
 }
 
-export const MapboxMap: React.FC<MapboxMapProps> = ({
-  token,
-  mapboxOptions,
+export const Ogma: FC<OgmaProps> = ({
+  options,
   children,
-  onStyleLoad,
-  control,
-  scrollZoom,
+  //onStyleLoad,
+  //control,
+  //scrollZoom,
+  onReady,
 }) => {
-  const [ready, setReady] = React.useState(false);
-  const [map, setMap] = React.useState<mapboxgl.Map | undefined>();
-  const [container, setContainer] = React.useState<HTMLDivElement | null>();
+  console.log("Ogma", options, useState);
+  const [ready, setReady] = useState(false);
+  const [ogma, setOgma] = useState<OgmaLib | undefined>();
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (container) {
-      mapboxgl.accessToken = token;
-      const map = new mapboxgl.Map({
+      const instance = new OgmaLib({
         container,
-        ...mapboxOptions,
+        graph: { nodes: [{ attributes: { color: "red" } }], edges: [] },
+        ...options,
       });
 
-      if (control) {
-        map.addControl(new mapboxgl.NavigationControl(), "bottom-left");
-      }
+      // if (control) {
+      //   map.addControl(new mapboxgl.NavigationControl(), "bottom-left");
+      // }
 
-      if (scrollZoom === false) {
-        map.scrollZoom.disable();
-      }
+      //ogma.events.once((evt) => {
+      // ... some async stuff
+      //});
 
-      map.on("load", (evt) => {
-        setReady(true);
-
-        if (onStyleLoad) {
-          onStyleLoad(map, evt);
-        }
-      });
-
-      setMap(map);
+      setOgma(instance);
+      setReady(true);
+      if (onReady) onReady(instance);
     }
-  }, [setMap, container]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setOgma, container]);
+
+  // resize handler
+  useLayoutEffect(() => {
+    const updateSize = () => ogma?.view.forceResize();
+    updateSize();
+
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   return (
-    <MapContext.Provider value={map}>
+    <OgmaContext.Provider value={ogma}>
       <div
         style={{ width: "100%", height: "100%" }}
-        ref={(x) => setContainer(x)}
+        ref={(containerRef) => setContainer(containerRef)}
       >
         {ready && children}
       </div>
-    </MapContext.Provider>
+    </OgmaContext.Provider>
   );
 };

@@ -1,65 +1,53 @@
-import mapboxgl from "mapbox-gl";
-import React from "react";
+import Ogma, { Point } from "@linkurious/ogma";
+import { FC, useEffect, useState } from "react";
 import { renderToString } from "react-dom/server";
-import { uuidv4 } from "./uuid";
-import { withMap } from "./context";
+import { withOgma } from "./context";
 
-export interface PopUpProps {
+export interface TooltipProps {
   id?: string;
-  lnglat: mapboxgl.LngLat;
-  map: mapboxgl.Map;
-  closeOnClick: boolean;
-  closeButton: boolean;
+  position: Point;
+  ogma: Ogma;
 }
 
-const PopUpComponent: React.FunctionComponent<PopUpProps> = ({
-  id = uuidv4(),
-  lnglat,
-  map,
-  closeButton,
-  closeOnClick,
+const TooltipComponent: FC<TooltipProps> = ({
+  //id = uuidv4(),
+  position,
+  //ogma,
   children,
 }) => {
-  const [popup, setPopup] = React.useState<any>(null);
-  const [newLnglat, setNewLnglat] = React.useState<mapboxgl.LngLat | undefined>(
-    undefined
-  );
-  const [newHtml, setNewHtml] = React.useState<string | undefined>(undefined);
+  const [Tooltip, setTooltip] = useState<any>(null);
+  const [newPosition, setNewPosition] = useState<Point | undefined>(undefined);
+  const [newHtml, setNewHtml] = useState<string | undefined>(undefined);
 
-  React.useEffect(() => {
-    if (!popup) {
-      const popupNew = new mapboxgl.Popup({
-        closeButton: closeButton,
-        closeOnClick: closeOnClick,
-      });
-
-      const htmlString = renderToString(children as any);
-      popupNew.setLngLat(lnglat).setHTML(htmlString).addTo(map);
-      setPopup(popupNew);
-      setNewLnglat(lnglat);
-      setNewHtml(htmlString);
+  useEffect(() => {
+    if (!Tooltip) {
+      // const TooltipNew = new Tooltip({
+      // });
+      // const htmlString = renderToString(children as any);
+      // TooltipNew.setLngLat(position).setHTML(htmlString).addTo(ogma);
+      // setTooltip(TooltipNew);
+      // setNewPosition(position);
+      // setNewHtml(htmlString);
     }
 
     return () => {
-      if (popup) {
-        popup.remove();
-      }
+      if (Tooltip) Tooltip.remove();
     };
-  }, [popup, setPopup, setNewLnglat, setNewHtml]);
+  }, [Tooltip, setTooltip, setNewPosition, setNewHtml]);
 
-  if (popup) {
+  if (Tooltip) {
     const htmlString = renderToString(children as any);
     if (htmlString !== newHtml) {
-      setNewHtml(htmlString);
-      popup.setHTML(htmlString);
-      // console.log({ htmlString, newHtml });
-    } else if (lnglat !== newLnglat) {
-      setNewLnglat(lnglat);
-      popup.setLngLat(newLnglat);
+      // setNewHtml(htmlString);
+      // Tooltip.setHTML(htmlString);
+      // // console.log({ htmlString, newHtml });
+    } else if (position !== newPosition) {
+      // setNewPosition(position);
+      // Tooltip.setLngLat(newPosition);
     }
   }
 
   return null;
 };
 
-export const PopUp = withMap<PopUpProps>(PopUpComponent);
+export const Tooltip = withOgma<TooltipProps>(TooltipComponent);

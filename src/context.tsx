@@ -11,7 +11,7 @@ interface OutputProps {
 
 export interface InputProps {}
 
-export function withMap<T>(Component: FC<Omit<T, "ogma"> & OutputProps>) {
+export function withOgma<T>(Component: FC<Omit<T, "ogma"> & OutputProps>) {
   const WrappedComponent: FC<Omit<T, "ogma"> & InputProps> = (props) => {
     return (
       <OgmaContext.Consumer>
