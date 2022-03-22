@@ -1,44 +1,42 @@
-import React, { useState, useEffect, useLayoutEffect, FC } from "react";
-import OgmaLib, { Options as OgmaOptions } from "@linkurious/ogma";
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  PropsWithChildren,
+} from "react";
+import OgmaLib, { Options as OgmaOptions, RawGraph } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 
-interface OgmaProps {
+interface OgmaProps<ND, ED> {
   options: Partial<OgmaOptions>;
   // onEvent?: (
   //   //evt: OgmaEvent<undefined>
   //   ogma: OgmaLib
   // ) => null;
   onReady?: (ogma: OgmaLib) => void;
+  graph?: RawGraph<ND, ED>;
 }
 
-export const Ogma: FC<OgmaProps> = ({
+export const Ogma = <ND, ED>({
   options,
   children,
+  graph,
   //onStyleLoad,
   //control,
   //scrollZoom,
   onReady,
-}) => {
-  console.log("Ogma", options, useState);
+}: PropsWithChildren<OgmaProps<ND, ED>>) => {
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (container) {
-      const instance = new OgmaLib({
+      const instance = new OgmaLib<ND, ED>({
         container,
-        graph: { nodes: [{ attributes: { color: "red" } }], edges: [] },
+        graph,
         ...options,
       });
-
-      // if (control) {
-      //   map.addControl(new mapboxgl.NavigationControl(), "bottom-left");
-      // }
-
-      //ogma.events.once((evt) => {
-      // ... some async stuff
-      //});
 
       setOgma(instance);
       setReady(true);

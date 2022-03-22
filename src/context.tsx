@@ -1,17 +1,23 @@
-import React, { createContext, Context, FC } from "react";
+import React, { createContext, useContext, Context, FC } from "react";
 import Ogma from "@linkurious/ogma";
+
+export function createOgmaContext<ND = unknown, ED = unknown>() {
+  return createContext<{ ogma?: Ogma<ND, ED> } | null>(null);
+}
 
 export const OgmaContext = createContext(undefined) as Context<
   Ogma | undefined
 >;
 
-interface OutputProps {
-  ogma: Ogma;
+interface OutputProps<ND, ED> {
+  ogma: Ogma<ND, ED>;
 }
 
 export interface InputProps {}
 
-export function withOgma<T>(Component: FC<Omit<T, "ogma"> & OutputProps>) {
+export function withOgma<T, ND = unknown, ED = unknown>(
+  Component: FC<Omit<T, "ogma"> & OutputProps<ND, ED>>
+) {
   const WrappedComponent: FC<Omit<T, "ogma"> & InputProps> = (props) => {
     return (
       <OgmaContext.Consumer>
@@ -22,3 +28,9 @@ export function withOgma<T>(Component: FC<Omit<T, "ogma"> & OutputProps>) {
 
   return WrappedComponent;
 }
+
+export const useOgma = <ND, ED>(): Ogma<ND, ED> => {
+  const ogma = useContext(OgmaContext);
+  if (!ogma) throw new Error("useOgma must be used within an OgmaProvider");
+  return ogma;
+};
