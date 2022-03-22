@@ -30,7 +30,7 @@ export default function App() {
         <EdgeStyleRule attributes={{ color: "blue" }} />
         <LayoutService />
         <Tooltip
-          position={{ x: 100, y: 200 }}
+          position={{ x: 0, y: 10 }}
           content={'<div class="x">ttp</div>'}
         />
         <NodeGrouping

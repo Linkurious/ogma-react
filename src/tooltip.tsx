@@ -1,7 +1,7 @@
 import Ogma, { Point, Size, Overlay } from "@linkurious/ogma";
 import { FC, ReactNode, useEffect, useState } from "react";
 import { renderToString } from "react-dom/server";
-import { withOgma } from "./context";
+import { useOgma, withOgma } from "./context";
 
 type PositionGetter = (ogma: Ogma) => Point | null;
 
@@ -15,7 +15,6 @@ export interface TooltipProps {
   position: Point | PositionGetter;
   content?: Content;
   size?: Size;
-  ogma: Ogma;
 }
 
 function getContent(
@@ -35,25 +34,29 @@ function getPosition(position: Point | PositionGetter, ogma: Ogma) {
   return position;
 }
 
-const TooltipComponent: FC<TooltipProps> = ({
+export const Tooltip: FC<TooltipProps> = ({
   //id = uuidv4(),
   content,
   position,
-  ogma,
-  size = { width: 200, height: 100 },
+  size = { width: 100, height: "auto" } as any as Size,
   children,
 }) => {
+  const ogma = useOgma();
   const [tooltip, setTooltip] = useState<Overlay | null>(null);
   const [newPosition, setNewPosition] = useState<Point>({ x: 0, y: 0 });
-  const [newHtml, setNewHtml] = useState<string>("<div></div>");
+  const [newHtml, setNewHtml] = useState<string>(`<div class="ogma-tooltip"/>`);
 
   useEffect(() => {
     if (!tooltip) {
+      console.log(newHtml);
       const tooltipLayer = ogma.layers.addOverlay({
         position: newPosition,
         element: newHtml,
         size,
+        scaled: false,
       });
+      // @ts-ignore
+      //window.tooltipLayer = tooltipLayer;
       // const TooltipNew = new Tooltip({
       // });
       // const htmlString = renderToString(children as any);
@@ -84,7 +87,7 @@ const TooltipComponent: FC<TooltipProps> = ({
     if (html !== newHtml) {
       console.log("render", html);
       setNewHtml(html);
-      tooltip; //.setElement(html);
+      tooltip.element.innerHTML = html;
     }
 
     if (position !== newPosition) {
@@ -96,5 +99,3 @@ const TooltipComponent: FC<TooltipProps> = ({
 
   return null;
 };
-
-export const Tooltip = withOgma<TooltipProps>(TooltipComponent);

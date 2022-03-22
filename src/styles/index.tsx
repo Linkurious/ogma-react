@@ -6,7 +6,7 @@ import Ogma, {
   StyleRule,
 } from "@linkurious/ogma";
 import { useEffect, RefCallback } from "react";
-import { useOgma } from "./context";
+import { useOgma } from "../context";
 
 interface WithRuleRef<ND, ED> {
   ruleRef?: RefCallback<StyleRule<ND, ED>>;
