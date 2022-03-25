@@ -1,0 +1,45 @@
+{
+  "name": "@linkurious/ogma-react",
+  "version": "0.0.1",
+  "description": "A light adaptation of Ogma for React application",
+  "main": "dist/index.js",
+  "module": "dist/index-esm.js",
+  "typings": "./dist/index.d.ts",
+  "private": false,
+  "files": [
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "example": "typehead serve"
+  },
+  "peerDependencies": {
+    "@linkurious/ogma": "^4.0.9",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.5.4"
+  },
+  "devDependencies": {
+    "@mapbox/typehead": "^1.1.0",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.21",
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linkurious/ogma-react.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/linkurious/ogma-react/issues"
+  },
+  "homepage": "https://github.com/linkurious/ogma-react#readme"
+}

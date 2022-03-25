@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.App {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+:root {
+  --overlay-background-color: #282c34;
+  --overlay-text-color: #61dafb;
+}
+
+.ogma-tooltip,
+.ogma-popup {
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.ogma-tooltip--body,
+.ogma-popup--body {
+  transform: translate(-50%, 0);
+  background-color: var(--overlay-background-color);
+  color: var(--overlay-text-color);
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 12%);
+  width: auto;
+  height: auto;
+  position: relative;
+}
+
+.ogma-popup--body {
+  transform: translate(-50%, -100%);
+}
+
+.ogma-popup--body:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 7px 6px 0;
+  border-color: transparent var(--overlay-background-color) transparent
+    transparent;
+  position: absolute;
+  left: 50%;
+  top: auto;
+  bottom: 3px;
+  right: auto;
+  transform: translate(-50%, 100%) rotate(270deg);
+}
+
+.ogma-popup--close {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.ogma-popup--top .ogma-popup--body {
+  bottom: 3px;
+}
+
+.ogma-popup--content {
+  padding: 10px;
+}
