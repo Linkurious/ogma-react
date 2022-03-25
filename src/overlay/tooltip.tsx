@@ -1,20 +1,22 @@
 import Ogma, { Point, Size, Overlay } from "@linkurious/ogma";
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState, ReactElement } from "react";
 import { renderToString } from "react-dom/server";
-import { useOgma, withOgma } from "./context";
+import { useOgma } from "../context";
 
 type PositionGetter = (ogma: Ogma) => Point | null;
 
 type Content =
   | string
-  | JSX.Element
-  | ((ogma: Ogma, position: Point) => JSX.Element);
+  | ReactElement
+  | ((ogma: Ogma, position: Point) => ReactElement);
 
 export interface TooltipProps {
   id?: string;
   position: Point | PositionGetter;
   content?: Content;
   size?: Size;
+  sticky?: boolean;
+  placement?: "top" | "bottom" | "left" | "right" | "center";
 }
 
 function getContent(
@@ -40,6 +42,7 @@ export const Tooltip: FC<TooltipProps> = ({
   position,
   size = { width: 100, height: "auto" } as any as Size,
   children,
+  placement = "center",
 }) => {
   const ogma = useOgma();
   const [tooltip, setTooltip] = useState<Overlay | null>(null);
@@ -73,12 +76,16 @@ export const Tooltip: FC<TooltipProps> = ({
   }, [tooltip, setTooltip, setNewPosition, setNewHtml]);
 
   useEffect(() => {
-    if (typeof position === "function") {
-      const pos = position(ogma);
-      if (pos) setNewPosition(pos);
-    } else setNewPosition(position);
+    const pos = getPosition(position, ogma);
+    console.log(pos);
+    // if (pos === null) tooltip.hide();
+    // else tooltip.show().setPosition(pos);
+    // if (typeof position === "function") {
+    //   const pos = position(ogma);
+    //   if (pos) setNewPosition(pos);
+    // } else setNewPosition(position);
 
-    if (tooltip) tooltip.setPosition(newPosition);
+    if (tooltip) tooltip.show().setPosition(newPosition);
     //tooltip.setPosition(newPosition);
   }, [tooltip, position, newPosition, content]);
 
