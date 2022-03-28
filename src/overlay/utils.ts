@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { renderToString } from "react-dom/server";
 import Ogma, { Point } from "@linkurious/ogma";
-import { Content, PositionGetter } from "./types";
+import { Content, PositionGetter, Placement } from "./types";
 
 export function getContent(
   ogma: Ogma,
@@ -19,3 +19,6 @@ export function getPosition(position: Point | PositionGetter, ogma: Ogma) {
   if (typeof position === "function") return position(ogma);
   return position;
 }
+
+export const getContainerClass = (popupClass: string, placement: Placement) =>
+  `${popupClass} ${popupClass}--${placement}`;

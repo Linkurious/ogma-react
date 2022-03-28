@@ -1,7 +1,8 @@
 import Ogma, { Point, Size, Overlay } from "@linkurious/ogma";
-import { FC, ReactNode, useEffect, useState, ReactElement } from "react";
-import { renderToString } from "react-dom/server";
+import { FC, useEffect, useState, ReactElement } from "react";
 import { useOgma } from "../context";
+import { Placement } from "./types";
+import { getContainerClass, getContent, getPosition } from "./utils";
 
 type PositionGetter = (ogma: Ogma) => Point | null;
 
@@ -16,24 +17,8 @@ export interface TooltipProps {
   content?: Content;
   size?: Size;
   sticky?: boolean;
-  placement?: "top" | "bottom" | "left" | "right" | "center";
-}
-
-function getContent(
-  ogma: Ogma,
-  position: Point,
-  content?: Content,
-  children?: ReactNode
-): string {
-  if (typeof content === "string") return content;
-  else if (typeof content === "function")
-    return renderToString(content(ogma, position));
-  return renderToString(children as any);
-}
-
-function getPosition(position: Point | PositionGetter, ogma: Ogma) {
-  if (typeof position === "function") return position(ogma);
-  return position;
+  placement?: Placement;
+  tooltipClass?: string;
 }
 
 export const Tooltip: FC<TooltipProps> = ({
@@ -43,11 +28,14 @@ export const Tooltip: FC<TooltipProps> = ({
   size = { width: 100, height: "auto" } as any as Size,
   children,
   placement = "center",
+  tooltipClass = "ogma-tooltip",
 }) => {
   const ogma = useOgma();
   const [tooltip, setTooltip] = useState<Overlay | null>(null);
   const [newPosition, setNewPosition] = useState<Point>({ x: 0, y: 0 });
-  const [newHtml, setNewHtml] = useState<string>(`<div class="ogma-tooltip"/>`);
+  const [newHtml, setNewHtml] = useState<string>(
+    `<div class="${getContainerClass(tooltipClass, placement)}"/>`
+  );
 
   useEffect(() => {
     if (!tooltip) {

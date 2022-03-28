@@ -1,11 +1,10 @@
 import { useEffect, useState, ReactNode, FC, ReactElement } from "react";
-import { useOgma } from "../context";
+
 import Ogma, { Overlay, Size, Point } from "@linkurious/ogma";
-
-import { getContent, getPosition } from "./utils";
+import { useOgma } from "../context";
+import { getContent, getPosition, getContainerClass } from "./utils";
 import { noop } from "../utils";
-
-type Placement = "top" | "bottom" | "left" | "right" | "center";
+import { Placement } from "./types";
 
 interface PopupProps {
   content?: string | ReactElement;
@@ -15,6 +14,7 @@ interface PopupProps {
   closeButton?: ReactNode;
   onClose?: () => void;
   placement?: Placement;
+  closeOnEsc?: boolean;
 
   popupClass?: string;
   contentClass?: string;
@@ -30,9 +30,6 @@ const POPUP_CLOSE_BUTTON_CLASS = "ogma-popup--close";
 const POPUP_BODY_CLASS = "ogma-popup--body";
 const POPUP_CLASS = "ogma-popup";
 
-const getContainerClass = (popupClass: string, placement: Placement) =>
-  `${popupClass} ${popupClass}--${placement}`;
-
 export const Popup: FC<PopupProps> = ({
   content,
   position,
@@ -44,6 +41,8 @@ export const Popup: FC<PopupProps> = ({
   closeButtonClass = POPUP_CLOSE_BUTTON_CLASS,
   contentClass = POPUP_CONTENT_CLASS,
   popupBodyClass = POPUP_BODY_CLASS,
+  size,
+  closeOnEsc = true,
 }) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<Overlay | null>(null);
@@ -60,7 +59,7 @@ export const Popup: FC<PopupProps> = ({
             <div class="${contentClass} ">${html}</div>
           </div>
         </div>`,
-      size: { width: "auto", height: "auto" } as any as Size,
+      size: size || ({ width: "auto", height: "auto" } as any as Size),
       scaled: false,
     });
 
@@ -74,7 +73,12 @@ export const Popup: FC<PopupProps> = ({
         onClose();
       }
     };
+    const onKeyDown = ({ code }: { code: number }) => {
+      if (code === 27) onClose();
+    };
+    if (closeOnEsc) ogma.events.on("keyup", onKeyDown);
     popupLayer.element.addEventListener("click", onClick);
+
     setLayer(popupLayer);
     if (!isOpen) popupLayer.hide();
 
@@ -82,6 +86,7 @@ export const Popup: FC<PopupProps> = ({
       // unregister listener
       if (layer) {
         layer.element.removeEventListener("click", onClick);
+        ogma.events.off(onKeyDown);
         layer.destroy();
         setLayer(null);
       }
