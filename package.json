@@ -13,7 +13,9 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "example": "typehead serve"
+    "example": "typehead serve",
+    "jest": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^4.0.9",
@@ -27,6 +29,7 @@
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.13",
+    "jest": "^27.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tslib": "^2.3.1",

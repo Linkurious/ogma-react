@@ -2,7 +2,12 @@ import { useEffect, useState, ReactNode, FC, ReactElement } from "react";
 
 import Ogma, { Overlay, Size, Point } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { getContent, getPosition, getContainerClass } from "./utils";
+import {
+  getContent,
+  getPosition,
+  getContainerClass,
+  getCloseButton,
+} from "./utils";
 import { noop } from "../utils";
 import { Placement } from "./types";
 
@@ -11,7 +16,7 @@ interface PopupProps {
   position: Point | ((ogma: Ogma) => Point);
   size?: Size;
   isOpen?: boolean;
-  closeButton?: ReactNode;
+  closeButton?: ReactNode | null;
   onClose?: () => void;
   placement?: Placement;
   closeOnEsc?: boolean;
@@ -35,6 +40,7 @@ export const Popup: FC<PopupProps> = ({
   position,
   children,
   isOpen = true,
+  closeButton,
   onClose = noop,
   placement = "top",
   popupClass = POPUP_CLASS,
@@ -51,11 +57,12 @@ export const Popup: FC<PopupProps> = ({
     // register listener
     const pos = getPosition(position, ogma) || offScreenPos;
     const html = getContent(ogma, pos, content, children);
+
     const popupLayer = ogma.layers.addOverlay({
       position: pos || offScreenPos,
       element: `<div class="${getContainerClass(popupClass, placement)}"/>
           <div class="${popupBodyClass}">
-            <div class="${closeButtonClass}">&times;</div>
+            ${getCloseButton(closeButton, closeButtonClass)}
             <div class="${contentClass} ">${html}</div>
           </div>
         </div>`,
@@ -65,7 +72,7 @@ export const Popup: FC<PopupProps> = ({
 
     const onClick = (evt: MouseEvent) => {
       const closeButton = popupLayer.element.querySelector(
-        `.${POPUP_CLOSE_BUTTON_CLASS}`
+        `.${closeButtonClass}`
       ) as Element;
       if (evt.target && closeButton.contains(evt.target as Node)) {
         evt.stopPropagation();
@@ -99,7 +106,9 @@ export const Popup: FC<PopupProps> = ({
       const html = getContent(ogma, pos, content, children);
       const { element } = layer;
       element.className = getContainerClass(popupClass, placement);
-      element.querySelector(`.${POPUP_CONTENT_CLASS}`)!.innerHTML = html;
+      element.querySelector(`.${popupBodyClass}`)!.innerHTML = `
+      ${getCloseButton(closeButton, closeButtonClass)}
+      <div class="${contentClass} ">${html}</div>`;
 
       layer.setPosition(pos);
 

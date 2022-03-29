@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from "react";
 import Ogma from "@linkurious/ogma";
-import { withOgma } from "./context";
+import { withOgma } from "../context";
 
 export interface LayerProps {
   id?: string;
