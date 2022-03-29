@@ -8,7 +8,7 @@ import OgmaLib, { Options as OgmaOptions, RawGraph } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 
 interface OgmaProps<ND, ED> {
-  options: Partial<OgmaOptions>;
+  options?: Partial<OgmaOptions>;
   // onEvent?: (
   //   //evt: OgmaEvent<undefined>
   //   ogma: OgmaLib
@@ -18,7 +18,7 @@ interface OgmaProps<ND, ED> {
 }
 
 export const Ogma = <ND, ED>({
-  options,
+  options = {},
   children,
   graph,
   //onStyleLoad,
@@ -35,7 +35,7 @@ export const Ogma = <ND, ED>({
       const instance = new OgmaLib<ND, ED>({
         container,
         graph,
-        ...options,
+        options,
       });
 
       setOgma(instance);

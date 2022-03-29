@@ -1,13 +1,12 @@
 import React, { FC, useEffect } from "react";
-import Ogma from "@linkurious/ogma";
-import { withOgma } from "../context";
+import { useOgma } from "../context";
 
 export interface LayerProps {
   id?: string;
-  ogma: Ogma;
 }
 
-const LayerComponent: FC<LayerProps> = ({ children }) => {
+export const Layer: FC<LayerProps> = ({ children }) => {
+  const ogma = useOgma();
   // unmount hook
   useEffect(() => {
     // events
@@ -21,5 +20,3 @@ const LayerComponent: FC<LayerProps> = ({ children }) => {
 
   return <>{children}</>;
 };
-
-export const Layer = withOgma<LayerProps>(LayerComponent);
