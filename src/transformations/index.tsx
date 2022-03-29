@@ -1,5 +1,5 @@
 import { useEffect, useState, RefCallback } from "react";
-import Ogma, {
+import OgmaLib, {
   NodeGroupingOptions,
   EdgeGroupingOptions,
   NeighborGenerationOptions,
@@ -21,7 +21,7 @@ export function NodeGrouping<ND, ED>({
   transformationRef,
   ...props
 }: NodeGroupingProps<ND, ED>) {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] = useState<Transformation>();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function EdgeGrouping<ND = any, ED = any>({
   transformationRef,
   ...props
 }: EdgeGroupingProps<ED, ND>) {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] = useState<Transformation>();
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function NodeCollapsing<ND = any, ED = any>({
   transformationRef,
   ...props
 }: NodeCollapsingProps<ND, ED>) {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] = useState<Transformation>();
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export function NeighborGeneration<ND = any, ED = any>({
   transformationRef,
   ...props
 }: NeighborGenerationProps<ND, ED>) {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] = useState<Transformation>();
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export function NeighborMerging<ND = any, ED = any>({
   transformationRef,
   ...props
 }: NeighborMergingProps<ND, ED>) {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] = useState<Transformation>();
 
   useEffect(() => {

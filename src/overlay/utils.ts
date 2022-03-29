@@ -1,10 +1,10 @@
 import { ReactNode, ReactElement } from "react";
 import { renderToString } from "react-dom/server";
-import Ogma, { Point } from "@linkurious/ogma";
+import OgmaLib, { Point } from "@linkurious/ogma";
 import { Content, PositionGetter, Placement } from "./types";
 
 export function getContent(
-  ogma: Ogma,
+  ogma: OgmaLib,
   position: Point,
   content?: Content,
   children?: ReactNode
@@ -15,7 +15,7 @@ export function getContent(
   return renderToString(children as any);
 }
 
-export function getPosition(position: Point | PositionGetter, ogma: Ogma) {
+export function getPosition(position: Point | PositionGetter, ogma: OgmaLib) {
   if (typeof position === "function") return position(ogma);
   return position;
 }

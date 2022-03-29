@@ -1,4 +1,4 @@
-import Ogma, {
+import OgmaLib, {
   NodeSelector,
   EdgeSelector,
   NodeAttributesValue,
@@ -22,7 +22,7 @@ export const NodeStyleRule = <ND, ED>({
   selector,
   attributes,
 }: NodeRuleProps<ND, ED>) => {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   useEffect(() => {
     const nodeRule = selector
       ? ogma.styles.addNodeRule(selector, attributes)
@@ -45,7 +45,7 @@ export const EdgeStyleRule = <ND, ED>({
   selector,
   attributes,
 }: EdgeRuleProps<ND, ED>) => {
-  const ogma = useOgma() as Ogma<ND, ED>;
+  const ogma = useOgma() as OgmaLib<ND, ED>;
   useEffect(() => {
     const edgeRule = selector
       ? ogma.styles.addEdgeRule(selector, attributes)

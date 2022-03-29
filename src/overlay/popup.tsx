@@ -1,6 +1,6 @@
 import { useEffect, useState, ReactNode, FC, ReactElement } from "react";
 
-import Ogma, { Overlay, Size, Point } from "@linkurious/ogma";
+import OgmaLib, { Overlay, Size, Point } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
   getContent,
@@ -13,7 +13,7 @@ import { Placement } from "./types";
 
 interface PopupProps {
   content?: string | ReactElement;
-  position: Point | ((ogma: Ogma) => Point);
+  position: Point | ((ogma: OgmaLib) => Point);
   size?: Size;
   isOpen?: boolean;
   closeButton?: ReactNode | null;

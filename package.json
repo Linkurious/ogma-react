@@ -11,9 +11,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "example": "typehead serve",
+    "tsc": "tsc",
+    "tsc:watch": "tsc --watch",
+    "example": "typehead build --watch",
+    "build": "typehead build",
     "test": "jest",
     "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
     "typecheck": "tsc --noEmit"

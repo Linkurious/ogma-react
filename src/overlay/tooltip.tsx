@@ -1,15 +1,15 @@
-import Ogma, { Point, Size, Overlay } from "@linkurious/ogma";
+import OgmaLib, { Point, Size, Overlay } from "@linkurious/ogma";
 import { FC, useEffect, useState, ReactElement } from "react";
 import { useOgma } from "../context";
 import { Placement } from "./types";
 import { getContainerClass, getContent, getPosition } from "./utils";
 
-type PositionGetter = (ogma: Ogma) => Point | null;
+type PositionGetter = (ogma: OgmaLib) => Point | null;
 
 type Content =
   | string
   | ReactElement
-  | ((ogma: Ogma, position: Point) => ReactElement);
+  | ((ogma: OgmaLib, position: Point) => ReactElement);
 
 export interface TooltipProps {
   id?: string;
