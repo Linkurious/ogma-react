@@ -5,7 +5,7 @@ import OgmaLib, {
   EdgeAttributesValue,
   StyleRule,
 } from "@linkurious/ogma";
-import { useEffect, RefCallback, useState } from "react";
+import { useEffect, RefCallback } from "react";
 import { useOgma } from "../context";
 
 interface WithRuleRef<ND, ED> {

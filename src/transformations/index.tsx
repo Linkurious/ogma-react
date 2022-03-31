@@ -1,4 +1,11 @@
-import { useEffect, useState, RefCallback } from "react";
+import {
+  useEffect,
+  useState,
+  RefCallback,
+  Ref,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 import OgmaLib, {
   NodeGroupingOptions,
   EdgeGroupingOptions,
@@ -11,30 +18,46 @@ import { useOgma } from "../context";
 
 interface WithTrandformationRef<ND, ED> {
   transformationRef?: RefCallback<Transformation<ND, ED>>;
+  disabled?: boolean;
 }
 
 interface NodeGroupingProps<ND, ED>
   extends NodeGroupingOptions<ND, ED>,
     WithTrandformationRef<ND, ED> {}
 
-export function NodeGrouping<ND, ED>({
-  transformationRef,
-  ...props
-}: NodeGroupingProps<ND, ED>) {
+function NodeGroupingComponent<ND, ED>(
+  { transformationRef, ...props }: NodeGroupingProps<ND, ED>,
+  ref?: Ref<Transformation<ND, ED>>
+) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] = useState<Transformation>();
+
+  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
+    transformation,
+  ]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeGrouping(props);
     setTransformation(newTransformation);
     if (transformationRef) transformationRef(newTransformation);
+
     return () => {
       if (transformation) transformation.destroy();
+      setTransformation(undefined);
     };
   }, []);
 
+  useEffect(() => {
+    if (transformation) {
+      if (props.disabled) transformation.disable(0);
+      else transformation.enable(0);
+    }
+  }, [props.disabled]);
+
   return null;
 }
+
+export const NodeGrouping = forwardRef(NodeGroupingComponent);
 
 interface EdgeGroupingProps<ED, ND>
   extends EdgeGroupingOptions<ED, ND>,

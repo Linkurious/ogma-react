@@ -2,7 +2,10 @@ import React, {
   useState,
   useEffect,
   useLayoutEffect,
-  PropsWithChildren,
+  forwardRef,
+  useImperativeHandle,
+  ReactNode,
+  Ref,
 } from "react";
 import OgmaLib, { Options as OgmaOptions, RawGraph } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
@@ -11,20 +14,21 @@ interface OgmaProps<ND, ED> {
   options?: Partial<OgmaOptions>;
   onReady?: (ogma: OgmaLib) => void;
   graph?: RawGraph<ND, ED>;
+  children?: ReactNode;
 }
 
 /**
  * Main component for the Ogma library.
  */
-export const Ogma = <ND, ED>({
-  options = {},
-  children,
-  graph,
-  onReady,
-}: PropsWithChildren<OgmaProps<ND, ED>>) => {
+export const OgmaComponent = <ND, ED>(
+  { options = {}, children, graph, onReady }: OgmaProps<ND, ED>,
+  ref?: Ref<OgmaLib<ND, ED>>
+) => {
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
+  useImperativeHandle(ref, () => ogma as OgmaLib<ND, ED>, [ogma]);
 
   useEffect(() => {
     if (container) {
@@ -60,3 +64,5 @@ export const Ogma = <ND, ED>({
     </OgmaContext.Provider>
   );
 };
+
+export const Ogma = forwardRef(OgmaComponent);

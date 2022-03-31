@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 import OgmaLib, { RawGraph } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../src";
 
@@ -20,12 +20,19 @@ describe("Ogma", () => {
   beforeEach(() => (div = document.createElement("div")));
 
   it("Ogma container renders without crashing", () => {
-    ReactDOM.render(<Ogma graph={graph} />, div);
+    render(<Ogma graph={graph} />, div);
+  });
+
+  it("Supports ref interface", () => {
+    const ref = React.createRef<OgmaLib>();
+    render(<Ogma ref={ref} graph={graph} />, div);
+    expect(ref.current).toBeDefined();
+    expect(ref.current).toBeInstanceOf(OgmaLib);
   });
 
   it("Ogma container renders with onReady callback", () => {
     const onReady = jest.fn((ogma: OgmaLib) => ogma);
-    ReactDOM.render(<Ogma graph={graph} onReady={onReady} />, div);
+    render(<Ogma graph={graph} onReady={onReady} />, div);
     expect(onReady).toHaveBeenCalled();
     expect(onReady.mock.calls[0][0]).toBeInstanceOf(OgmaLib);
   });
@@ -39,7 +46,7 @@ describe("Ogma", () => {
       expect(options.minimumWidth).toBe(minimumWidth);
       done();
     };
-    ReactDOM.render(
+    render(
       <Ogma
         graph={graph}
         onReady={onReady}
@@ -56,7 +63,7 @@ describe("Ogma", () => {
       done();
       return null;
     };
-    ReactDOM.render(
+    render(
       <Ogma graph={graph}>
         <Component />
       </Ogma>,

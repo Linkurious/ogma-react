@@ -1,4 +1,4 @@
-import { Node, RawGraph } from "@linkurious/ogma";
+import OgmaLib, { Node, RawGraph, Transformation } from "@linkurious/ogma";
 import React, { useEffect, useState } from "react";
 import {
   Ogma,
@@ -26,12 +26,17 @@ export default function App() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [clickedNode, setClickedNode] = useState<Node>(null);
 
+  const ref = React.createRef<OgmaLib>();
+  const groupingRef = React.createRef<Transformation>();
+
   return (
     <div className="App">
       <Ogma
+        ref={ref}
         options={{}}
         graph={graph}
         onReady={(ogma) => {
+          console.log(ref);
           ogma.events.on("click", ({ target }) => {
             if (target && target.isNode) {
               setClickedNode(target);
@@ -51,7 +56,6 @@ export default function App() {
           // content="String content"
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
           onClose={() => setPopupOpen(false)}
-          placement="left"
           isOpen={popupOpen}
         >
           {clickedNode && (
@@ -59,10 +63,12 @@ export default function App() {
           )}
         </Popup>
         <NodeGrouping
+          ref={groupingRef}
           groupIdFunction={(node) => {
             const id = Number(node.getId());
             return id === 1 || id === 2 ? "grouped" : undefined;
           }}
+          duration={1000}
           transformationRef={(grouping) => console.log(grouping)}
         />
       </Ogma>
