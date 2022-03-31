@@ -14,10 +14,11 @@
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
     "example": "typehead build --watch",
-    "build": "typehead build",
+    "build": "npm run types && typehead build",
     "test": "jest",
     "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^4.0.9",
@@ -33,6 +34,7 @@
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.13",
     "canvas": "^2.9.1",
+    "dts-bundle-generator": "^6.5.0",
     "jest": "^27.5.1",
     "jest-junit": "^13.0.0",
     "jsdom": "^19.0.0",
