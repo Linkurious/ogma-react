@@ -1,20 +1,9 @@
 import React from "react";
 import { render } from "react-dom";
 import { act } from "react-dom/test-utils";
-import OgmaLib, { RawGraph } from "@linkurious/ogma";
+import OgmaLib from "@linkurious/ogma";
 import { Ogma, NodeStyleRule, EdgeStyleRule } from "../src";
-
-const graph: RawGraph = {
-  nodes: [
-    { id: 0, attributes: { color: "blue", x: 0, y: 0 } },
-    { id: 1, attributes: { color: "cyan", x: 25, y: 0 } },
-    { id: 2, attributes: { color: "green", x: 25, y: 0 } },
-  ],
-  edges: [
-    { id: 0, source: 0, target: 1 },
-    { id: 1, source: 0, target: 2 },
-  ],
-};
+import graph from "./fixtures/simple_graph.json";
 
 describe("styles", () => {
   let div: HTMLDivElement;
