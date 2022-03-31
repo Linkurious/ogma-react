@@ -32,6 +32,7 @@ export function NodeGrouping<ND, ED>({
       if (transformation) transformation.destroy();
     };
   }, []);
+
   return null;
 }
 

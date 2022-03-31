@@ -51,6 +51,7 @@ export default function App() {
           // content="String content"
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
           onClose={() => setPopupOpen(false)}
+          placement="left"
           isOpen={popupOpen}
         >
           {clickedNode && (

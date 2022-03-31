@@ -9,21 +9,17 @@ import { OgmaContext } from "./context";
 
 interface OgmaProps<ND, ED> {
   options?: Partial<OgmaOptions>;
-  // onEvent?: (
-  //   //evt: OgmaEvent<undefined>
-  //   ogma: OgmaLib
-  // ) => null;
   onReady?: (ogma: OgmaLib) => void;
   graph?: RawGraph<ND, ED>;
 }
 
+/**
+ * Main component for the Ogma library.
+ */
 export const Ogma = <ND, ED>({
   options = {},
   children,
   graph,
-  //onStyleLoad,
-  //control,
-  //scrollZoom,
   onReady,
 }: PropsWithChildren<OgmaProps<ND, ED>>) => {
   const [ready, setReady] = useState(false);

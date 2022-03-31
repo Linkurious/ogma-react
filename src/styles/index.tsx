@@ -5,7 +5,7 @@ import OgmaLib, {
   EdgeAttributesValue,
   StyleRule,
 } from "@linkurious/ogma";
-import { useEffect, RefCallback } from "react";
+import { useEffect, RefCallback, useState } from "react";
 import { useOgma } from "../context";
 
 interface WithRuleRef<ND, ED> {
@@ -23,11 +23,13 @@ export const NodeStyleRule = <ND, ED>({
   attributes,
 }: NodeRuleProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
+  //const [rule, setRule] = useState<StyleRule<ND, ED>>();
   useEffect(() => {
     const nodeRule = selector
       ? ogma.styles.addNodeRule(selector, attributes)
       : ogma.styles.addNodeRule(attributes);
     if (ruleRef) ruleRef(nodeRule);
+    //setRule(nodeRule);
     return () => {
       nodeRule.destroy();
     };
@@ -46,11 +48,14 @@ export const EdgeStyleRule = <ND, ED>({
   attributes,
 }: EdgeRuleProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
+  //const [rule, setRule] = useState<StyleRule<ND, ED>>();
   useEffect(() => {
+    //if (rule) rule.destroy();
     const edgeRule = selector
       ? ogma.styles.addEdgeRule(selector, attributes)
       : ogma.styles.addEdgeRule(attributes);
     if (ruleRef) ruleRef(edgeRule);
+    //setRule(edgeRule);
     return () => {
       edgeRule.destroy();
     };
