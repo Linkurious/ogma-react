@@ -69,7 +69,6 @@ export default function App() {
             return id === 1 || id === 2 ? "grouped" : undefined;
           }}
           duration={1000}
-          transformationRef={(grouping) => console.log(grouping)}
         />
       </Ogma>
     </div>
