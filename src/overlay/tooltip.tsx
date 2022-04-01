@@ -1,81 +1,106 @@
-import OgmaLib, { Point, Size, Overlay } from "@linkurious/ogma";
-import { FC, useEffect, useState, ReactElement } from "react";
+import OgmaLib, {
+  Point,
+  Size,
+  Overlay,
+  //MouseMoveEvent,
+} from "@linkurious/ogma";
+import { FC, useEffect, useState, useRef } from "react";
 import { useOgma } from "../context";
-import { Placement } from "./types";
-import { getContainerClass, getContent, getPosition } from "./utils";
+import { Placement, Content } from "./types";
+import {
+  getAdjustedPlacement,
+  getContainerClass,
+  getContent,
+  getPosition,
+} from "./utils";
 
 type PositionGetter = (ogma: OgmaLib) => Point | null;
 
-type Content =
-  | string
-  | ReactElement
-  | ((ogma: OgmaLib, position: Point) => ReactElement);
+// type Content =
+//   | string
+//   | ReactElement
+//   | ((ogma: OgmaLib, position: Point) => ReactElement);
 
-export interface TooltipProps {
+/**
+ * 1. in useEffect unconditionally, I create the tooltip
+ * 2. i listen to ogma mousemove and update pos
+ * 3. if there's an update of content, I re-render
+ */
+
+interface TooltipProps {
   id?: string;
   position: Point | PositionGetter;
   content?: Content;
   size?: Size;
-  sticky?: boolean;
+  visible?: boolean;
   placement?: Placement;
   tooltipClass?: string;
 }
 
 export const Tooltip: FC<TooltipProps> = ({
-  //id = uuidv4(),
-  content,
+  tooltipClass = "ogma-tooltip",
+  placement = "right",
   position,
   size = { width: "auto", height: "auto" } as any as Size,
   children,
-  placement = "right",
-  tooltipClass = "ogma-tooltip",
+  content,
+  visible = true,
 }) => {
   const ogma = useOgma();
-  const [tooltip, setTooltip] = useState<Overlay | null>(null);
-  const [newPosition, setNewPosition] = useState<Point>({ x: 0, y: 0 });
-  const [newHtml, setNewHtml] = useState<string>(
-    `<div class="${getContainerClass(
-      tooltipClass,
-      placement
-    )}"><div class="${tooltipClass}--content" /></div>`
-  );
+  const [layer, setLayer] = useState<Overlay>();
+  const [coords, setCoords] = useState<Point | null>();
+  const [html, setHtml] = useState("");
+  const [dimensions, setDimensions] = useState<Size>();
+  const raf = useRef<number>();
 
+  // component is mounted
   useEffect(() => {
-    if (!tooltip) {
-      const tooltipLayer = ogma.layers.addOverlay({
-        position: newPosition,
-        element: newHtml,
-        size,
-        scaled: false,
-      });
-      setTooltip(tooltipLayer);
-    }
-
+    const className = getContainerClass(tooltipClass, placement);
+    const wrapperHtml = `<div class="${className}"><div class="${tooltipClass}--content" /></div>`;
+    const newCoords = getPosition(position, ogma);
+    setCoords(newCoords);
+    const tooltip = ogma.layers.addOverlay({
+      position: newCoords || { x: -9999, y: -9999 },
+      element: wrapperHtml,
+      scaled: false,
+      size,
+    });
+    setLayer(tooltip);
     return () => {
-      if (tooltip) tooltip.destroy();
+      tooltip.destroy();
     };
-  }, [tooltip, setTooltip, setNewPosition, setNewHtml]);
+  }, []);
 
+  // content or position has changed
   useEffect(() => {
-    const pos = getPosition(position, ogma);
-    if (tooltip) tooltip.show().setPosition(newPosition);
-    //tooltip.setPosition(newPosition);
-  }, [tooltip, position, newPosition, content]);
-
-  if (tooltip) {
-    const html = getContent(ogma, newPosition, content, children);
-    if (html !== newHtml) {
-      console.log("render", html);
-      setNewHtml(html);
-      tooltip.element.firstElementChild!.innerHTML = html;
+    const newContent = getContent(ogma, coords!, content, children);
+    //console.log("re-render", newContent, getPosition(position, ogma));
+    if (layer) {
+      if (newContent !== html) {
+        layer.element.firstElementChild!.innerHTML = newContent;
+        setHtml(newContent);
+        setDimensions({
+          width: layer.element.offsetWidth,
+          height: layer.element.offsetHeight,
+        });
+        console.log();
+      }
+      const newCoords = getPosition(position, ogma);
+      if (coords !== newCoords) {
+        setCoords(newCoords);
+      }
     }
-
-    if (position !== newPosition) {
-      const pos = getPosition(position, ogma);
-      if (pos === null) tooltip.hide();
-      else tooltip.show().setPosition(pos);
-    }
-  }
+    raf.current = requestAnimationFrame(() => {
+      if (layer && coords && dimensions) {
+        layer.element.className = getContainerClass(
+          tooltipClass,
+          getAdjustedPlacement(coords, placement, dimensions, ogma)
+        );
+        layer.setPosition(coords); // throttledSetPosition(coords);
+      }
+    });
+    return () => cancelAnimationFrame(raf.current as number);
+  }, [children, content, position, visible]);
 
   return null;
 };

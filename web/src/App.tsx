@@ -1,4 +1,10 @@
-import OgmaLib, { Node, RawGraph, Transformation } from "@linkurious/ogma";
+import OgmaLib, {
+  Edge,
+  Node,
+  Point,
+  RawGraph,
+  Transformation,
+} from "@linkurious/ogma";
 import React, { useEffect, useState } from "react";
 import {
   Ogma,
@@ -29,18 +35,31 @@ export default function App() {
   const ref = React.createRef<OgmaLib>();
   const groupingRef = React.createRef<Transformation>();
 
+  const [tooltipPositon, setTooltipPosition] = useState<Point>();
+  const [target, setTarget] = useState<Node | Edge | null>();
+
   return (
     <div className="App">
       <Ogma
         ref={ref}
         graph={graph}
         onReady={(ogma) => {
-          ogma.events.on("click", ({ target }) => {
-            if (target && target.isNode) {
-              setClickedNode(target);
-              setPopupOpen(true);
-            }
-          });
+          ogma.events
+            .on("click", ({ target }) => {
+              if (target && target.isNode) {
+                setClickedNode(target);
+                setPopupOpen(true);
+              }
+            })
+            // .on('mouseover', ({ target }) => )
+            .on("mousemove", (evt) => {
+              const ptr = ogma.getPointerInformation();
+              //setTarget(ptr.target);
+              setTooltipPosition(
+                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
+              );
+              setTarget(ptr.target);
+            });
         }}
       >
         <NodeStyleRule attributes={{ color: "#247BA0", radius: 2 }} />
@@ -55,11 +74,12 @@ export default function App() {
             <div className="content">{`Node ${clickedNode.getId()}:`}</div>
           )}
         </Popup>
-        <Tooltip
-          placement="top"
-          position={(ogma) => ogma.getNodes().get(0).getPosition()}
-        >
-          <div className="x">ttp</div>
+        <Tooltip placement="top" position={tooltipPositon}>
+          <div className="x">
+            {target
+              ? `${target.isNode ? "Node" : "Edge"} #${target.getId()}`
+              : "nothing"}
+          </div>
         </Tooltip>
         <NodeGrouping
           ref={groupingRef}

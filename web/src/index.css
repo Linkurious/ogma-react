@@ -78,6 +78,13 @@ code {
   position: relative;
 }
 
+.ogma-tooltip {
+  /* transition: linear;
+  transition-property: transform;
+  transition-duration: 50ms; */
+  pointer-events: none;
+}
+
 .ogma-popup--body {
   transform: translate(-50%, -100%);
 }
@@ -108,7 +115,7 @@ code {
 
 .ogma-popup--top .ogma-popup--body,
 .ogma-tooltip--top .ogma-tooltip--content {
-  bottom: 3px;
+  bottom: 6px;
   transform: translate(-50%, -100%);
 }
 

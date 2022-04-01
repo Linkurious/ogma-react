@@ -83,5 +83,9 @@
   "bugs": {
     "url": "https://github.com/linkurious/ogma-react/issues"
   },
-  "homepage": "https://github.com/linkurious/ogma-react#readme"
+  "homepage": "https://github.com/linkurious/ogma-react#readme",
+  "dependencies": {
+    "@types/lodash.throttle": "^4.1.6",
+    "lodash.throttle": "^4.1.1"
+  }
 }
