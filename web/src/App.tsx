@@ -33,10 +33,8 @@ export default function App() {
     <div className="App">
       <Ogma
         ref={ref}
-        options={{}}
         graph={graph}
         onReady={(ogma) => {
-          console.log(ref);
           ogma.events.on("click", ({ target }) => {
             if (target && target.isNode) {
               setClickedNode(target);
@@ -48,12 +46,7 @@ export default function App() {
         <NodeStyleRule attributes={{ color: "#247BA0", radius: 2 }} />
         <EdgeStyleRule attributes={{ color: "#247BA0", width: 0.15 }} />
         {/* <LayoutService /> */}
-        {/* <Tooltip
-          position={(ogma) => ogma.getNodes().get(0).getPosition()}
-          content={'<div class="x">ttp</div>'}
-        /> */}
         <Popup
-          // content="String content"
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
           onClose={() => setPopupOpen(false)}
           isOpen={popupOpen}
@@ -62,6 +55,12 @@ export default function App() {
             <div className="content">{`Node ${clickedNode.getId()}:`}</div>
           )}
         </Popup>
+        <Tooltip
+          placement="top"
+          position={(ogma) => ogma.getNodes().get(0).getPosition()}
+        >
+          <div className="x">ttp</div>
+        </Tooltip>
         <NodeGrouping
           ref={groupingRef}
           groupIdFunction={(node) => {

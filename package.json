@@ -14,6 +14,7 @@
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
     "example": "typehead build --watch",
+    "start": "typehead serve",
     "build": "npm run types && typehead build",
     "test": "jest",
     "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
