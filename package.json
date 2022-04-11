@@ -13,8 +13,8 @@
   "scripts": {
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
-    "example": "typehead build --watch",
     "start": "typehead serve",
+    "build:example": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
     "build": "npm run types && typehead build",
     "test": "jest",
     "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
@@ -22,13 +22,16 @@
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts"
   },
   "peerDependencies": {
-    "@linkurious/ogma": "^4.0.9",
+    "@linkurious/ogma": ">=4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "typescript": "^4.5.4"
   },
   "devDependencies": {
+    "@geist-ui/core": "^2.3.8",
+    "@linkurious/ogma": "^4.1.0-develop.270",
     "@mapbox/typehead": "^1.1.0",
+    "@next/bundle-analyzer": "^12.1.4",
     "@types/enzyme": "^3.10.11",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",

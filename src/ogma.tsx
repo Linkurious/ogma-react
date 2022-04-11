@@ -17,16 +17,20 @@ interface OgmaProps<ND, ED> {
   children?: ReactNode;
 }
 
+const defaultOptions = {};
+
 /**
  * Main component for the Ogma library.
  */
 export const OgmaComponent = <ND, ED>(
-  { options = {}, children, graph, onReady }: OgmaProps<ND, ED>,
+  { options = defaultOptions, children, graph, onReady }: OgmaProps<ND, ED>,
   ref?: Ref<OgmaLib<ND, ED>>
 ) => {
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
+  const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
 
   useImperativeHandle(ref, () => ogma as OgmaLib<ND, ED>, [ogma]);
 
@@ -52,6 +56,19 @@ export const OgmaComponent = <ND, ED>(
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  useEffect(() => {
+    if (ogma) {
+      if (graph && ogma && graph !== graphData) {
+        setGraphData(graph);
+        ogma.setGraph(graph);
+      }
+      if (options && ogmaOptions !== options) {
+        setOgmaOptions(options);
+        ogma.setOptions(options);
+      }
+    }
+  }, [graph, options]);
 
   return (
     <OgmaContext.Provider value={ogma}>

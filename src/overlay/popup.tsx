@@ -13,7 +13,7 @@ import { Placement } from "./types";
 
 interface PopupProps {
   content?: string | ReactElement;
-  position: Point | ((ogma: OgmaLib) => Point);
+  position: Point | ((ogma: OgmaLib) => Point | null);
   size?: Size;
   isOpen?: boolean;
   closeButton?: ReactNode | null;

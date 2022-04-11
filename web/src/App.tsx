@@ -17,25 +17,23 @@ import {
 import { LayoutService } from "./LayoutService";
 
 export default function App() {
-  const graph: RawGraph = {
-    nodes: [
-      { id: 0, attributes: { color: "red", x: 0, y: 0 } },
-      { id: 1, attributes: { color: "green", x: 25, y: 0 } },
-      { id: 2, attributes: { color: "green", x: 25, y: 0 } },
-    ],
-    edges: [
-      { source: 0, target: 1 },
-      { source: 0, target: 2 },
-    ],
-  };
+  const [graph, setGraph] = useState<RawGraph>();
+
+  useEffect(() => {
+    fetch("data.json")
+      .then((res) => res.json())
+      .then((data: RawGraph) => {
+        setGraph(data);
+      });
+  }, []);
 
   const [popupOpen, setPopupOpen] = useState(false);
-  const [clickedNode, setClickedNode] = useState<Node>(null);
+  const [clickedNode, setClickedNode] = useState<Node>();
 
   const ref = React.createRef<OgmaLib>();
   const groupingRef = React.createRef<Transformation>();
 
-  const [tooltipPositon, setTooltipPosition] = useState<Point>();
+  const [tooltipPositon, setTooltipPosition] = useState<Point>({ x: 0, y: 0 });
   const [target, setTarget] = useState<Node | Edge | null>();
 
   return (
@@ -59,7 +57,9 @@ export default function App() {
                 ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
               );
               setTarget(ptr.target);
-            });
+            })
+            // locate graph when the nodes are added
+            .on("addNodes", () => ogma.view.locateGraph());
         }}
       >
         <NodeStyleRule attributes={{ color: "#247BA0", radius: 2 }} />
