@@ -5,7 +5,7 @@ import OgmaLib, {
   RawGraph,
   Transformation,
 } from "@linkurious/ogma";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import {
   Ogma,
   NodeStyleRule,
@@ -14,27 +14,36 @@ import {
   NodeGrouping,
   Popup,
 } from "../../src";
+import { Drawer, Text, Button, Loading } from "@geist-ui/core";
+import { Menu as MenuIcon } from "@geist-ui/icons";
 import { LayoutService } from "./LayoutService";
 
 export default function App() {
   const [graph, setGraph] = useState<RawGraph>();
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("data.json")
-      .then((res) => res.json())
-      .then((data: RawGraph) => {
-        setGraph(data);
-      });
-  }, []);
+  const [drawerShown, setDrawerShown] = useState(false);
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [clickedNode, setClickedNode] = useState<Node>();
 
-  const ref = React.createRef<OgmaLib>();
-  const groupingRef = React.createRef<Transformation>();
+  const ref = createRef<OgmaLib>();
+  const groupingRef = createRef<Transformation>();
 
   const [tooltipPositon, setTooltipPosition] = useState<Point>({ x: 0, y: 0 });
   const [target, setTarget] = useState<Node | Edge | null>();
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("data.json")
+      .then((res) => res.json())
+      .then((data: RawGraph) => {
+        setGraph(data);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <Loading />;
 
   return (
     <div className="App">
@@ -49,8 +58,7 @@ export default function App() {
                 setPopupOpen(true);
               }
             })
-            // .on('mouseover', ({ target }) => )
-            .on("mousemove", (evt) => {
+            .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
               //setTarget(ptr.target);
               setTooltipPosition(
@@ -59,7 +67,7 @@ export default function App() {
               setTarget(ptr.target);
             })
             // locate graph when the nodes are added
-            .on("addNodes", () => ogma.view.locateGraph());
+            .on("addNodes", () => ogma.view.locateGraph({ duration: 250 }));
         }}
       >
         <NodeStyleRule attributes={{ color: "#247BA0", radius: 2 }} />
@@ -68,13 +76,13 @@ export default function App() {
         <Popup
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
           onClose={() => setPopupOpen(false)}
-          isOpen={popupOpen}
+          isOpen={clickedNode && popupOpen}
         >
           {clickedNode && (
             <div className="content">{`Node ${clickedNode.getId()}:`}</div>
           )}
         </Popup>
-        <Tooltip placement="top" position={tooltipPositon}>
+        <Tooltip visible={!!target} placement="top" position={tooltipPositon}>
           <div className="x">
             {target
               ? `${target.isNode ? "Node" : "Edge"} #${target.getId()}`
@@ -90,6 +98,25 @@ export default function App() {
           duration={1000}
         />
       </Ogma>
+      <div className="controls">
+        <Button
+          onClick={() => setDrawerShown(!drawerShown)}
+          iconRight={<MenuIcon />}
+          scale={2 / 3}
+          auto
+        />
+      </div>
+      <Drawer
+        visible={drawerShown}
+        onClose={() => setDrawerShown(false)}
+        placement="right"
+      >
+        <Drawer.Title>Drawer</Drawer.Title>
+        <Drawer.Subtitle>This is a drawer</Drawer.Subtitle>
+        <Drawer.Content>
+          <p>Some content contained within the drawer.</p>
+        </Drawer.Content>
+      </Drawer>
     </div>
   );
 }

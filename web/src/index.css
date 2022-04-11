@@ -162,3 +162,10 @@ code {
 .ogma-popup--content {
   padding: 10px;
 }
+
+.controls {
+  position: absolute;
+  z-index: 100;
+  right: 20px;
+  top: 20px;
+}

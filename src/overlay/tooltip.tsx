@@ -83,12 +83,13 @@ export const Tooltip: FC<TooltipProps> = ({
           width: layer.element.offsetWidth,
           height: layer.element.offsetHeight,
         });
-        console.log();
       }
       const newCoords = getPosition(position, ogma);
       if (coords !== newCoords) {
         setCoords(newCoords);
       }
+      if (visible) layer.show();
+      else layer.hide();
     }
     raf.current = requestAnimationFrame(() => {
       if (layer && coords && dimensions) {
@@ -99,6 +100,7 @@ export const Tooltip: FC<TooltipProps> = ({
         layer.setPosition(coords); // throttledSetPosition(coords);
       }
     });
+
     return () => cancelAnimationFrame(raf.current as number);
   }, [children, content, position, visible]);
 
