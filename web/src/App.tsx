@@ -14,8 +14,8 @@ import {
   NodeGrouping,
   Popup,
 } from "../../src";
-import { Drawer, Text, Button, Loading } from "@geist-ui/core";
-import { Menu as MenuIcon } from "@geist-ui/icons";
+import { Drawer, Text, Button, Loading, Toggle } from "@geist-ui/core";
+import { Menu as MenuIcon, X as XIcon } from "@geist-ui/icons";
 import { LayoutService } from "./LayoutService";
 
 export default function App() {
@@ -29,6 +29,8 @@ export default function App() {
 
   const ref = createRef<OgmaLib>();
   const groupingRef = createRef<Transformation>();
+
+  const [nodeGrouping, setNodeGrouping] = useState(true);
 
   const [tooltipPositon, setTooltipPosition] = useState<Point>({ x: 0, y: 0 });
   const [target, setTarget] = useState<Node | Edge | null>();
@@ -91,6 +93,7 @@ export default function App() {
         </Tooltip>
         <NodeGrouping
           ref={groupingRef}
+          disabled={!nodeGrouping}
           groupIdFunction={(node) => {
             const id = Number(node.getId());
             return id === 1 || id === 2 ? "grouped" : undefined;
@@ -101,8 +104,11 @@ export default function App() {
       <div className="controls">
         <Button
           onClick={() => setDrawerShown(!drawerShown)}
-          iconRight={<MenuIcon />}
-          scale={2 / 3}
+          icon={<MenuIcon />}
+          w="28px"
+          h="28px"
+          px={0.5}
+          title="Show controls"
           auto
         />
       </div>
@@ -111,10 +117,25 @@ export default function App() {
         onClose={() => setDrawerShown(false)}
         placement="right"
       >
-        <Drawer.Title>Drawer</Drawer.Title>
+        <Drawer.Title>
+          <Text>Controls</Text>
+          <Button
+            onClick={() => setDrawerShown(!drawerShown)}
+            icon={<XIcon />}
+            auto
+            type="abort"
+            px={0.5}
+          />
+        </Drawer.Title>
         <Drawer.Subtitle>This is a drawer</Drawer.Subtitle>
         <Drawer.Content>
-          <p>Some content contained within the drawer.</p>
+          <div>
+            <Toggle
+              checked={nodeGrouping}
+              onChange={() => setNodeGrouping(!nodeGrouping)}
+            />
+            <span>Node grouping.</span>
+          </div>
         </Drawer.Content>
       </Drawer>
     </div>

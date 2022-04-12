@@ -29,15 +29,17 @@ function NodeGroupingComponent<ND, ED>(
     setTransformation(newTransformation);
 
     return () => {
-      if (transformation) transformation.destroy();
+      newTransformation.destroy();
       setTransformation(undefined);
     };
   }, []);
 
   useEffect(() => {
     if (transformation) {
-      if (props.disabled) transformation.disable(0);
-      else transformation.enable(0);
+      if (props.disabled === transformation.isEnabled()) {
+        if (props.disabled) transformation.disable(0);
+        else transformation.enable(0);
+      }
     }
   }, [props.disabled]);
 
