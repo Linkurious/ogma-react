@@ -2,7 +2,7 @@
   "nodes": [
     { "id": 0, "attributes": { "color": "red", "x": 0, "y": 0 } },
     { "id": 1, "attributes": { "color": "green", "x": 25, "y": 0 } },
-    { "id": 2, "attributes": { "color": "green", "x": 25, "y": 0 } }
+    { "id": 2, "attributes": { "color": "green", "x": 25, "y": 25 } }
   ],
   "edges": [
     { "source": 0, "target": 1 },

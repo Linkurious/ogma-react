@@ -11,6 +11,7 @@ import OgmaLib, {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { EnabledState } from "./types";
+import { toggle } from "./utils";
 
 interface NeighborMergingProps<ND, ED>
   extends NeighborMergingOptions<ND, ED>,
@@ -31,9 +32,16 @@ function NeighborMergingComponent<ND = any, ED = any>(
     const newTransformation = ogma.transformations.addNeighborMerging(props);
     setTransformation(newTransformation);
     return () => {
-      if (transformation) transformation.destroy();
+      newTransformation.destroy();
+      setTransformation(undefined);
     };
   }, []);
+
+  useEffect(() => {
+    if (transformation) {
+      toggle(transformation, !!props.disabled, props.duration);
+    }
+  }, [props.disabled]);
 
   return null;
 }

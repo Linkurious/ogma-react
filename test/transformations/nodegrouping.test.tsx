@@ -77,12 +77,11 @@ describe("Node grouping", () => {
     });
   });
 
-  it("should ungroup when the transformation is disabled", (done) => {
+  it("should ungroup when the transformation is disabled", () => {
     const ogmaRef = React.createRef<OgmaLib>();
     const transformationRef = React.createRef<Transformation>();
     const Test = () => {
       const [grouped, setGrouped] = React.useState<boolean>(true);
-      console.log({ grouped });
       return (
         <Ogma graph={graph} ref={ogmaRef}>
           <button onClick={() => setGrouped(!grouped)}>Click</button>
@@ -101,11 +100,12 @@ describe("Node grouping", () => {
       render(<Test />, div);
     });
     const button = div.querySelector("button") as HTMLButtonElement;
+    expect(ogmaRef.current!.transformations.getList().length).toBe(1);
+    expect(ogmaRef.current!.getNodes().size).toBe(3);
+    expect(
+      ogmaRef.current?.transformations.getList().map((t) => t.isEnabled())
+    ).toStrictEqual([false]);
+
     act(() => button.click());
-    ogmaRef.current!.transformations.afterNextUpdate().then(() => {
-      expect(ogmaRef.current!.transformations.getList().length).toBe(1);
-      console.log(ogmaRef.current!.getNodes().size);
-      done();
-    });
   });
 });

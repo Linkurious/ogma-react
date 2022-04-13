@@ -11,6 +11,7 @@ import OgmaLib, {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { EnabledState } from "./types";
+import { toggle } from "./utils";
 
 interface NodeCollapsingProps<ND, ED>
   extends NodeCollapsingOptions<ND, ED>,
@@ -30,10 +31,18 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeCollapsing(props);
     setTransformation(newTransformation);
+
     return () => {
-      if (transformation) transformation.destroy();
+      newTransformation.destroy();
+      setTransformation(undefined);
     };
   }, []);
+
+  useEffect(() => {
+    if (transformation) {
+      toggle(transformation, !!props.disabled, props.duration);
+    }
+  }, [props.disabled]);
 
   return null;
 }

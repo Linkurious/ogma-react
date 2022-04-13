@@ -11,6 +11,7 @@ import OgmaLib, {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { EnabledState } from "./types";
+import { toggle } from "./utils";
 
 interface NeighborGenerationProps<ND, ED>
   extends NeighborGenerationOptions<ND, ED>,
@@ -31,9 +32,16 @@ function NeighborGenerationComponent<ND = any, ED = any>(
     const newTransformation = ogma.transformations.addNeighborGeneration(props);
     setTransformation(newTransformation);
     return () => {
-      if (transformation) transformation.destroy();
+      newTransformation.destroy();
+      setTransformation(undefined);
     };
   }, []);
+
+  useEffect(() => {
+    if (transformation) {
+      toggle(transformation, !!props.disabled, props.duration);
+    }
+  }, [props.disabled]);
 
   return null;
 }
