@@ -1,6 +1,6 @@
 @Library('linkurious-shared')_
 
 nodeJob {
-  projectName = "linkurious/react-ogma"
+  projectName = "linkurious/ogma-react"
   createGitTag = true
 }
