@@ -30,7 +30,7 @@
   "devDependencies": {
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.1",
-    "@linkurious/ogma": "^4.1.0-develop.270",
+    "@linkurious/ogma": "^4.1.0-develop.277",
     "@mapbox/typehead": "^1.1.0",
     "@next/bundle-analyzer": "^12.1.4",
     "@types/enzyme": "^3.10.11",

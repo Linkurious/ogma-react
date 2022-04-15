@@ -14,15 +14,13 @@ import {
   NodeGrouping,
   Popup,
 } from "../../src";
-import { Drawer, Text, Button, Loading, Toggle } from "@geist-ui/core";
-import { Menu as MenuIcon, X as XIcon } from "@geist-ui/icons";
-import { LayoutService } from "./LayoutService";
+import { Loading } from "@geist-ui/core";
+import { LayoutService } from "./components/Layout";
+import { Controls } from "./components/Controls";
 
 export default function App() {
   const [graph, setGraph] = useState<RawGraph>();
   const [loading, setLoading] = useState(true);
-
-  const [drawerShown, setDrawerShown] = useState(false);
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [clickedNode, setClickedNode] = useState<Node>();
@@ -31,8 +29,10 @@ export default function App() {
   const groupingRef = createRef<Transformation>();
 
   const [nodeGrouping, setNodeGrouping] = useState(true);
-
-  const [tooltipPositon, setTooltipPosition] = useState<Point>({ x: 0, y: 0 });
+  const [tooltipPositon, setTooltipPosition] = useState<Point>({
+    x: -1e5,
+    y: -1e5,
+  });
   const [target, setTarget] = useState<Node | Edge | null>();
 
   useEffect(() => {
@@ -62,19 +62,20 @@ export default function App() {
             })
             .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
-              //setTarget(ptr.target);
               setTooltipPosition(
                 ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
               );
               setTarget(ptr.target);
             })
             // locate graph when the nodes are added
-            .on("addNodes", () => ogma.view.locateGraph({ duration: 250 }));
+            .on("addNodes", () =>
+              ogma.view.locateGraph({ duration: 250, padding: 50 })
+            );
         }}
       >
         <NodeStyleRule attributes={{ color: "#247BA0", radius: 2 }} />
         <EdgeStyleRule attributes={{ color: "#247BA0", width: 0.15 }} />
-        {/* <LayoutService /> */}
+        <LayoutService />
         <Popup
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
           onClose={() => setPopupOpen(false)}
@@ -101,43 +102,13 @@ export default function App() {
           duration={1000}
         />
       </Ogma>
-      <div className="controls">
-        <Button
-          onClick={() => setDrawerShown(!drawerShown)}
-          icon={<MenuIcon />}
-          w="28px"
-          h="28px"
-          px={0.5}
-          title="Show controls"
-          auto
-        />
-      </div>
-      <Drawer
-        visible={drawerShown}
-        onClose={() => setDrawerShown(false)}
-        placement="right"
-      >
-        <Drawer.Title>
-          <Text>Controls</Text>
-          <Button
-            onClick={() => setDrawerShown(!drawerShown)}
-            icon={<XIcon />}
-            auto
-            type="abort"
-            px={0.5}
-          />
-        </Drawer.Title>
-        <Drawer.Subtitle>This is a drawer</Drawer.Subtitle>
-        <Drawer.Content>
-          <div>
-            <Toggle
-              checked={nodeGrouping}
-              onChange={() => setNodeGrouping(!nodeGrouping)}
-            />
-            <span>Node grouping.</span>
-          </div>
-        </Drawer.Content>
-      </Drawer>
+      <Controls
+        toggleNodeGrouping={(value) => setNodeGrouping(value)}
+        nodeGrouping={nodeGrouping}
+        setNodeSize={(size) => {
+          console.log({ size });
+        }}
+      />
     </div>
   );
 }

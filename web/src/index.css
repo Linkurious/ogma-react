@@ -163,9 +163,14 @@ code {
   padding: 10px;
 }
 
-.controls {
+.control-buttons {
   position: absolute;
   z-index: 100;
   right: 20px;
   top: 20px;
+}
+
+.controls .controls-section-label {
+  padding-left: 1em;
+  vertical-align: middle;
 }
