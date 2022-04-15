@@ -18,13 +18,15 @@
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
     "start": "typehead serve",
-    "build:example": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
+    "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
     "build": "npm run types && typehead build",
     "test": "jest",
     "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
     "typecheck": "tsc --noEmit",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts",
-    "postversion": "sync_versions"
+    "postversion": "sync_versions",
+    "predoc:prod": "npm run build && npm run doc",
+    "doc:prod": "gh-pages -d web"
   },
   "peerDependencies": {
     "@linkurious/ogma": ">=4.0",
@@ -46,6 +48,7 @@
     "@types/react-dom": "^17.0.13",
     "canvas": "^2.9.1",
     "dts-bundle-generator": "^6.5.0",
+    "gh-pages": "^3.2.3",
     "jest": "^27.5.1",
     "jest-junit": "^13.0.0",
     "jsdom": "^19.0.0",
