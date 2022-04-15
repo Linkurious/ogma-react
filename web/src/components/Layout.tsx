@@ -13,7 +13,7 @@ export function LayoutService() {
     // register listener
     ogma.events.on("addNodes", onNodesAdded);
     // run it for the first time
-    onNodesAdded({ nodes: ogma.getNodes() });
+    //onNodesAdded({ nodes: ogma.getNodes() });
 
     // cleanup
     return () => {

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useOgma } from "../../../src";
 import { Drawer, Text, Button, Toggle, Slider, Spacer } from "@geist-ui/core";
 import { Menu as MenuIcon, X as XIcon } from "@geist-ui/icons";
 
@@ -58,9 +57,9 @@ export function Controls({
             <Text>Node size</Text>
             <Slider
               initialValue={5}
-              max={100}
+              max={50}
               min={1}
-              step={1}
+              step={0.25}
               onClickCapture={(evt) => evt.stopPropagation()}
               onChange={setNodeSize}
             />

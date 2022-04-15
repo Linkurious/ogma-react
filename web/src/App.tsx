@@ -29,6 +29,7 @@ export default function App() {
   const groupingRef = createRef<Transformation>();
 
   const [nodeGrouping, setNodeGrouping] = useState(true);
+  const [nodeSize, setNodeSize] = useState(5);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
     x: -1e5,
     y: -1e5,
@@ -73,7 +74,7 @@ export default function App() {
             );
         }}
       >
-        <NodeStyleRule attributes={{ color: "#247BA0", radius: 2 }} />
+        <NodeStyleRule attributes={{ color: "#247BA0", radius: nodeSize }} />
         <EdgeStyleRule attributes={{ color: "#247BA0", width: 0.15 }} />
         <LayoutService />
         <Popup
@@ -105,9 +106,7 @@ export default function App() {
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}
         nodeGrouping={nodeGrouping}
-        setNodeSize={(size) => {
-          console.log({ size });
-        }}
+        setNodeSize={(size) => setNodeSize(size)}
       />
     </div>
   );
