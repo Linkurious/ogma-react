@@ -30,6 +30,7 @@ export default function App() {
 
   const [nodeGrouping, setNodeGrouping] = useState(true);
   const [nodeSize, setNodeSize] = useState(5);
+  const [edgeWidth, setEdgeWidth] = useState(0.25);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
     x: -1e5,
     y: -1e5,
@@ -75,7 +76,7 @@ export default function App() {
         }}
       >
         <NodeStyleRule attributes={{ color: "#247BA0", radius: nodeSize }} />
-        <EdgeStyleRule attributes={{ color: "#247BA0", width: 0.15 }} />
+        <EdgeStyleRule attributes={{ color: "#247BA0", width: edgeWidth }} />
         <LayoutService />
         <Popup
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
@@ -100,13 +101,14 @@ export default function App() {
             const id = Number(node.getId());
             return id === 1 || id === 2 ? "grouped" : undefined;
           }}
-          duration={1000}
+          duration={500}
         />
       </Ogma>
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}
         nodeGrouping={nodeGrouping}
-        setNodeSize={(size) => setNodeSize(size)}
+        setNodeSize={setNodeSize}
+        setEdgeWidth={setEdgeWidth}
       />
     </div>
   );

@@ -6,12 +6,14 @@ interface ControlsProps {
   toggleNodeGrouping: (value: boolean) => void;
   nodeGrouping: boolean;
   setNodeSize: (value: number) => void;
+  setEdgeWidth: (value: number) => void;
 }
 
 export function Controls({
   toggleNodeGrouping,
   nodeGrouping,
   setNodeSize,
+  setEdgeWidth,
 }: ControlsProps) {
   //const ogma = useOgma();
   const [drawerShown, setDrawerShown] = useState(false);
@@ -62,6 +64,18 @@ export function Controls({
               step={0.25}
               onClickCapture={(evt) => evt.stopPropagation()}
               onChange={setNodeSize}
+            />
+          </div>
+          <Spacer h={1} />
+          <div className="controls-section">
+            <Text>Edge width</Text>
+            <Slider
+              initialValue={0.25}
+              max={5}
+              min={0.05}
+              step={0.5}
+              onClickCapture={(evt) => evt.stopPropagation()}
+              onChange={setEdgeWidth}
             />
           </div>
         </Drawer.Content>
