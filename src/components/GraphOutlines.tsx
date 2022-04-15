@@ -16,6 +16,7 @@ export function GraphOutlines({ visible = true }: GraphOutlinesProps) {
     ogma.getNodes().forEach((node) => {
       const { x, y } = node.getPosition();
       const radius = node.getAttribute("radius");
+      ctx.moveTo(x, y);
       ctx.arc(x, y, (radius as number) * 6, 0, 2 * Math.PI);
     });
     ctx.fill();
