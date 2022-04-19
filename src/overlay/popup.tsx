@@ -66,7 +66,7 @@ const PopupComponent = (
   const ogma = useOgma();
   const [layer, setLayer] = useState<Overlay | null>(null);
 
-  useImperativeHandle(ref, () => layer as Overlay);
+  useImperativeHandle(ref, () => layer as Overlay, [layer]);
 
   useEffect(() => {
     // register listener
@@ -135,4 +135,9 @@ const PopupComponent = (
   return null;
 };
 
+/**
+ * A popup component.
+ * Use it to display information statically on top of your visualisation
+ * or to display a modal dialog.
+ */
 export const Popup = forwardRef(PopupComponent);

@@ -51,10 +51,13 @@ describe("Edge grouping", () => {
       </Ogma>,
       div
     );
-    ref.current?.view.afterNextFrame().then(() => {
-      expect(ref.current?.getEdges().size).toBe(2);
-      done();
-    });
+    ref.current?.view
+      .afterNextFrame()
+      .then(() => {
+        expect(ref.current?.getEdges().size).toBe(2);
+        done();
+      })
+      .catch(done);
   });
 
   it("should ungroup when the transformation is removed", (done) => {
@@ -74,11 +77,14 @@ describe("Edge grouping", () => {
     });
     const button = div.querySelector("button") as HTMLButtonElement;
     act(() => button.click());
-    ogmaRef.current!.transformations.afterNextUpdate().then(() => {
-      expect(ogmaRef.current!.transformations.getList().length).toBe(0);
-      expect(ogmaRef.current!.getEdges().getId()).toStrictEqual([0, 1]);
-      done();
-    });
+    ogmaRef
+      .current!.transformations.afterNextUpdate()
+      .then(() => {
+        expect(ogmaRef.current!.transformations.getList().length).toBe(0);
+        expect(ogmaRef.current!.getEdges().getId()).toStrictEqual([0, 1]);
+        done();
+      })
+      .catch(done);
   });
 
   it("should ungroup when the transformation is disabled", () => {

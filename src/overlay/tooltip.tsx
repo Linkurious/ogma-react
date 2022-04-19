@@ -106,4 +106,10 @@ const TooltipComponent = (
   return null;
 };
 
+/**
+ * Tooltip layer is a custom component to render some dynamic data on top of
+ * your visualisation. The position and contents can be changed quickly and it
+ * will adapt the placement to the viewport size. See in in action in our
+ * [example](linkurious.github.io/ogma-react/)
+ */
 export const Tooltip = forwardRef(TooltipComponent);

@@ -402,6 +402,48 @@ Edge grouping transformation. See [`ogma.transformations.addEdgeGrouping()`](htt
 </Ogma>
 ```
 
+### `<NodeFilter />`
+
+Node filter transformation. See [`ogma.transformations.addNodeFilter()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeFilter) for more information.
+
+#### Props
+
+| Prop         | Type                           | Default | Description |
+| ------------ | ------------------------------ | ------- | ----------- |
+| `...props`   | `Ogma.NodeFilterOptions` |  | See [`ogma.transformations.addNodeFilter()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeFilter) for more information. |
+
+#### Example
+
+```tsx
+<Ogma graph={...}>
+  <NodeFilter
+    criteria={node => node.getData('age') > 22}
+    disabled={false}
+  />
+</Ogma>
+```
+
+### `<EdgeFilter />`
+
+Wrapper for the edge filter transformation. See [`ogma.transformations.addEdgeFilter()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeFilter) for more information.
+
+#### Props
+
+| Prop         | Type                           | Default | Description |
+| ------------ | ------------------------------ | ------- | ----------- |
+| `...props`   | `Ogma.EdgeFilterOptions` |  | See [`ogma.transformations.addEdgeFilter()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeFilter) for more information. |
+
+#### Example
+
+```tsx
+<Ogma graph={...}>
+  <EdgeFilter
+    criteria={edge => edge.getData('type') === 'important'}
+    disabled={false}
+  />
+</Ogma>
+```
+
 ### `<NeighborMerging />`
 
 Neighbor merging transformation. See [`ogma.transformations.addNeighborMerging()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNeighborMerging) for more information.
