@@ -32,14 +32,7 @@ export function GraphOutlines({ visible = true }: GraphOutlinesProps) {
     };
   }, []);
 
-  useEffect(() => {
-    console.log({ visible }, layerRef.current);
-    if (visible) {
-      layerRef.current?.show();
-    } else {
-      layerRef.current?.hide();
-    }
-  }, [visible]);
-
-  return <CanvasLayer render={render} ref={layerRef} index={0} />;
+  return (
+    <CanvasLayer visible={visible} render={render} ref={layerRef} index={0} />
+  );
 }

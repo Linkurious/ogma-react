@@ -18,6 +18,7 @@ import { Loading } from "@geist-ui/core";
 import { LayoutService } from "./components/Layout";
 import { Controls } from "./components/Controls";
 import { GraphOutlines } from "./components/GraphOutlines";
+import { Logo } from "./components/Logo";
 
 export default function App() {
   const [graph, setGraph] = useState<RawGraph>();
@@ -32,6 +33,8 @@ export default function App() {
   const [nodeGrouping, setNodeGrouping] = useState(true);
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.25);
+
+  // layers
   const [outlines, setOutlines] = useState(false);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
     x: -1e5,
@@ -53,6 +56,7 @@ export default function App() {
 
   return (
     <div className="App">
+      <Logo />
       <Ogma
         ref={ref}
         graph={graph}
@@ -77,8 +81,14 @@ export default function App() {
             );
         }}
       >
-        <NodeStyleRule attributes={{ color: "#247BA0", radius: nodeSize }} />
-        <EdgeStyleRule attributes={{ color: "#247BA0", width: edgeWidth }} />
+        <NodeStyleRule
+          attributes={{
+            color: "#247BA0",
+            radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
+            text: (node) => node?.getData("properties.name"),
+          }}
+        />
+        <EdgeStyleRule attributes={{ width: edgeWidth }} />
         <LayoutService />
         <Popup
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
@@ -100,8 +110,11 @@ export default function App() {
           ref={groupingRef}
           disabled={!nodeGrouping}
           groupIdFunction={(node) => {
-            const id = Number(node.getId());
-            return id === 1 || id === 2 ? "grouped" : undefined;
+            const categories = node.getData("categories");
+            return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
+          }}
+          nodeGenerator={(nodes) => {
+            return { data: { multiplier: nodes.size } };
           }}
           duration={500}
         />
