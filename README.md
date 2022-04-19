@@ -16,6 +16,8 @@ An wrapper of [`@linkurious/ogma`](https://ogma.linkurio.us) for use with [React
     - Transformations:
       - [`<NodeGrouping />`](#nodegrouping-)
       - [`<EdgeGrouping />`](#edgegrouping-)
+      - [`<NodeFilter />`](#nodefilter-)
+      - [`<EdgeFilter />`](#edgefilter-)
       - [`<NeighborGeneration />`](#neighborgeneration-)
       - [`<NeighborMerging />`](#neighbormerging-)
       - [`<NodeCollapsing />`](#nodecollapsing-)
@@ -199,6 +201,8 @@ export default function App () {
 - Transformations:
   - [`<NodeGrouping />`](#nodegrouping-)
   - [`<EdgeGrouping />`](#edgegrouping-)
+  - [`<NodeFilter />`](#nodefilter-)
+  - [`<EdgeFilter />`](#edgefilter-)
   - [`<NeighborGeneration />`](#neighborgeneration-)
   - [`<NeighborMerging />`](#neighbormerging-)
   - [`<NodeCollapsing />`](#nodecollapsing-)
