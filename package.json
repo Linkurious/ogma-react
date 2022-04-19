@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "0.5.6",
+  "version": "0.0.1",
   "description": "A light adaptation of Ogma for React application",
   "main": "dist/index.js",
   "module": "dist/index-esm.js",
