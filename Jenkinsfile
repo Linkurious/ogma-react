@@ -3,5 +3,8 @@
 nodeJob {
   projectName = "linkurious/ogma-react"
   runPreReleaseOnUpload = false
-  npmPackPath = './dist'
+  npmPackPath = './dist',
+  createGitTag = true
+  gitTagPrefix = 'v'
+  runNpmPublish = true
 }
