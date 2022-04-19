@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A light adaptation of Ogma for React application",
   "main": "dist/index.js",
   "module": "dist/index-esm.js",
@@ -99,7 +99,7 @@
     "url": "git+https://github.com/linkurious/ogma-react.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/linkurious/ogma-react/issues"
   },
