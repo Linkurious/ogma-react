@@ -218,7 +218,7 @@ Main visualisation component. You can use `onReady` or `ref` prop to get a refer
 
 | Prop       | Type                   | Default | Description |
 | ---------- | ---------------------- | ------- | ----------- |
-| `options?` | `Ogma.Options`         | `{}`    | Ogma options                                                                                                                                                            |
+| `options?` | [`Ogma.Options`](https://doc.linkurio.us/ogma/latest/api.html#Options)         | `{}`    | Ogma options                                                                                                                                                            |
 | `graph?`   | `Ogma.RawGraph`        | `null`  | The graph to render                                                                                                                                                     |
 | `onReady?` | `(ogma: Ogma) => void` | `null`  | Callback when the Ogma instance is ready                                                                                                                                |
 | `ref?`     | `React.Ref<Ogma>`      | `null`  | Reference to the Ogma instance                                                                                                                                          |
