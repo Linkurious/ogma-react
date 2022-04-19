@@ -480,6 +480,19 @@ Geo mode component. It's the first version of this component and we are still ga
 | `enabled?`       | `boolean`    | `false`  | On/off toggle |
 | `...rest` | `Ogma.GeomModeOptions`  | | See [`GeoModeOptions`](https://doc.linkurio.us/ogma/latest/api.html#GeoModeOptions) properties |
 
+#### Example
+
+```tsx
+<Ogma graph={...}>
+  <Geo
+    enabled={true}
+    tileUrlTemplate="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
+    longitudePath="data.lng"
+    latitudePath="data.lat"
+  />
+</Ogma>
+```
+
 
 ## License
 

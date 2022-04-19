@@ -150,8 +150,8 @@ export default function App() {
         {/* Geo mode */}
         <Geo
           enabled={geoEnabled}
-          longitudePath={"properties.longitude"}
-          latitudePath={"properties.latitude"}
+          longitudePath="properties.longitude"
+          latitudePath="properties.latitude"
         />
       </Ogma>
       <Controls
