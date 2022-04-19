@@ -23,7 +23,7 @@
     "start": "typehead serve",
     "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
     "build": "npm run types && typehead build && scripts/prepublish.js",
-    "format": "prettier -w src/**/*.{ts,tsx} web/**/*.tsx",
+    "format": "prettier -w src/**/*.{ts,tsx} web/**/*.tsx test/**/*.tsx",
     "test": "jest",
     "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
     "typecheck": "tsc --noEmit",
