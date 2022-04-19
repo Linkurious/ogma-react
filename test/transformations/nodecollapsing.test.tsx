@@ -1,11 +1,9 @@
 import React from "react";
 import { render } from "react-dom";
-// import { act } from "react-dom/test-utils";
-// import OgmaLib from "@linkurious/ogma";
 import { Ogma, NodeCollapsing } from "../../src";
 import graph from "../fixtures/simple_graph.json";
 
-describe("styles", () => {
+describe("Node collapsing", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 

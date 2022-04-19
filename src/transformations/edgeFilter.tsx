@@ -5,17 +5,17 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, { EdgeGroupingOptions, Transformation } from "@linkurious/ogma";
+import OgmaLib, { EdgeFilterOptions, Transformation } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface EdgeGroupingProps<ED, ND>
-  extends EdgeGroupingOptions<ED, ND>,
+interface EdgeFilterProps<ED, ND>
+  extends EdgeFilterOptions<ED, ND>,
     EnabledState {}
 
-function EdgeGroupingComponent<ND = any, ED = any>(
-  props: EdgeGroupingProps<ED, ND>,
+function EdgeFilterComponent<ND = any, ED = any>(
+  props: EdgeFilterProps<ED, ND>,
   ref?: Ref<Transformation<ND, ED>>
 ) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
@@ -26,7 +26,7 @@ function EdgeGroupingComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addEdgeGrouping(props);
+    const newTransformation = ogma.transformations.addEdgeFilter(props);
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();
@@ -44,6 +44,6 @@ function EdgeGroupingComponent<ND = any, ED = any>(
 }
 
 /**
- * Edge grouping transformation component. It wraps around Ogma [`EdgeGrouping` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeGrouping).
+ * Edge Filter transformation component. It wraps around Ogma [`EdgeFilter` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeFilter).
  */
-export const EdgeGrouping = forwardRef(EdgeGroupingComponent);
+export const EdgeFilter = forwardRef(EdgeFilterComponent);

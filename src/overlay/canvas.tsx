@@ -58,4 +58,13 @@ const CanvasLayerComponent = (
   return null;
 };
 
+/**
+ * A canvas layer that can be added to the Ogma instance. See the [Ogma documentation](https://doc.linkurio.us/ogma/latest/api.html#Ogma-layers-addCanvasLayer) for more information.
+ *
+ * Useful to perform drawings in sync with the view. In the drawing function you
+ * are given the CanvasRenderingContext2D, that is automatically scaled and
+ * translated to be in sync with the graph. So you can simply use graph
+ * coordinates to draw shapes and text in it. See our "Layers" examples for
+ * the code snippets.
+ */
 export const CanvasLayer = forwardRef(CanvasLayerComponent);

@@ -39,4 +39,8 @@ const NodeStyleRuleComponent = <ND, ED>(
   return null;
 };
 
+/**
+ * This component wraps around Ogma [`NodeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addNodeRule). It allows you to add a node style rule to the
+ * Ogma instance to calculate the visual appearance attributes of the nodes.
+ */
 export const NodeStyleRule = forwardRef(NodeStyleRuleComponent);

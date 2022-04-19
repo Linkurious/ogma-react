@@ -42,10 +42,13 @@ describe("Node grouping", () => {
       </Ogma>,
       div
     );
-    ref.current?.view.afterNextFrame().then(() => {
-      expect(ref.current?.getNodes().size).toBe(2);
-      done();
-    });
+    ref.current?.view
+      .afterNextFrame()
+      .then(() => {
+        expect(ref.current?.getNodes().size).toBe(2);
+        done();
+      })
+      .catch(done);
   });
 
   it("should ungroup when the transformation is removed", (done) => {
@@ -71,10 +74,13 @@ describe("Node grouping", () => {
     });
     const button = div.querySelector("button") as HTMLButtonElement;
     act(() => button.click());
-    ogmaRef.current!.transformations.afterNextUpdate().then(() => {
-      expect(ogmaRef.current!.transformations.getList().length).toBe(0);
-      done();
-    });
+    ogmaRef
+      .current!.transformations.afterNextUpdate()
+      .then(() => {
+        expect(ogmaRef.current!.transformations.getList().length).toBe(0);
+        done();
+      })
+      .catch(done);
   });
 
   it("should ungroup when the transformation is disabled", () => {

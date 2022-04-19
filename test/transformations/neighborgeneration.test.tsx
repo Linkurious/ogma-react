@@ -1,11 +1,9 @@
 import React from "react";
 import { render } from "react-dom";
-// import { act } from "react-dom/test-utils";
-// import OgmaLib from "@linkurious/ogma";
 import { Ogma, NeighborGeneration } from "../../src";
 import graph from "../fixtures/simple_graph.json";
 
-describe("styles", () => {
+describe("Neighbor generation", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
