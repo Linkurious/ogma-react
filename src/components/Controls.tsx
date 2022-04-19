@@ -9,6 +9,8 @@ interface ControlsProps {
   setEdgeWidth: (value: number) => void;
   outlines: boolean;
   setOutlines: (value: boolean) => void;
+  geoEnabled: boolean;
+  setGeoEnabled: (value: boolean) => void;
 }
 
 export function Controls({
@@ -16,6 +18,8 @@ export function Controls({
   nodeGrouping,
   setNodeSize,
   setEdgeWidth,
+  geoEnabled,
+  setGeoEnabled,
   outlines,
   setOutlines,
 }: ControlsProps) {
@@ -89,6 +93,14 @@ export function Controls({
               onChange={() => setOutlines(!outlines)}
             />
             <span className="controls-section-label">Node outlines</span>
+          </div>
+          <Spacer h={1} />
+          <div className="controls-section">
+            <Toggle
+              checked={outlines}
+              onChange={() => setGeoEnabled(!geoEnabled)}
+            />
+            <span className="controls-section-label">Geo mode</span>
           </div>
         </Drawer.Content>
       </Drawer>

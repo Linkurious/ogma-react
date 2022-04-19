@@ -6,6 +6,11 @@ import OgmaLib, {
   Transformation,
 } from "@linkurious/ogma";
 import React, { useEffect, useState, createRef } from "react";
+// loading indicator
+import { Loading } from "@geist-ui/core";
+// for geo mode
+import * as L from "leaflet";
+// components
 import {
   Ogma,
   NodeStyleRule,
@@ -13,28 +18,42 @@ import {
   Tooltip,
   NodeGrouping,
   Popup,
+  Geo,
 } from "../../src";
-import { Loading } from "@geist-ui/core";
+
+// cusotm components:
+// layout component, to be applied on certain events
 import { LayoutService } from "./components/Layout";
-import { Controls } from "./components/Controls";
+// outlines canvas layer with halos
 import { GraphOutlines } from "./components/GraphOutlines";
+// control panel
+import { Controls } from "./components/Controls";
 import { Logo } from "./components/Logo";
 
+// to enable geo mode integration
+OgmaLib.libraries["leaflet"] = L;
+
 export default function App() {
+  // graph state
   const [graph, setGraph] = useState<RawGraph>();
   const [loading, setLoading] = useState(true);
 
+  // UI states
   const [popupOpen, setPopupOpen] = useState(false);
   const [clickedNode, setClickedNode] = useState<Node>();
 
+  // ogma instance and grouping references
   const ref = createRef<OgmaLib>();
   const groupingRef = createRef<Transformation>();
 
+  // grouping and geo states
   const [nodeGrouping, setNodeGrouping] = useState(true);
+  const [geoEnabled, setGeoEnabled] = useState(false);
+  // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.25);
 
-  // layers
+  // UI layers
   const [outlines, setOutlines] = useState(false);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
     x: -1e5,
@@ -42,6 +61,7 @@ export default function App() {
   });
   const [target, setTarget] = useState<Node | Edge | null>();
 
+  // load the graph
   useEffect(() => {
     setLoading(true);
     fetch("data.json")
@@ -52,6 +72,7 @@ export default function App() {
       });
   }, []);
 
+  // nothing to render yet
   if (loading) return <Loading />;
 
   return (
@@ -81,6 +102,7 @@ export default function App() {
             );
         }}
       >
+        {/* Styling */}
         <NodeStyleRule
           attributes={{
             color: "#247BA0",
@@ -89,7 +111,11 @@ export default function App() {
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
+
+        {/* Layout */}
         <LayoutService />
+
+        {/* context-aware UI */}
         <Popup
           position={() => (clickedNode ? clickedNode.getPosition() : null)}
           onClose={() => setPopupOpen(false)}
@@ -106,9 +132,12 @@ export default function App() {
               : "nothing"}
           </div>
         </Tooltip>
+        <GraphOutlines visible={outlines} />
+
+        {/* Grouping */}
         <NodeGrouping
           ref={groupingRef}
-          disabled={!nodeGrouping}
+          disabled={!nodeGrouping && !geoEnabled}
           groupIdFunction={(node) => {
             const categories = node.getData("categories");
             return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
@@ -118,7 +147,12 @@ export default function App() {
           }}
           duration={500}
         />
-        <GraphOutlines visible={outlines} />
+        {/* Geo mode */}
+        <Geo
+          enabled={geoEnabled}
+          longitudePath={"properties.longitude"}
+          latitudePath={"properties.latitude"}
+        />
       </Ogma>
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}
@@ -127,6 +161,8 @@ export default function App() {
         setEdgeWidth={setEdgeWidth}
         outlines={outlines}
         setOutlines={setOutlines}
+        geoEnabled={geoEnabled}
+        setGeoEnabled={setGeoEnabled}
       />
     </div>
   );
