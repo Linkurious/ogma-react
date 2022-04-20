@@ -27,7 +27,7 @@ Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [
 
 ## Getting Started
 
-Add `@linkurious/ogma` and `@linkurious/ogma-react` to your project. For Ogma, you should use you NPM link from [get.linkuri.us](https://get.linkurio.us).
+Add `@linkurious/ogma` and `@linkurious/ogma-react` to your project. For Ogma, you should use you NPM link from [get.linkurio.us](https://get.linkurio.us).
 
 ```bash
 npm install <YOUR_LINK_WITH_API_KEY>
@@ -41,7 +41,7 @@ yarn i <YOUR_LINK_WITH_API_KEY>
 yarn add @linkurious/ogma-react
 ```
 
-You will need the CSS or Styled Components (see `web/src/styles.css` for an example). No CSS is included by default.
+You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/web/src/index.css) for an example). No CSS is included by default.
 
 ```tsx
 import { Ogma, NodeStyle, Popup } from '@linkurious/ogma-react';
