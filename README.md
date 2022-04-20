@@ -1,5 +1,7 @@
 # `@linkurious/ogma-react`
 
+![logo](/web/logo.svg)
+
 Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [React](https://reactjs.org).
 
   * [Getting started](#getting-started)
@@ -35,7 +37,7 @@ npm i @linkurious/ogma-react --save
 Or, with yarn:
 
 ```
-yanpm i <YOUR_LINK_WITH_API_KEY>
+yarn i <YOUR_LINK_WITH_API_KEY>
 yarn add @linkurious/ogma-react
 ```
 
