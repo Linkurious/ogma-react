@@ -1,6 +1,6 @@
 # `@linkurious/react-ogma`
 
-An wrapper of [`@linkurious/ogma`](https://ogma.linkurio.us) for use with [React](https://reactjs.org).
+Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [React](https://reactjs.org).
 
   * [Getting started](#getting-started)
   * [Usage](#usage)
