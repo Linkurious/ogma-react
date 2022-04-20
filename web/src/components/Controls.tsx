@@ -97,7 +97,7 @@ export function Controls({
           <Spacer h={1} />
           <div className="controls-section">
             <Toggle
-              checked={outlines}
+              checked={geoEnabled}
               onChange={() => setGeoEnabled(!geoEnabled)}
             />
             <span className="controls-section-label">Geo mode</span>
