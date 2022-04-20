@@ -1,4 +1,4 @@
-# `@linkurious/react-ogma`
+# `@linkurious/ogma-react`
 
 Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [React](https://reactjs.org).
 
