@@ -15,9 +15,13 @@ fs.readFile("package.json", "utf8")
       peerDependencies: base.peerDependencies,
       private: undefined,
       files: base.files.map((f) => f.replace("dist/", "")),
+      exports: {},
     };
     ["jsdelivr", "browser", "main", "module", "typings"].forEach((field) => {
       overwrite[field] = base[field].replace("dist/", "");
+    });
+    Object.keys(base.exports).forEach((key) => {
+      overwrite.exports[key] = base.exports[key].replace("./dist/", "./");
     });
     return { ...base, ...overwrite };
   })
