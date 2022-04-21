@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -11,9 +11,14 @@
   ],
   "jsdelivr": "dist/index.umd.js",
   "browser": "dist/index.umd.js",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.js",
   "module": "dist/index-esm.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index-esm.js",
+    "require": "./dist/index.js",
+    "default": "./dist/index.umd.js"
+  },
   "files": [
     "dist/*.d.ts",
     "dist/*.js",
