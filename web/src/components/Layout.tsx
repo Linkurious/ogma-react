@@ -6,7 +6,7 @@ import { useOgma } from "../../../src";
 export function LayoutService() {
   const ogma = useOgma();
   const onNodesAdded = (_evt: { nodes: NodeList }) => {
-    ogma.layouts.force({ locate: false });
+    ogma.layouts.force({ locate: true });
   };
 
   useEffect(() => {

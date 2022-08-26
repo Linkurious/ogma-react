@@ -79,6 +79,7 @@ describe("Edge grouping", () => {
     act(() => button.click());
     ogmaRef
       .current!.transformations.afterNextUpdate()
+      .then(() => ogmaRef.current!.transformations.afterNextUpdate())
       .then(() => {
         expect(ogmaRef.current!.transformations.getList().length).toBe(0);
         expect(ogmaRef.current!.getEdges().getId()).toStrictEqual([0, 1]);
