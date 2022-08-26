@@ -37,7 +37,7 @@
     "tsc:watch": "tsc --watch",
     "start": "typehead serve",
     "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
-    "build": "npm run build:ts && npm run build:js && npm run build:files",
+    "build": "npm ls @linkurious/ogma && npm run build:ts && npm run build:js && npm run build:files",
     "build:ts": "npm run typecheck && npm run types",
     "build:js": "typehead build && npm run build:umd",
     "build:umd": "./scripts/umd.js",
