@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -26,8 +26,8 @@
     "dist/*.md"
   ],
   "engines": {
-    "node": "14.19.1",
-    "npm": "6.14.16"
+    "node": "16.15.0",
+    "npm": "8.5.5"
   },
   "publishConfig": {
     "access": "public"
@@ -37,7 +37,7 @@
     "tsc:watch": "tsc --watch",
     "start": "typehead serve",
     "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
-    "build": "npm run build:ts && npm run build:js && npm run build:files",
+    "build": "npm ls @linkurious/ogma && npm run build:ts && npm run build:js && npm run build:files",
     "build:ts": "npm run typecheck && npm run types",
     "build:js": "typehead build && npm run build:umd",
     "build:umd": "./scripts/umd.js",
@@ -60,7 +60,6 @@
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.1",
     "@linkurious/code-tools": "0.0.6",
-    "@linkurious/ogma": "4.1.0-PR-2905.9",
     "@mapbox/typehead": "^1.1.0",
     "@next/bundle-analyzer": "^12.1.4",
     "@types/enzyme": "^3.10.11",

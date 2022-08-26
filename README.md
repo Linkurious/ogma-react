@@ -106,7 +106,7 @@ It's unintuitive to implement the layouts as a React component declaratively. We
 
   ```tsx
   import { useEffect } from 'react';
-  import { useOgma } from '@linkurious/react-ogma';
+  import { useOgma } from '@linkurious/ogma-react';
   export function LayoutService () {
     const ogma = useOgma(); // hook to get the ogma instance
 
@@ -119,7 +119,7 @@ It's unintuitive to implement the layouts as a React component declaratively. We
       // cleanup
       return () => {
         ogma.events.off(onNodesAdded);
-      });
+      };
     }, []);
 
     return null;
@@ -145,6 +145,7 @@ export default function App() {
 ```tsx
 import { useState, useEffect } from 'react';
 import { RawGraph } from '@linkurious/ogma';
+import { Ogma } from '@linkurious/ogma-react';
 
 export default function App () {
   const [isLoading, setIsLoading] = useState(true);
@@ -167,7 +168,8 @@ Using the parsers:
 
 ```tsx
 import { useState, useEffect } from 'react';
-import Ogma, { RawGraph } from '@linkurious/ogma';
+import OgmaLib, { RawGraph } from '@linkurious/ogma';
+import { Ogma } from '@linkurious/ogma-react';
 
 export default function App () {
   const [isLoading, setIsLoading] = useState(true);
@@ -177,7 +179,7 @@ export default function App () {
   useEffect(() => {
     fetch('/graph.gexf')
       .then(res => res.text())
-      .then(gexf => Ogma.parse.gexf(gexf))
+      .then(gexf => OgmaLib.parse.gexf(gexf))
       .then(jsonGraph => {
         setGraph(jsonGraph);
         setIsLoading(false);
