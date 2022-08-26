@@ -26,8 +26,8 @@
     "dist/*.md"
   ],
   "engines": {
-    "node": "14.19.1",
-    "npm": "6.14.16"
+    "node": "16.15.0",
+    "npm": "8.5.5"
   },
   "publishConfig": {
     "access": "public"
