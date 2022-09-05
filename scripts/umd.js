@@ -5,7 +5,8 @@ const globalName = "OgmaReact";
 
 const globals = {
   react: "React",
-  "react-dom": "ReactDom",
+  "react-dom": "ReactDOM",
+  "react-dom/server": "ReactDOMServer",
   "@linkurious/ogma": "Ogma",
 };
 
