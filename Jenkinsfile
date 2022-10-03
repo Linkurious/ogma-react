@@ -7,4 +7,5 @@ nodeJob {
   createGitTag = false
   gitTagPrefix = 'v'
   runNpmPublish = true
+  runDependencyVersionCheck = false
 }
