@@ -1,0 +1,8 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>Linkurious/renovate-config",
+    "github>Linkurious/renovate-config:meta",
+    "regexManagers:dockerfileVersions"
+  ]
+}
