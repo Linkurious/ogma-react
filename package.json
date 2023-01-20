@@ -58,7 +58,7 @@
   "devDependencies": {
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.1",
-    "@linkurious/code-tools": "0.0.10",
+    "@linkurious/code-tools": "0.0.12",
     "@mapbox/typehead": "^1.1.0",
     "@next/bundle-analyzer": "^12.1.4",
     "@types/enzyme": "^3.10.11",
