@@ -15,7 +15,7 @@ import { toggle } from "./utils";
 
 interface NeighborMergingProps<ND, ED>
   extends NeighborMergingOptions<ND, ED>,
-    EnabledState {}
+  EnabledState { }
 
 function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
@@ -42,6 +42,10 @@ function NeighborMergingComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.dataFunction, props.selector])
 
   return null;
 }

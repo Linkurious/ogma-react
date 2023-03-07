@@ -12,7 +12,7 @@ import { toggle } from "./utils";
 
 interface EdgeGroupingProps<ED, ND>
   extends EdgeGroupingOptions<ED, ND>,
-    EnabledState {}
+  EnabledState { }
 
 function EdgeGroupingComponent<ND = any, ED = any>(
   props: EdgeGroupingProps<ED, ND>,
@@ -39,6 +39,10 @@ function EdgeGroupingComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.selector, props.generator, props.groupIdFunction, props.separateEdgesByDirection])
 
   return null;
 }

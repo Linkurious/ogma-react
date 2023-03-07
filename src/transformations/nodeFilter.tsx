@@ -12,7 +12,7 @@ import { toggle } from "./utils";
 
 interface NodeFilterProps<ED, ND>
   extends NodeFilterOptions<ED, ND>,
-    EnabledState {}
+  EnabledState { }
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
@@ -39,6 +39,10 @@ function NodeFilterComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.criteria])
 
   return null;
 }

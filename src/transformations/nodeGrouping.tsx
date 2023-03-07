@@ -10,9 +10,9 @@ import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface NodeGroupingProps<ND, ED>
+export interface NodeGroupingProps<ND, ED>
   extends NodeGroupingOptions<ND, ED>,
-    EnabledState {}
+  EnabledState { }
 
 function NodeGroupingComponent<ND, ED>(
   props: NodeGroupingProps<ND, ED>,
@@ -41,6 +41,11 @@ function NodeGroupingComponent<ND, ED>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.groupIdFunction, props.groupSelfLoopEdges, props.edgeGenerator, props.nodeGenerator, props.groupEdges, props.padding,
+  props.selector, props.showContents, props.separateEdgesByDirection])
 
   return null;
 }

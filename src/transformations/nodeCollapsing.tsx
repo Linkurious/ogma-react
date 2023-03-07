@@ -15,7 +15,7 @@ import { toggle } from "./utils";
 
 interface NodeCollapsingProps<ND, ED>
   extends NodeCollapsingOptions<ND, ED>,
-    EnabledState {}
+  EnabledState { }
 
 export function NodeCollapsingComponent<ND = any, ED = any>(
   props: NodeCollapsingProps<ND, ED>,
@@ -43,6 +43,10 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.edgeGenerator, props.selector])
 
   return null;
 }

@@ -12,7 +12,7 @@ import { toggle } from "./utils";
 
 interface EdgeFilterProps<ED, ND>
   extends EdgeFilterOptions<ED, ND>,
-    EnabledState {}
+  EnabledState { }
 
 function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ED, ND>,
@@ -39,6 +39,10 @@ function EdgeFilterComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.criteria])
 
   return null;
 }
