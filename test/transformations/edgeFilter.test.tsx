@@ -1,5 +1,6 @@
 import { EdgeFilterTest, ref } from "./test-components";
 import { render, userEvent, screen } from '../utils'
+import OgmaLib from "@linkurious/ogma";
 describe("Edge filter", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
@@ -9,7 +10,7 @@ describe("Edge filter", () => {
       <EdgeFilterTest disabled={true} />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0, 1]);
@@ -26,7 +27,7 @@ describe("Edge filter", () => {
       <EdgeFilterTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0]);
@@ -43,7 +44,7 @@ describe("Edge filter", () => {
       <EdgeFilterTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0]);

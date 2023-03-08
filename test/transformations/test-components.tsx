@@ -2,7 +2,7 @@
 import graph from "../fixtures/simple_graph.json";
 import graphCurved from "../fixtures/simple_graph_curved.json";
 
-import { Ogma as OgmaLib } from "@linkurious/ogma";
+import OgmaLib from "@linkurious/ogma";
 
 import {
   Ogma, EdgeFilter, EdgeFilterProps, NodeFilter, NodeFilterProps,
@@ -10,9 +10,7 @@ import {
   NodeGrouping, NodeGroupingProps,
   NeighborGeneration, NeighborGenerationProps,
   NeighborMerging, NeighborMergingProps,
-  NodeCollapsing, NodeCollapsingProps,
-
-
+  NodeCollapsing, NodeCollapsingProps
 } from "../../src";
 import { createRef, forwardRef, useState } from "react";
 
@@ -76,9 +74,9 @@ function NodeFilterTestC(filter: Partial<NodeFilterProps<unknown, unknown>> = {}
 function EdgeGroupingTestC(grouping: Partial<EdgeGroupingProps<unknown, unknown>> = {}) {
   const [props, setProps] = useState<EdgeGroupingProps<unknown, unknown>>({
     selector: (edge) => !!(+edge.getId() % 2),
-    groupIdFunction: (edge) => `group-1`,
+    groupIdFunction: () => `group-1`,
     separateEdgesByDirection: false,
-    generator(edges, groupId, transformation) {
+    generator(_, groupId) {
       return {
         id: groupId,
         data: { key: 'value' }
@@ -118,9 +116,9 @@ function EdgeGroupingTestC(grouping: Partial<EdgeGroupingProps<unknown, unknown>
 function NodeGroupingTestC(grouping: Partial<NodeGroupingProps<unknown, unknown>> = {}) {
   const [props, setProps] = useState<NodeGroupingProps<unknown, unknown>>({
     selector: (node) => !!(+node.getId() % 2),
-    groupIdFunction: (node) => `group-1`,
+    groupIdFunction: () => `group-1`,
     separateEdgesByDirection: false,
-    nodeGenerator(nodes, groupId, transformation) {
+    nodeGenerator: (_, groupId) => {
       return {
         id: groupId,
         data: { key: 'value' }

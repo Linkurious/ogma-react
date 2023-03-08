@@ -1,5 +1,6 @@
 import { NodeGroupingTest, ref } from "./test-components";
 import { render, userEvent, screen } from '../utils'
+import OgmaLib from "@linkurious/ogma";
 describe("Node grouping", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
@@ -9,7 +10,7 @@ describe("Node grouping", () => {
       <NodeGroupingTest disabled={true} />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
@@ -26,7 +27,7 @@ describe("Node grouping", () => {
       <NodeGroupingTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
@@ -43,7 +44,7 @@ describe("Node grouping", () => {
       <NodeGroupingTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);

@@ -5,7 +5,7 @@ import OgmaLib, {
   RawGraph,
   Transformation,
 } from "@linkurious/ogma";
-import React, { useEffect, useState, createRef } from "react";
+import { useEffect, useState, createRef } from "react";
 // loading indicator
 import { Loading } from "@geist-ui/core";
 // for geo mode

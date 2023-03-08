@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Icon = ({ width = 12, height = 12 }) => (
   <svg
     width={width}

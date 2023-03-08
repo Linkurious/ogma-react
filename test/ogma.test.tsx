@@ -65,7 +65,8 @@ describe("Ogma", () => {
       const Component = () => {
         const ogma = useOgma();
         expect(ogma).toBeInstanceOf(OgmaLib);
-        return resolve(null);
+        resolve(null);
+        return <></>;
       };
       render(
         <Ogma graph={graph}>

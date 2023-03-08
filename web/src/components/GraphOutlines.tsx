@@ -1,5 +1,5 @@
 import { CanvasLayer as OgmaCanvasLayer } from "@linkurious/ogma";
-import React, { useEffect, createRef, useCallback } from "react";
+import { useEffect, createRef, useCallback } from "react";
 import { useOgma, CanvasLayer } from "../../../src";
 
 interface GraphOutlinesProps {

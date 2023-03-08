@@ -13,7 +13,7 @@ import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface NodeCollapsingProps<ND, ED>
+export interface NodeCollapsingProps<ND, ED>
   extends NodeCollapsingOptions<ND, ED>,
   EnabledState { }
 

@@ -1,5 +1,6 @@
 import { NodeCollapsingTest, ref } from "./test-components";
 import { render, userEvent, screen } from '../utils'
+import OgmaLib from "@linkurious/ogma";
 describe("Node Collapsing", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
@@ -9,7 +10,7 @@ describe("Node Collapsing", () => {
       <NodeCollapsingTest disabled={true} />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
@@ -26,7 +27,7 @@ describe("Node Collapsing", () => {
       <NodeCollapsingTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);
@@ -45,7 +46,7 @@ describe("Node Collapsing", () => {
     //   <NodeCollapsingTest />,
     //   div
     // );
-    // return ref.current?.transformations
+    // return (ref.current as OgmaLib).transformations
     //   .afterNextUpdate()
     //   .then(() => {
     //     expect(ref.current?.getEdges().get(0).getData()).toEqual({ key1: 'value1' });

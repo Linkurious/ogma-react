@@ -1,5 +1,6 @@
 import { NeighborMergingTest, ref } from "./test-components";
 import { render, userEvent, screen } from '../utils'
+import OgmaLib from "@linkurious/ogma";
 describe("Neighbor merging", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
@@ -9,7 +10,7 @@ describe("Neighbor merging", () => {
       <NeighborMergingTest disabled={true} />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
@@ -26,7 +27,7 @@ describe("Neighbor merging", () => {
       <NeighborMergingTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);
@@ -43,7 +44,7 @@ describe("Neighbor merging", () => {
       <NeighborMergingTest />,
       div
     );
-    return ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);

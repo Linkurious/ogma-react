@@ -1,5 +1,5 @@
-import React, { createRef } from "react";
-import { render, screen } from './utils'
+import { createRef } from "react";
+import { render } from './utils'
 
 import { Ogma, Popup } from "../src";
 import { Overlay, Point } from "@linkurious/ogma";
