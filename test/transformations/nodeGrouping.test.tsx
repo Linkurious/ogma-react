@@ -1,0 +1,57 @@
+import { NodeGroupingTest, ref } from "./test-components";
+import { render, userEvent, screen } from '../utils'
+describe("Node grouping", () => {
+  let div: HTMLDivElement;
+  beforeEach(() => (div = document.createElement("div")));
+
+  it("Can be disabled by default and then enabled", () => {
+    render(
+      <NodeGroupingTest disabled={true} />,
+      div
+    );
+    return ref.current?.transformations
+      .afterNextUpdate()
+      .then(() => {
+        expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
+      })
+      .then(() => userEvent.click(screen.getByText('toggle')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
+      })
+  });
+
+  it("Can be disabled", () => {
+    render(
+      <NodeGroupingTest />,
+      div
+    );
+    return ref.current?.transformations
+      .afterNextUpdate()
+      .then(() => {
+        expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
+      })
+      .then(() => userEvent.click(screen.getByText('toggle')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
+      })
+  });
+
+  it("Updates grouping", () => {
+    render(
+      <NodeGroupingTest />,
+      div
+    );
+    return ref.current?.transformations
+      .afterNextUpdate()
+      .then(() => {
+        expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
+      })
+      .then(() => userEvent.click(screen.getByText('setGrouping')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(ref.current?.getNodes().getId()).toEqual([`group-1`, `group-0`]);
+      })
+  });
+});

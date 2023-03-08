@@ -10,7 +10,7 @@ import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface EdgeGroupingProps<ED, ND>
+export interface EdgeGroupingProps<ED, ND>
   extends EdgeGroupingOptions<ED, ND>,
   EnabledState { }
 
@@ -26,7 +26,10 @@ function EdgeGroupingComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addEdgeGrouping(props);
+    const newTransformation = ogma.transformations.addEdgeGrouping({
+      ...props,
+      enabled: !props.disabled,
+    });
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();

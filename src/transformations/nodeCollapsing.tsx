@@ -29,7 +29,10 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addNodeCollapsing(props);
+    const newTransformation = ogma.transformations.addNodeCollapsing({
+      ...props,
+      enabled: !props.disabled
+    });
     setTransformation(newTransformation);
 
     return () => {

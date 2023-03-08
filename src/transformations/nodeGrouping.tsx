@@ -27,7 +27,10 @@ function NodeGroupingComponent<ND, ED>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addNodeGrouping(props);
+    const newTransformation = ogma.transformations.addNodeGrouping({
+      ...props,
+      enabled: !props.disabled,
+    });
     setTransformation(newTransformation);
 
     return () => {
