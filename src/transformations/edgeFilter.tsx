@@ -12,7 +12,7 @@ import { toggle } from "./utils";
 
 export interface EdgeFilterProps<ED, ND>
   extends EdgeFilterOptions<ED, ND>,
-  EnabledState { }
+    EnabledState {}
 
 function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ED, ND>,
@@ -26,10 +26,9 @@ function EdgeFilterComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    console.log('props', props)
     const newTransformation = ogma.transformations.addEdgeFilter({
       ...props,
-      enabled: !props.disabled
+      enabled: !props.disabled,
     });
     setTransformation(newTransformation);
     return () => {
@@ -40,15 +39,13 @@ function EdgeFilterComponent<ND = any, ED = any>(
 
   useEffect(() => {
     if (transformation) {
-      console.log('props.disabled', props.disabled)
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
 
   useEffect(() => {
-    console.log('setoptions', props.disabled)
     transformation?.setOptions(props);
-  }, [props.criteria])
+  }, [props.criteria]);
 
   return null;
 }

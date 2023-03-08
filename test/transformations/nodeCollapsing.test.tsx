@@ -1,42 +1,36 @@
 import { NodeCollapsingTest, ref } from "./test-components";
-import { render, userEvent, screen } from '../utils'
+import { render, userEvent, screen } from "../utils";
 import OgmaLib from "@linkurious/ogma";
 describe("Node Collapsing", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
   it("Can be disabled by default and then enabled", () => {
-    render(
-      <NodeCollapsingTest disabled={true} />,
-      div
-    );
+    render(<NodeCollapsingTest disabled={true} />, div);
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
       })
-      .then(() => userEvent.click(screen.getByText('toggle')))
+      .then(() => userEvent.click(screen.getByText("toggle")))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);
-      })
+      });
   });
 
   it("Can be disabled", () => {
-    render(
-      <NodeCollapsingTest />,
-      div
-    );
+    render(<NodeCollapsingTest />, div);
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);
       })
-      .then(() => userEvent.click(screen.getByText('toggle')))
+      .then(() => userEvent.click(screen.getByText("toggle")))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
-      })
+      });
   });
 
   it("Updates criteria", () => {
@@ -54,7 +48,6 @@ describe("Node Collapsing", () => {
     //   .then(() => userEvent.click(screen.getByText('setCollapse')))
     //   .then(() => ref.current?.transformations.afterNextUpdate())
     //   .then(() => {
-    //     console.log(ref.current?.getEdges().getData())
     //     expect(ref.current?.getEdges().get(0).getData()).toEqual({ key2: 'value2' });
     //   })
   });
