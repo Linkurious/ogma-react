@@ -19,6 +19,7 @@ import {
   NodeGrouping,
   Popup,
   Geo,
+  NodeGroupingProps
 } from "../../src";
 
 // cusotm components:
@@ -52,6 +53,16 @@ export default function App() {
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.25);
+  const [groupingOptions, setGroupingOptions] = useState<NodeGroupingProps<any, any>>({
+    groupIdFunction: (node) => {
+      const categories = node.getData("categories");
+      return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
+    },
+    nodeGenerator: (nodes) => {
+      return { data: { multiplier: nodes.size } };
+    }
+  });
+
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
@@ -71,6 +82,16 @@ export default function App() {
         setLoading(false);
       });
   }, []);
+
+  function updateGrouping() {
+    setGroupingOptions({
+      ...groupingOptions,
+      groupIdFunction: (node) => {
+        const categories = node.getData("categories");
+        return categories[0] === "INVESTOR" ? "INVESTOR" : "OTHER";
+      }
+    })
+  }
 
   // nothing to render yet
   if (loading) return <Loading />;
@@ -138,13 +159,8 @@ export default function App() {
         <NodeGrouping
           ref={groupingRef}
           disabled={!nodeGrouping && !geoEnabled}
-          groupIdFunction={(node) => {
-            const categories = node.getData("categories");
-            return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
-          }}
-          nodeGenerator={(nodes) => {
-            return { data: { multiplier: nodes.size } };
-          }}
+          groupIdFunction={groupingOptions.groupIdFunction}
+          nodeGenerator={groupingOptions.nodeGenerator}
           duration={500}
         />
         {/* Geo mode */}
@@ -164,6 +180,8 @@ export default function App() {
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
       />
+      <button id="button" onClick={updateGrouping}>update grouping</button>
+
     </div>
   );
 }
