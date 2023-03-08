@@ -13,7 +13,8 @@ export default defineConfig({
     setupFiles: './test/setup.ts',
     threads: false,
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      reporter: ["json", "cobertura"],
+      reportsDirectory: "reports/coverage",
     }
   }
 })
