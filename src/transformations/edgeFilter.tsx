@@ -10,7 +10,7 @@ import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface EdgeFilterProps<ED, ND>
+export interface EdgeFilterProps<ED, ND>
   extends EdgeFilterOptions<ED, ND>,
   EnabledState { }
 
