@@ -13,9 +13,9 @@ import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface NeighborGenerationProps<ND, ED>
+export interface NeighborGenerationProps<ND, ED>
   extends NeighborGenerationOptions<ND, ED>,
-    EnabledState {}
+  EnabledState { }
 
 function NeighborGenerationComponent<ND = any, ED = any>(
   props: NeighborGenerationProps<ND, ED>,
@@ -29,7 +29,10 @@ function NeighborGenerationComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addNeighborGeneration(props);
+    const newTransformation = ogma.transformations.addNeighborGeneration({
+      ...props,
+      enabled: !props.disabled,
+    });
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();
@@ -42,6 +45,10 @@ function NeighborGenerationComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.edgeGenerator, props.nodeGenerator, props.neighborIdFunction, props.selector])
 
   return null;
 }

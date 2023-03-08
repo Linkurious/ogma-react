@@ -1,27 +1,58 @@
-import React, { createRef } from "react";
-import { render } from "react-dom";
+import { EdgeFilterTest, ref } from "./test-components";
+import { render, userEvent, screen } from '../utils'
 import OgmaLib from "@linkurious/ogma";
-import { Ogma, EdgeFilter } from "../../src";
-import graph from "../fixtures/simple_graph.json";
-
 describe("Edge filter", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
-  it("Edge filter component renders without crashing", (done) => {
-    const ref = createRef<OgmaLib>();
+  it("Can be disabled by default and then enabled", () => {
     render(
-      <Ogma graph={graph} ref={ref}>
-        <EdgeFilter criteria={(edge) => edge.getId() === 1} />
-      </Ogma>,
+      <EdgeFilterTest disabled={true} />,
       div
     );
-    ref.current?.transformations
+    return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
-        expect(ref.current?.getEdges().size).toBe(1);
-        done();
+        expect(ref.current?.getEdges().getId()).toEqual([0, 1]);
       })
-      .catch(done);
+      .then(() => userEvent.click(screen.getByText('toggle')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(ref.current?.getEdges().getId()).toEqual([0]);
+      })
+  });
+
+  it("Can be disabled", () => {
+    render(
+      <EdgeFilterTest />,
+      div
+    );
+    return (ref.current as OgmaLib).transformations
+      .afterNextUpdate()
+      .then(() => {
+        expect(ref.current?.getEdges().getId()).toEqual([0]);
+      })
+      .then(() => userEvent.click(screen.getByText('toggle')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(ref.current?.getEdges().getId()).toEqual([0, 1]);
+      })
+  });
+
+  it("Updates criteria", () => {
+    render(
+      <EdgeFilterTest />,
+      div
+    );
+    return (ref.current as OgmaLib).transformations
+      .afterNextUpdate()
+      .then(() => {
+        expect(ref.current?.getEdges().getId()).toEqual([0]);
+      })
+      .then(() => userEvent.click(screen.getByText('setCriteria')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(ref.current?.getEdges().getId()).toEqual([1]);
+      })
   });
 });

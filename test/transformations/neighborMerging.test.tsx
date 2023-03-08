@@ -1,58 +1,58 @@
-import { NodeFilterTest, ref } from "./test-components";
+import { NeighborMergingTest, ref } from "./test-components";
 import { render, userEvent, screen } from '../utils'
 import OgmaLib from "@linkurious/ogma";
-describe("Node filter", () => {
+describe("Neighbor merging", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
   it("Can be disabled by default and then enabled", () => {
     render(
-      <NodeFilterTest disabled={true} />,
+      <NeighborMergingTest disabled={true} />,
       div
     );
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
+        expect(ref.current?.getEdges().size).toEqual(2);
       })
       .then(() => userEvent.click(screen.getByText('toggle')))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0]);
+        expect(ref.current?.getEdges().size).toEqual(1);
       })
   });
 
   it("Can be disabled", () => {
     render(
-      <NodeFilterTest />,
+      <NeighborMergingTest />,
       div
     );
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0]);
+        expect(ref.current?.getEdges().size).toEqual(1);
       })
       .then(() => userEvent.click(screen.getByText('toggle')))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
+        expect(ref.current?.getEdges().size).toEqual(2);
       })
   });
 
   it("Updates criteria", () => {
     render(
-      <NodeFilterTest />,
+      <NeighborMergingTest />,
       div
     );
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0]);
+        expect(ref.current?.getEdges().size).toEqual(1);
       })
-      .then(() => userEvent.click(screen.getByText('setCriteria')))
+      .then(() => userEvent.click(screen.getByText('setGenerator')))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([1]);
+        expect(ref.current?.getEdges().size).toEqual(0);
       })
   });
 });

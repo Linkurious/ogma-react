@@ -1,0 +1,50 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "attributes": {
+        "color": "blue",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": 1,
+      "attributes": {
+        "color": "cyan",
+        "x": 25,
+        "y": 0
+      }
+    },
+    {
+      "id": 2,
+      "attributes": {
+        "color": "green",
+        "x": 25,
+        "y": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": 0,
+      "source": 0,
+      "target": 1
+    },
+    {
+      "id": 1,
+      "source": 0,
+      "target": 2
+    },
+    {
+      "id": 2,
+      "source": 0,
+      "target": 1
+    },
+    {
+      "id": 3,
+      "source": 0,
+      "target": 2
+    }
+  ]
+}

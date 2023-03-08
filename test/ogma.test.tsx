@@ -1,5 +1,6 @@
 import React from "react";
-import { render } from "react-dom";
+import { render } from './utils'
+
 import OgmaLib, { RawGraph } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../src";
 
@@ -31,43 +32,49 @@ describe("Ogma", () => {
   });
 
   it("Ogma container renders with onReady callback", () => {
-    const onReady = jest.fn((ogma: OgmaLib) => ogma);
-    render(<Ogma graph={graph} onReady={onReady} />, div);
-    expect(onReady).toHaveBeenCalled();
-    expect(onReady.mock.calls[0][0]).toBeInstanceOf(OgmaLib);
+    return new Promise(resolve => {
+      render(<Ogma graph={graph} onReady={ogma => resolve(ogma)} />, div);
+    }).then((ogma) => {
+      expect(ogma).toBeInstanceOf(OgmaLib);
+    })
   });
 
-  it("Ogma container renders and takes options", (done) => {
+  it("Ogma container renders and takes options", () => {
     const backgroundColor = "red";
     const minimumWidth = 500;
-    const onReady = (ogma: OgmaLib) => {
-      const options = ogma.getOptions();
-      expect(options.backgroundColor).toBe(backgroundColor);
-      expect(options.minimumWidth).toBe(minimumWidth);
-      done();
-    };
-    render(
-      <Ogma
-        graph={graph}
-        onReady={onReady}
-        options={{ backgroundColor, minimumWidth }}
-      />,
-      div
-    );
+    return new Promise(resolve => {
+      const onReady = (ogma: OgmaLib) => {
+        const options = ogma.getOptions();
+        expect(options.backgroundColor).toBe(backgroundColor);
+        expect(options.minimumWidth).toBe(minimumWidth);
+        return resolve(null);
+      };
+      render(
+        <Ogma
+          graph={graph}
+          onReady={onReady}
+          options={{ backgroundColor, minimumWidth }}
+        />,
+        div
+      );
+    })
   });
 
-  it("Ogma container passes the ogma instance to children", (done) => {
-    const Component = () => {
-      const ogma = useOgma();
-      expect(ogma).toBeInstanceOf(OgmaLib);
-      done();
-      return null;
-    };
-    render(
-      <Ogma graph={graph}>
-        <Component />
-      </Ogma>,
-      div
-    );
+  it("Ogma container passes the ogma instance to children", () => {
+    return new Promise(resolve => {
+      const Component = () => {
+        const ogma = useOgma();
+        expect(ogma).toBeInstanceOf(OgmaLib);
+        resolve(null);
+        return <></>;
+      };
+      render(
+        <Ogma graph={graph}>
+          <Component />
+        </Ogma>,
+        div
+      );
+    });
   });
+
 });
