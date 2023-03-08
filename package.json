@@ -64,6 +64,8 @@
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
     "@vitest/coverage-c8": "^0.24.5",
+    "@mapbox/typehead": "^1.1.0",
+    "@next/bundle-analyzer": "^12.1.4",
     "@vitest/ui": "latest",
     "jsdom": "latest",
     "typescript": "^4.8.4",

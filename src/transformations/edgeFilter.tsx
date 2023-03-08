@@ -26,7 +26,11 @@ function EdgeFilterComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addEdgeFilter(props);
+    console.log('props', props)
+    const newTransformation = ogma.transformations.addEdgeFilter({
+      ...props,
+      enabled: !props.disabled
+    });
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();
@@ -36,11 +40,13 @@ function EdgeFilterComponent<ND = any, ED = any>(
 
   useEffect(() => {
     if (transformation) {
+      console.log('props.disabled', props.disabled)
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
 
   useEffect(() => {
+    console.log('setoptions', props.disabled)
     transformation?.setOptions(props);
   }, [props.criteria])
 
