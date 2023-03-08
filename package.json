@@ -1,1 +1,99 @@
-{"name":"@linkurious/ogma-react","version":"4.3.1","description":"A light adaptation of Ogma for React application","keywords":["ogma","react","graph-visualisation","webgl","graph"],"jsdelivr":"dist/index.js","browser":"dist/index.umd.js","main":"dist/index.js","module":"dist/index-esm.js","typings":"dist/index.d.ts","exports":{"import":"./dist/index-esm.js","require":"./dist/index.js","default":"./dist/index.js"},"files":["dist/*.d.ts","dist/*.js","dist/*.js.map","dist/*.md"],"engines":{"node":"18.13.0"},"publishConfig":{"access":"public"},"scripts":{"tsc":"tsc","tsc:watch":"tsc --watch","start":"typehead serve","doc":"esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx","build":"npm ls @linkurious/ogma && npm run build:ts && npm run build:js && npm run build:files","build:ts":"npm run typecheck && npm run types","build:js":"typehead build && npm run build:umd","build:umd":"./scripts/umd.js","build:files":"scripts/prepublish.js && cp README.md dist","format":"prettier -w src/**/*.{ts,tsx} web/**/*.tsx test/**/*.tsx","test":"vitest","test:unit":"vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml","typecheck":"tsc --noEmit","types":"dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner","postversion":"sync_versions","doc:publish":"npm run doc && gh-pages -d web"},"peerDependencies":{"@linkurious/ogma":"^4.4.1","react":"^18.0.8","react-dom":"^18.0.8","typescript":"^4.8.4"},"devDependencies":{"@geist-ui/core":"^2.3.8","@geist-ui/icons":"^1.0.1","@linkurious/code-tools":"0.0.12","@mapbox/typehead":"^1.1.0","@next/bundle-analyzer":"^12.1.4","@testing-library/jest-dom":"^5.16.4","@testing-library/react":"^13.4.0","@testing-library/user-event":"^14.4.3","@types/leaflet":"^1.7.9","@types/lodash.throttle":"^4.1.6","@types/node":"^18.11.18","@types/react":"^18.0.24","@types/react-dom":"^18.0.8","@vitejs/plugin-react":"^2.2.0","@vitest/coverage-c8":"^0.24.5","@vitest/ui":"latest","canvas":"^2.11.0","dts-bundle-generator":"^6.5.0","gh-pages":"^3.2.3","jsdom":"latest","leaflet":"^1.8.0","prettier":"^2.6.2","tslib":"^2.5.0","typescript":"^4.8.4","vite":"latest","vitest":"latest"},"repository":{"type":"git","url":"git+https://github.com/linkurious/ogma-react.git"},"author":"Linkurious SAS","license":"Apache-2.0","bugs":{"url":"https://github.com/linkurious/ogma-react/issues"},"homepage":"https://github.com/linkurious/ogma-react#readme","dependencies":{"lodash.throttle":"^4.1.1"}}
+{
+  "name": "@linkurious/ogma-react",
+  "version": "4.3.1",
+  "description": "A light adaptation of Ogma for React application",
+  "keywords": [
+    "ogma",
+    "react",
+    "graph-visualisation",
+    "webgl",
+    "graph"
+  ],
+  "jsdelivr": "dist/index.js",
+  "browser": "dist/index.umd.js",
+  "main": "dist/index.js",
+  "module": "dist/index-esm.js",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index-esm.js",
+    "require": "./dist/index.js",
+    "default": "./dist/index.js"
+  },
+  "files": [
+    "dist/*.d.ts",
+    "dist/*.js",
+    "dist/*.js.map",
+    "dist/*.md"
+  ],
+  "engines": {
+    "node": "18.13.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "tsc:watch": "tsc --watch",
+    "start": "typehead serve",
+    "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
+    "build": "npm ls @linkurious/ogma && npm run build:ts && npm run build:js && npm run build:files",
+    "build:ts": "npm run typecheck && npm run types",
+    "build:js": "typehead build && npm run build:umd",
+    "build:umd": "./scripts/umd.js",
+    "build:files": "scripts/prepublish.js && cp README.md dist",
+    "format": "prettier -w src/**/*.{ts,tsx} web/**/*.tsx test/**/*.tsx",
+    "test": "vitest",
+    "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
+    "typecheck": "tsc --noEmit",
+    "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
+    "postversion": "sync_versions",
+    "doc:publish": "npm run doc && gh-pages -d web"
+  },
+  "peerDependencies": {
+    "@linkurious/ogma": "^4.4.1",
+    "react": "^18.0.8",
+    "react-dom": "^18.0.8",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "@geist-ui/core": "^2.3.8",
+    "@geist-ui/icons": "^1.0.1",
+    "@linkurious/code-tools": "^0.0.14",
+    "@mapbox/typehead": "^1.1.0",
+    "@next/bundle-analyzer": "^12.1.4",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/leaflet": "^1.7.9",
+    "@types/lodash.throttle": "^4.1.6",
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "@vitest/coverage-c8": "^0.24.5",
+    "@vitest/ui": "latest",
+    "canvas": "^2.11.0",
+    "dts-bundle-generator": "^6.5.0",
+    "gh-pages": "^3.2.3",
+    "jsdom": "latest",
+    "leaflet": "^1.8.0",
+    "prettier": "^2.6.2",
+    "tslib": "^2.5.0",
+    "typescript": "^4.8.4",
+    "vite": "latest",
+    "vitest": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linkurious/ogma-react.git"
+  },
+  "author": "Linkurious SAS",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/linkurious/ogma-react/issues"
+  },
+  "homepage": "https://github.com/linkurious/ogma-react#readme",
+  "dependencies": {
+    "lodash.throttle": "^4.1.1"
+  }
+}
