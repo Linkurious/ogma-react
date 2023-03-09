@@ -14,6 +14,8 @@ export default defineConfig({
     threads: false,
     coverage: {
       reporter: ["json", "cobertura"],
+      src: ["src"],
+      all: true,
       reportsDirectory: "reports/coverage",
     }
   }
