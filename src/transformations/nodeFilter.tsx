@@ -10,9 +10,9 @@ import { useOgma } from "../context";
 import { EnabledState } from "./types";
 import { toggle } from "./utils";
 
-interface NodeFilterProps<ED, ND>
+export interface NodeFilterProps<ED, ND>
   extends NodeFilterOptions<ED, ND>,
-    EnabledState {}
+  EnabledState { }
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
@@ -26,7 +26,10 @@ function NodeFilterComponent<ND = any, ED = any>(
   ]);
 
   useEffect(() => {
-    const newTransformation = ogma.transformations.addNodeFilter(props);
+    const newTransformation = ogma.transformations.addNodeFilter({
+      ...props,
+      enabled: !props.disabled,
+    });
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();
@@ -39,6 +42,10 @@ function NodeFilterComponent<ND = any, ED = any>(
       toggle(transformation, !!props.disabled, props.duration);
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    transformation?.setOptions(props);
+  }, [props.criteria])
 
   return null;
 }

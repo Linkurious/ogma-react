@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -42,73 +42,46 @@
     "build:umd": "./scripts/umd.js",
     "build:files": "scripts/prepublish.js && cp README.md dist",
     "format": "prettier -w src/**/*.{ts,tsx} web/**/*.tsx test/**/*.tsx",
-    "test": "jest",
-    "test:unit": "jest --ci --coverage --reporters=default --reporters=jest-junit",
+    "test": "vitest",
+    "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "typecheck": "tsc --noEmit",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
     "doc:publish": "npm run doc && gh-pages -d web"
   },
   "peerDependencies": {
-    "@linkurious/ogma": ">=4.3.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "^4.5.4"
+    "@linkurious/ogma": "^4.4.1",
+    "react": "^18.0.8",
+    "react-dom": "^18.0.8",
+    "typescript": "^4.8.4"
   },
   "devDependencies": {
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.1",
-    "@linkurious/code-tools": "0.0.12",
+    "@linkurious/code-tools": "^0.0.14",
     "@mapbox/typehead": "^1.1.0",
     "@next/bundle-analyzer": "^12.1.4",
-    "@types/enzyme": "^3.10.11",
-    "@types/jest": "^27.4.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/leaflet": "^1.7.9",
+    "@types/lodash.throttle": "^4.1.6",
     "@types/node": "^18.11.18",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "canvas": "^2.9.1",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@vitejs/plugin-react": "^2.2.0",
+    "@vitest/coverage-c8": "^0.24.5",
+    "@vitest/ui": "latest",
+    "canvas": "^2.11.0",
     "dts-bundle-generator": "^6.5.0",
     "gh-pages": "^3.2.3",
-    "jest": "^27.5.1",
-    "jest-junit": "^13.0.0",
-    "jsdom": "^19.0.0",
-    "jsdom-global": "^3.0.2",
+    "jsdom": "latest",
     "leaflet": "^1.8.0",
     "prettier": "^2.6.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "ts-jest": "^27.1.4",
-    "tslib": "^2.3.1",
-    "typescript": "^4.5.4"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.json"
-      }
-    },
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "ts",
-      "tsx",
-      "json"
-    ],
-    "testRegex": "/(test|__tests__)/.*\\.(test|spec)\\.tsx?",
-    "setupFiles": [
-      "<rootDir>/test/setup.ts"
-    ],
-    "coverageReporters": [
-      "text",
-      "cobertura"
-    ],
-    "coverageDirectory": "reports"
-  },
-  "jest-junit": {
-    "outputFile": "reports/junit-test-results.xml"
+    "tslib": "^2.5.0",
+    "typescript": "^4.8.4",
+    "vite": "latest",
+    "vitest": "latest"
   },
   "repository": {
     "type": "git",
@@ -121,7 +94,6 @@
   },
   "homepage": "https://github.com/linkurious/ogma-react#readme",
   "dependencies": {
-    "@types/lodash.throttle": "^4.1.6",
     "lodash.throttle": "^4.1.1"
   }
 }

@@ -18,45 +18,50 @@ describe("styles", () => {
     );
   });
 
-  it("Passes node attributes", (done) => {
-    const onReady = (ogma: OgmaLib) => {
-      ogma.view.afterNextFrame().then(() => {
-        expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
-          "red",
-          "red",
-          "red",
-        ]);
-        done();
-      });
-    };
-    render(
-      <Ogma graph={graph} onReady={onReady}>
-        <NodeStyleRule attributes={{ color: "red" }} />
-      </Ogma>,
-      div
-    );
+  it("Passes node attributes", () => {
+    return new Promise(resolve => {
+      const onReady = (ogma: OgmaLib) => {
+        ogma.view.afterNextFrame().then(() => {
+          expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
+            "red",
+            "red",
+            "red",
+          ]);
+          resolve(null);
+        });
+      };
+      render(
+        <Ogma graph={graph} onReady={onReady}>
+          <NodeStyleRule attributes={{ color: "red" }} />
+        </Ogma>,
+        div
+      );
+    })
   });
 
-  it("Uses selector for NodeStyle", (done) => {
-    const onReady = (ogma: OgmaLib) => {
-      ogma.view.afterNextFrame().then(() => {
-        expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
-          "red",
-          "red",
-          "green",
-        ]);
-        done();
-      });
-    };
-    render(
-      <Ogma graph={graph} onReady={onReady}>
-        <NodeStyleRule
-          attributes={{ color: "red" }}
-          selector={(node) => Number(node.getId()) < 2}
-        />
-      </Ogma>,
-      div
-    );
+  it("Uses selector for NodeStyle", () => {
+    return new Promise(resolve => {
+      const onReady = (ogma: OgmaLib) => {
+        ogma.view.afterNextFrame().then(() => {
+          expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
+            "red",
+            "red",
+            "green",
+          ]);
+          resolve(null);
+        });
+      };
+      render(
+        <Ogma graph={graph} onReady={onReady}>
+          <NodeStyleRule
+            attributes={{ color: "red" }}
+            selector={(node) => Number(node.getId()) < 2}
+          />
+        </Ogma>,
+        div
+      );
+    });
+
   });
 
   it("NodeStyle cleans up after being removed", () => {
@@ -87,43 +92,49 @@ describe("styles", () => {
     );
   });
 
-  it("Passes edge attributes", (done) => {
-    const onReady = (ogma: OgmaLib) => {
-      ogma.view.afterNextFrame().then(() => {
-        expect(ogma.getEdges().getAttribute("color")).toStrictEqual([
-          "red",
-          "red",
-        ]);
-        done();
-      });
-    };
-    render(
-      <Ogma graph={graph} onReady={onReady}>
-        <EdgeStyleRule attributes={{ color: "red" }} />
-      </Ogma>,
-      div
-    );
+  it("Passes edge attributes", () => {
+    return new Promise(resolve => {
+      const onReady = (ogma: OgmaLib) => {
+        ogma.view.afterNextFrame().then(() => {
+          expect(ogma.getEdges().getAttribute("color")).toStrictEqual([
+            "red",
+            "red",
+          ]);
+          resolve(null);
+        });
+      };
+      render(
+        <Ogma graph={graph} onReady={onReady}>
+          <EdgeStyleRule attributes={{ color: "red" }} />
+        </Ogma>,
+        div
+      );
+    });
+
   });
 
-  it("Uses selector for EdgeStyle", (done) => {
-    const onReady = (ogma: OgmaLib) => {
-      ogma.view.afterNextFrame().then(() => {
-        expect(ogma.getEdges().getAttribute("color")).toStrictEqual([
-          "grey",
-          "green",
-        ]);
-        done();
-      });
-    };
-    render(
-      <Ogma graph={graph} onReady={onReady}>
-        <EdgeStyleRule
-          attributes={{ color: "green" }}
-          selector={(edge) => Number(edge.getId()) > 0}
-        />
-      </Ogma>,
-      div
-    );
+  it("Uses selector for EdgeStyle", () => {
+    return new Promise(resolve => {
+      const onReady = (ogma: OgmaLib) => {
+        ogma.view.afterNextFrame().then(() => {
+          expect(ogma.getEdges().getAttribute("color")).toStrictEqual([
+            "grey",
+            "green",
+          ]);
+          resolve(null);
+        });
+      };
+      render(
+        <Ogma graph={graph} onReady={onReady}>
+          <EdgeStyleRule
+            attributes={{ color: "green" }}
+            selector={(edge) => Number(edge.getId()) > 0}
+          />
+        </Ogma>,
+        div
+      );
+    });
+
   });
 
   it("EdgeStyle cleans up after being removed", () => {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Spacer, Link } from "@geist-ui/core";
 import { Github as GithubIcon } from "@geist-ui/icons";
 import { Icon as ReactIcon } from "./ReactIcon";

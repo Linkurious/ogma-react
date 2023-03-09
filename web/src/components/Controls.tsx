@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Drawer, Text, Button, Toggle, Slider, Spacer } from "@geist-ui/core";
 import { Menu as MenuIcon, X as XIcon } from "@geist-ui/icons";
 

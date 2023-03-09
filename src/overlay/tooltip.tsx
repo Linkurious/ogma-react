@@ -73,7 +73,6 @@ const TooltipComponent = (
   // content or position has changed
   useEffect(() => {
     const newContent = getContent(ogma, coords!, content, children);
-    //console.log("re-render", newContent, getPosition(position, ogma));
     if (layer) {
       if (newContent !== html) {
         layer.element.firstElementChild!.innerHTML = newContent;
