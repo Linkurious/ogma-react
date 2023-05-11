@@ -74,7 +74,7 @@
     "@vitest/ui": "latest",
     "canvas": "^2.11.0",
     "dts-bundle-generator": "^6.5.0",
-    "gh-pages": "^3.2.3",
+    "gh-pages": "^5.0.0",
     "jsdom": "latest",
     "leaflet": "^1.8.0",
     "prettier": "^2.6.2",
