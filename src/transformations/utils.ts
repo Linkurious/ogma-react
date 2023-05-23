@@ -25,23 +25,30 @@ export function useTransformationCallbacks(props: TransformationProps, transform
     if (target !== transformation) return;
     props.onUpdated && props.onUpdated(transformation);
   };
+  const setIndexListener = ({ target, index }: { target: Transformation; index: number }) => {
+    if (target !== transformation) return;
+    props.onSetIndex && props.onSetIndex(transformation, index);
+  };
   const destroyedListener = ({ target }: { target: Transformation }) => {
     if (target !== transformation) return;
     props.onDestroyed && props.onDestroyed(transformation);
     ogma.events.off(enabledListener)
       .off(disabledListener)
       .off(updatedListener)
+      .off(setIndexListener)
       .off(destroyedListener);
 
   };
   ogma.events.on('transformationEnabled', enabledListener)
     .on('transformationDisabled', disabledListener)
     .on('transformationDestroyed', destroyedListener)
+    .on('transformationSetIndex', setIndexListener)
     .on('transformationRefresh', updatedListener);
   const cleanup = () => {
     ogma.events.off(enabledListener)
       .off(disabledListener)
       .off(updatedListener)
+      .off(setIndexListener)
       .off(destroyedListener);
   };
   return cleanup;
