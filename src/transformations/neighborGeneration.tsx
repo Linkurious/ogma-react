@@ -10,12 +10,12 @@ import OgmaLib, {
   Transformation,
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { EnabledState } from "./types";
-import { toggle } from "./utils";
+import { TransformationProps } from "./types";
+import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NeighborGenerationProps<ND, ED>
   extends NeighborGenerationOptions<ND, ED>,
-  EnabledState { }
+  TransformationProps { }
 
 function NeighborGenerationComponent<ND = any, ED = any>(
   props: NeighborGenerationProps<ND, ED>,
@@ -33,6 +33,7 @@ function NeighborGenerationComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();

@@ -359,6 +359,18 @@ Custom canvas layer.
 </Ogma>
 ```
 
+## Transformations
+
+All transformations have callback props, making it easy to react to events related to transformations.
+| Prop         | Type                           | Default | Description |
+| ------------ | ------------------------------ | ------- | ----------- |
+| `onEnabled`  | `(t: Transformation) => void` | `null`  | Triggered when transformation is enabled   |
+| `onUpdated`  | `(t: Transformation) => void` | `null`  | Triggered when transformation is refreshed |
+| `onDisabled` | `(t: Transformation) => void` | `null`  | Triggered when transformation is disabled |
+| `onDestroyed`| `(t: Transformation) => void` | `null`  | Triggered when transformation is destroyed |
+| `onSetIndex` | `(t: Transformation, i: number) => void` | `null`  | Triggered when transformation changes index |
+
+
 ### `<NodeGrouping />`
 
 Node grouping transformation. See [`ogma.transformations.addNodeGrouping()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeGrouping) for more details.

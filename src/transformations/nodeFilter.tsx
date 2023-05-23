@@ -7,12 +7,12 @@ import {
 } from "react";
 import OgmaLib, { NodeFilterOptions, Transformation } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { EnabledState } from "./types";
-import { toggle } from "./utils";
+import { TransformationProps } from "./types";
+import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeFilterProps<ED, ND>
   extends NodeFilterOptions<ED, ND>,
-  EnabledState { }
+  TransformationProps { }
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
@@ -30,6 +30,7 @@ function NodeFilterComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();
