@@ -7,12 +7,12 @@ import {
 } from "react";
 import OgmaLib, { EdgeFilterOptions, Transformation } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { EnabledState } from "./types";
-import { toggle } from "./utils";
+import { TransformationProps } from "./types";
+import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface EdgeFilterProps<ED, ND>
   extends EdgeFilterOptions<ED, ND>,
-    EnabledState {}
+  TransformationProps { }
 
 function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ED, ND>,
@@ -30,6 +30,7 @@ function EdgeFilterComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();

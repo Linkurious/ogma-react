@@ -55,4 +55,25 @@ describe("Node grouping", () => {
         expect(ref.current?.getNodes().getId()).toEqual([`group-1`, `group-0`]);
       })
   });
+  it.only("Triggers callbacks", () => {
+    let count = 0;
+    render(
+      <NodeGroupingTest
+        onEnabled={() => { count = count | 2; }}
+        onDestroyed={() => { count = count | 4; }}
+        onUpdated={() => { count = count | 8; }}
+      />,
+      div
+    );
+    return (ref.current as OgmaLib).transformations
+      .afterNextUpdate()
+      .then(() => {
+        expect(count).toEqual(2);
+      })
+      .then(() => userEvent.click(screen.getByText('setGrouping')))
+      .then(() => ref.current?.transformations.afterNextUpdate())
+      .then(() => {
+        expect(count).toEqual(10);
+      })
+  });
 });
