@@ -14,19 +14,19 @@ export function toggle(
 }
 
 export function useTransformationCallbacks(props: TransformationProps, transformation: Transformation, ogma: Ogma) {
-  const enabledListenner = ({ target }) => {
+  const enabledListenner = ({ target }: { target: Transformation }) => {
     if (target !== transformation) return;
     props.onEnabled && props.onEnabled(transformation);
   };
-  const disabledListenner = ({ target }) => {
+  const disabledListenner = ({ target }: { target: Transformation }) => {
     if (target !== transformation) return;
     props.onDisabled && props.onDisabled(transformation);
   };
-  const updatedListenner = ({ target }) => {
+  const updatedListenner = ({ target }: { target: Transformation }) => {
     if (target !== transformation) return;
     props.onUpdated && props.onUpdated(transformation);
   };
-  const destroyedListenner = ({ target }) => {
+  const destroyedListenner = ({ target }: { target: Transformation }) => {
     if (target !== transformation) return;
     props.onDestroyed && props.onDestroyed(transformation);
     ogma.events.off(enabledListenner);
