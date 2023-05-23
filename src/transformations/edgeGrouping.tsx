@@ -7,12 +7,12 @@ import {
 } from "react";
 import OgmaLib, { EdgeGroupingOptions, Transformation } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { EnabledState } from "./types";
-import { toggle } from "./utils";
+import { TransformationProps } from "./types";
+import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface EdgeGroupingProps<ED, ND>
   extends EdgeGroupingOptions<ED, ND>,
-  EnabledState { }
+  TransformationProps { }
 
 function EdgeGroupingComponent<ND = any, ED = any>(
   props: EdgeGroupingProps<ED, ND>,
@@ -30,6 +30,7 @@ function EdgeGroupingComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();

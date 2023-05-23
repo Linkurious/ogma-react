@@ -150,6 +150,12 @@ function NodeGroupingTestC(grouping: Partial<NodeGroupingProps<unknown, unknown>
         disabled={props.disabled}
         selector={props.selector}
         nodeGenerator={props.nodeGenerator}
+        onCreated={props.onCreated}
+        onDestroyed={props.onDestroyed}
+        onEnabled={props.onEnabled}
+        onDisabled={props.onDisabled}
+        onUpdated={props.onUpdated}
+        onSetIndex={props.onSetIndex}
         separateEdgesByDirection={props.separateEdgesByDirection} />
     </Ogma>
   </div >)
