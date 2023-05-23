@@ -55,7 +55,7 @@ describe("Node grouping", () => {
         expect(ref.current?.getNodes().getId()).toEqual([`group-1`, `group-0`]);
       })
   });
-  it.only("Triggers callbacks", () => {
+  it("Triggers callbacks", () => {
     let count = 0;
     render(
       <NodeGroupingTest
