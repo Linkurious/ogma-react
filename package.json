@@ -60,7 +60,7 @@
     "@geist-ui/icons": "^1.0.1",
     "@linkurious/code-tools": "^0.0.14",
     "@mapbox/typehead": "^1.1.0",
-    "@next/bundle-analyzer": "^12.1.4",
+    "@next/bundle-analyzer": "^13.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
