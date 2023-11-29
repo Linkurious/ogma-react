@@ -19,7 +19,7 @@ import {
   NodeGrouping,
   Popup,
   Geo,
-  NodeGroupingProps
+  NodeGroupingProps,
 } from "../../src";
 
 // cusotm components:
@@ -53,16 +53,17 @@ export default function App() {
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.25);
-  const [groupingOptions, setGroupingOptions] = useState<NodeGroupingProps<any, any>>({
+  const [groupingOptions, setGroupingOptions] = useState<
+    NodeGroupingProps<any, any>
+  >({
     groupIdFunction: (node) => {
       const categories = node.getData("categories");
       return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
     },
     nodeGenerator: (nodes) => {
       return { data: { multiplier: nodes.size } };
-    }
+    },
   });
-
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
@@ -75,7 +76,7 @@ export default function App() {
   // load the graph
   useEffect(() => {
     setLoading(true);
-    fetch("data.json")
+    fetch("web/data.json")
       .then((res) => res.json())
       .then((data: RawGraph) => {
         setGraph(data);
@@ -89,8 +90,8 @@ export default function App() {
       groupIdFunction: (node) => {
         const categories = node.getData("categories");
         return categories[0] === "INVESTOR" ? "INVESTOR" : "OTHER";
-      }
-    })
+      },
+    });
   }
 
   // nothing to render yet
@@ -180,8 +181,9 @@ export default function App() {
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
       />
-      <button id="button" onClick={updateGrouping}>update grouping</button>
-
+      <button id="button" onClick={updateGrouping}>
+        update grouping
+      </button>
     </div>
   );
 }

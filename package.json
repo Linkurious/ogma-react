@@ -50,7 +50,7 @@
     "doc:publish": "npm run doc && gh-pages -d web"
   },
   "peerDependencies": {
-    "@linkurious/ogma": "^4.4.1",
+    "@linkurious/ogma": "^4.5.1",
     "react": "^18.0.8",
     "react-dom": "^18.0.8",
     "typescript": "^4.8.4"
@@ -59,6 +59,7 @@
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.1",
     "@linkurious/code-tools": "^0.0.14",
+    "@linkurious/eslint-config-ogma": "^1.0.5",
     "@mapbox/typehead": "^1.1.0",
     "@next/bundle-analyzer": "^14.0.0",
     "@testing-library/jest-dom": "^5.16.4",

@@ -5,29 +5,31 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, { NodeGroupingOptions, Transformation } from "@linkurious/ogma";
+import OgmaLib, {
+  NodeGroupingOptions,
+  NodeGrouping as NodeGroupingTransformation,
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { toggle, useTransformationCallbacks } from "./utils";
 import { TransformationProps } from "./types";
 
 export interface NodeGroupingProps<ND, ED>
   extends NodeGroupingOptions<ND, ED>,
-  TransformationProps { };
+    TransformationProps {}
 
 function NodeGroupingComponent<ND, ED>(
   props: NodeGroupingProps<ND, ED>,
-  ref?: Ref<Transformation<ND, ED>>
+  ref?: Ref<NodeGroupingTransformation<ND, ED>>
 ) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [transformation, setTransformation] = useState<Transformation>();
+  const [transformation, setTransformation] =
+    useState<NodeGroupingTransformation<ND, ED>>();
 
-  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
-    transformation,
-  ]);
+  useImperativeHandle(ref, () => transformation!, [transformation]);
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeGrouping({
       ...props,
-      enabled: !props.disabled,
+      enabled: !ogma.view.animationInProgress() && !props.disabled,
     });
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
@@ -45,8 +47,17 @@ function NodeGroupingComponent<ND, ED>(
 
   useEffect(() => {
     transformation?.setOptions(props);
-  }, [props.groupIdFunction, props.groupSelfLoopEdges, props.edgeGenerator, props.nodeGenerator, props.groupEdges, props.padding,
-  props.selector, props.showContents, props.separateEdgesByDirection])
+  }, [
+    props.groupIdFunction,
+    props.groupSelfLoopEdges,
+    props.edgeGenerator,
+    props.nodeGenerator,
+    props.groupEdges,
+    props.padding,
+    props.selector,
+    props.showContents,
+    props.separateEdgesByDirection,
+  ]);
 
   return null;
 }
