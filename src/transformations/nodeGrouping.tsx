@@ -19,9 +19,9 @@ export interface NodeGroupingProps<ND, ED>
 
 function NodeGroupingComponent<ND, ED>(
   props: NodeGroupingProps<ND, ED>,
-  ref?: Ref<NodeGroupingTransformation<ND, ED>>,
+  ref?: Ref<NodeGroupingTransformation<ND, ED>>
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
+  const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
     useState<NodeGroupingTransformation<ND, ED>>();
 

@@ -63,11 +63,13 @@ export default function App() {
   >({
     groupIdFunction: (node) => {
       const categories = node.getData("categories");
+      if (!categories) return undefined;
       return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
     },
     nodeGenerator: (nodes) => {
       return { data: { multiplier: nodes.size } };
     },
+    disabled: true,
   });
 
   // UI layers
@@ -113,13 +115,13 @@ export default function App() {
             .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
               requestSetTooltipPosition(
-                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y }),
+                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
               );
               setTarget(ptr.target);
             })
             // locate graph when the nodes are added
             .on("addNodes", () =>
-              ogma.view.locateGraph({ duration: 250, padding: 50 }),
+              ogma.view.locateGraph({ duration: 250, padding: 50 })
             );
         }}
       >
@@ -135,6 +137,15 @@ export default function App() {
 
         {/* Layout */}
         <LayoutService />
+
+        {/* Grouping */}
+        <NodeGrouping
+          ref={groupingRef}
+          disabled={!nodeGrouping && !geoEnabled}
+          groupIdFunction={groupingOptions.groupIdFunction}
+          nodeGenerator={groupingOptions.nodeGenerator}
+          duration={500}
+        />
 
         {/* context-aware UI */}
         <Popup
@@ -155,14 +166,6 @@ export default function App() {
         </Tooltip>
         <GraphOutlines visible={outlines} />
 
-        {/* Grouping */}
-        <NodeGrouping
-          ref={groupingRef}
-          disabled={!nodeGrouping && !geoEnabled}
-          groupIdFunction={groupingOptions.groupIdFunction}
-          nodeGenerator={groupingOptions.nodeGenerator}
-          duration={500}
-        />
         {/* Geo mode */}
         <Geo
           enabled={geoEnabled}
