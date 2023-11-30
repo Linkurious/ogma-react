@@ -3,9 +3,9 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  Transformation,
+  NodeGrouping as NodeGroupingTransformation,
 } from "@linkurious/ogma";
-import { useEffect, useState, createRef } from "react";
+import { useEffect, useState, createRef, useCallback, useRef } from "react";
 // loading indicator
 import { Loading } from "@geist-ui/core";
 // for geo mode
@@ -20,6 +20,7 @@ import {
   Popup,
   Geo,
   NodeGroupingProps,
+  Layer,
 } from "../../src";
 
 // cusotm components:
@@ -29,10 +30,14 @@ import { LayoutService } from "./components/Layout";
 import { GraphOutlines } from "./components/GraphOutlines";
 // control panel
 import { Controls } from "./components/Controls";
+import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
 
 // to enable geo mode integration
 OgmaLib.libraries["leaflet"] = L;
+
+type ND = unknown;
+type ED = unknown;
 
 export default function App() {
   // graph state
@@ -45,7 +50,7 @@ export default function App() {
 
   // ogma instance and grouping references
   const ref = createRef<OgmaLib>();
-  const groupingRef = createRef<Transformation>();
+  const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
 
   // grouping and geo states
   const [nodeGrouping, setNodeGrouping] = useState(true);
@@ -68,10 +73,14 @@ export default function App() {
   // UI layers
   const [outlines, setOutlines] = useState(false);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
-    x: -1e5,
-    y: -1e5,
+    x: 0,
+    y: 0,
   });
   const [target, setTarget] = useState<Node | Edge | null>();
+
+  const requestSetTooltipPosition = useCallback((pos: Point) => {
+    requestAnimationFrame(() => setTooltipPosition(pos));
+  }, []);
 
   // load the graph
   useEffect(() => {
@@ -83,16 +92,6 @@ export default function App() {
         setLoading(false);
       });
   }, []);
-
-  function updateGrouping() {
-    setGroupingOptions({
-      ...groupingOptions,
-      groupIdFunction: (node) => {
-        const categories = node.getData("categories");
-        return categories[0] === "INVESTOR" ? "INVESTOR" : "OTHER";
-      },
-    });
-  }
 
   // nothing to render yet
   if (loading) return <Loading />;
@@ -113,7 +112,7 @@ export default function App() {
             })
             .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
-              setTooltipPosition(
+              requestSetTooltipPosition(
                 ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
               );
               setTarget(ptr.target);
@@ -154,7 +153,7 @@ export default function App() {
               : "nothing"}
           </div>
         </Tooltip>
-        <GraphOutlines visible={outlines} />
+        {/* <GraphOutlines visible={outlines} /> */}
 
         {/* Grouping */}
         <NodeGrouping
@@ -162,6 +161,9 @@ export default function App() {
           disabled={!nodeGrouping && !geoEnabled}
           groupIdFunction={groupingOptions.groupIdFunction}
           nodeGenerator={groupingOptions.nodeGenerator}
+          onEnabled={() => {
+            console.log("enabled", !nodeGrouping && !geoEnabled);
+          }}
           duration={500}
         />
         {/* Geo mode */}
@@ -170,6 +172,7 @@ export default function App() {
           longitudePath="properties.longitude"
           latitudePath="properties.latitude"
         />
+        <MousePosition />
       </Ogma>
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}
@@ -181,9 +184,6 @@ export default function App() {
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
       />
-      <button id="button" onClick={updateGrouping}>
-        update grouping
-      </button>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import {
 } from "./utils";
 import { noop } from "../utils";
 import { Placement } from "./types";
+import { createPortal } from "react-dom";
 
 interface PopupProps {
   content?: string | ReactElement;
@@ -118,7 +119,7 @@ const PopupComponent = (
   useEffect(() => {
     if (layer) {
       const pos = getPosition(position, ogma) || offScreenPos;
-      const html = getContent(ogma, pos, content, children);
+      const html = getContent(ogma, pos, content);
       const { element } = layer;
       element.className = getContainerClass(popupClass, placement);
       element.querySelector(`.${popupBodyClass}`)!.innerHTML = `
@@ -132,7 +133,12 @@ const PopupComponent = (
     }
   }, [content, position, isOpen, placement]);
 
-  return null;
+  if (!layer || !children) return null;
+
+  return createPortal(
+    children,
+    layer!.element.querySelector(`.${popupBodyClass}`)!
+  );
 };
 
 /**

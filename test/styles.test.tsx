@@ -19,7 +19,7 @@ describe("styles", () => {
   });
 
   it("Passes node attributes", () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const onReady = (ogma: OgmaLib) => {
         ogma.view.afterNextFrame().then(() => {
           expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
@@ -36,11 +36,11 @@ describe("styles", () => {
         </Ogma>,
         div
       );
-    })
+    });
   });
 
   it("Uses selector for NodeStyle", () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const onReady = (ogma: OgmaLib) => {
         ogma.view.afterNextFrame().then(() => {
           expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
@@ -61,7 +61,6 @@ describe("styles", () => {
         div
       );
     });
-
   });
 
   it("NodeStyle cleans up after being removed", () => {
@@ -93,7 +92,7 @@ describe("styles", () => {
   });
 
   it("Passes edge attributes", () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const onReady = (ogma: OgmaLib) => {
         ogma.view.afterNextFrame().then(() => {
           expect(ogma.getEdges().getAttribute("color")).toStrictEqual([
@@ -110,11 +109,10 @@ describe("styles", () => {
         div
       );
     });
-
   });
 
   it("Uses selector for EdgeStyle", () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const onReady = (ogma: OgmaLib) => {
         ogma.view.afterNextFrame().then(() => {
           expect(ogma.getEdges().getAttribute("color")).toStrictEqual([
@@ -134,7 +132,6 @@ describe("styles", () => {
         div
       );
     });
-
   });
 
   it("EdgeStyle cleans up after being removed", () => {

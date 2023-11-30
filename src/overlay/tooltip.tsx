@@ -8,6 +8,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
+import { createPortal } from "react-dom";
 import { useOgma } from "../context";
 import { Placement, Content } from "./types";
 import {
