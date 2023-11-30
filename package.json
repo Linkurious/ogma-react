@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "4.3.3",
+  "version": "4.6.0",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -9,15 +9,15 @@
     "webgl",
     "graph"
   ],
-  "jsdelivr": "dist/index.js",
-  "browser": "dist/index.umd.js",
-  "main": "dist/index.js",
-  "module": "dist/index-esm.js",
+  "jsdelivr": "dist/ogma-react.mjs",
+  "browser": "dist/ogma-react.umd.js",
+  "main": "dist/ogma-react.mjs",
+  "module": "dist/ogma-react.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index-esm.js",
-    "require": "./dist/index.js",
-    "default": "./dist/index.js"
+    "import": "./dist/ogma-react.mjs",
+    "require": "./dist/ogma-react.js",
+    "default": "./dist/ogma-react.mjs"
   },
   "files": [
     "dist/*.d.ts",
@@ -25,18 +25,13 @@
     "dist/*.js.map",
     "dist/*.md"
   ],
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "tsc": "tsc",
-    "tsc:watch": "tsc --watch",
     "start": "vite dev web",
-    "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
-    "build": "npm ls @linkurious/ogma && npm run build:ts && npm run build:lib && npm run build:demo",
+    "build": "npm ls @linkurious/ogma && npm run build:lib && npm run build:ts",
     "build:ts": "npm run typecheck && npm run types",
     "build:demo": "vite build web",
     "build:lib": "vite build && npm run build:files",
@@ -48,7 +43,7 @@
     "typecheck": "tsc --noEmit",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run doc && gh-pages -d web"
+    "doc:publish": "npm run build:demo && gh-pages -d web"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^4.5.1",
