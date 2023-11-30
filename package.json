@@ -43,7 +43,7 @@
     "typecheck": "tsc --noEmit",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run build:demo && gh-pages -d web"
+    "doc:publish": "npm run build:demo && gh-pages -d web/dist"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^4.5.1",
