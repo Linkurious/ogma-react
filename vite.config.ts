@@ -34,6 +34,7 @@ export default defineConfig({
     coverage: {
       reporter: ["json", "cobertura"],
       src: ["src"],
+      include: ["src/**/*.{ts,tsx}"],
       all: true,
       reportsDirectory: "reports/coverage",
     },
