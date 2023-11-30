@@ -60,7 +60,7 @@ describe("Node grouping", () => {
           count = count | 8;
         }}
       />,
-      div
+      div,
     );
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()

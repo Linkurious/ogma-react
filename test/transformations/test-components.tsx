@@ -25,7 +25,7 @@ import { createRef, forwardRef, useState } from "react";
 export const ref = createRef<OgmaLib>();
 
 function EdgeFilterTestC(
-  filter: Partial<EdgeFilterProps<unknown, unknown>> = {}
+  filter: Partial<EdgeFilterProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<EdgeFilterProps<unknown, unknown>>({
     criteria: (edge) => edge.getId() === 0,
@@ -55,7 +55,7 @@ function EdgeFilterTestC(
   );
 }
 function NodeFilterTestC(
-  filter: Partial<NodeFilterProps<unknown, unknown>> = {}
+  filter: Partial<NodeFilterProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<NodeFilterProps<unknown, unknown>>({
     criteria: (node) => node.getId() === 0,
@@ -86,7 +86,7 @@ function NodeFilterTestC(
 }
 
 function EdgeGroupingTestC(
-  grouping: Partial<EdgeGroupingProps<unknown, unknown>> = {}
+  grouping: Partial<EdgeGroupingProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<EdgeGroupingProps<unknown, unknown>>({
     selector: (edge) => !!(+edge.getId() % 2),
@@ -133,7 +133,7 @@ function EdgeGroupingTestC(
 }
 
 function NodeGroupingTestC(
-  grouping: Partial<NodeGroupingProps<unknown, unknown>> = {}
+  grouping: Partial<NodeGroupingProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<NodeGroupingProps<unknown, unknown>>({
     selector: (node) => !!(+node.getId() % 2),
@@ -186,7 +186,7 @@ function NodeGroupingTestC(
 }
 
 function NeighborGenerationTestC(
-  generator: Partial<NeighborGenerationProps<unknown, unknown>> = {}
+  generator: Partial<NeighborGenerationProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<NeighborGenerationProps<unknown, unknown>>(
     {
@@ -194,7 +194,7 @@ function NeighborGenerationTestC(
       neighborIdFunction: () => `even`,
       disabled: false,
       ...generator,
-    }
+    },
   );
   function updateGenerator() {
     setProps({
@@ -226,7 +226,7 @@ function NeighborGenerationTestC(
 }
 
 function NeighborMergingTestC(
-  generator: Partial<NeighborMergingProps<unknown, unknown>> = {}
+  generator: Partial<NeighborMergingProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<NeighborMergingProps<unknown, unknown>>({
     selector: (node) => +node.getId() === 1,
@@ -263,7 +263,7 @@ function NeighborMergingTestC(
 }
 
 function NodeCollapsingTestC(
-  generator: Partial<NodeCollapsingProps<unknown, unknown>> = {}
+  generator: Partial<NodeCollapsingProps<unknown, unknown>> = {},
 ) {
   const [props, setProps] = useState<NodeCollapsingProps<unknown, unknown>>({
     selector: (node) => +node.getId() === 0,

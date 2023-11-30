@@ -1,13 +1,5 @@
-import Ogma, { Point, Layer as OgmaLayer } from "@linkurious/ogma";
-import {
-  useEffect,
-  useState,
-  Ref,
-  useImperativeHandle,
-  forwardRef,
-  useCallback,
-  useRef,
-} from "react";
+import { Point, Layer as OgmaLayer } from "@linkurious/ogma";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useOgma, Layer } from "../../../src";
 import "./MousePosition.css";
 

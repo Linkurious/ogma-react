@@ -7,25 +7,25 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // build: {
-  //   minify: true,
-  //   lib: {
-  //     name: "OgmaReact",
-  //     entry: "./src/index.ts",
-  //     formats: ["es", "cjs", "umd"],
-  //   },
-  //   rollupOptions: {
-  //     external: ["@linkurious/ogma", "react", "react-dom", "react-dom/server"],
-  //     output: {
-  //       globals: {
-  //         react: "React",
-  //         "react-dom": "ReactDOM",
-  //         "react-dom/server": "ReactDOMServer",
-  //         "@linkurious/ogma": "Ogma",
-  //       },
-  //     },
-  //   },
-  // },
+  build: {
+    minify: true,
+    lib: {
+      name: "OgmaReact",
+      entry: "./src/index.ts",
+      formats: ["es", "cjs", "umd"],
+    },
+    rollupOptions: {
+      external: ["@linkurious/ogma", "react", "react-dom", "react-dom/server"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+          "react-dom/server": "ReactDOMServer",
+          "@linkurious/ogma": "Ogma",
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: "jsdom",

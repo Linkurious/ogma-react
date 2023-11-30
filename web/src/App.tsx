@@ -5,7 +5,7 @@ import OgmaLib, {
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
 } from "@linkurious/ogma";
-import { useEffect, useState, createRef, useCallback, useRef } from "react";
+import { useEffect, useState, createRef, useCallback } from "react";
 // loading indicator
 import { Loading } from "@geist-ui/core";
 // for geo mode
@@ -20,7 +20,6 @@ import {
   Popup,
   Geo,
   NodeGroupingProps,
-  Layer,
 } from "../../src";
 
 // cusotm components:
@@ -32,6 +31,7 @@ import { GraphOutlines } from "./components/GraphOutlines";
 import { Controls } from "./components/Controls";
 import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
+import { UpdateGroupingButton } from "./components/UpdateGroupingButton";
 
 // to enable geo mode integration
 OgmaLib.libraries["leaflet"] = L;
@@ -85,7 +85,7 @@ export default function App() {
   // load the graph
   useEffect(() => {
     setLoading(true);
-    fetch("web/data.json")
+    fetch("data.json")
       .then((res) => res.json())
       .then((data: RawGraph) => {
         setGraph(data);
@@ -113,13 +113,13 @@ export default function App() {
             .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
               requestSetTooltipPosition(
-                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
+                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y }),
               );
               setTarget(ptr.target);
             })
             // locate graph when the nodes are added
             .on("addNodes", () =>
-              ogma.view.locateGraph({ duration: 250, padding: 50 })
+              ogma.view.locateGraph({ duration: 250, padding: 50 }),
             );
         }}
       >
@@ -153,7 +153,7 @@ export default function App() {
               : "nothing"}
           </div>
         </Tooltip>
-        {/* <GraphOutlines visible={outlines} /> */}
+        <GraphOutlines visible={outlines} />
 
         {/* Grouping */}
         <NodeGrouping
@@ -161,9 +161,6 @@ export default function App() {
           disabled={!nodeGrouping && !geoEnabled}
           groupIdFunction={groupingOptions.groupIdFunction}
           nodeGenerator={groupingOptions.nodeGenerator}
-          onEnabled={() => {
-            console.log("enabled", !nodeGrouping && !geoEnabled);
-          }}
           duration={500}
         />
         {/* Geo mode */}
@@ -173,6 +170,10 @@ export default function App() {
           latitudePath="properties.latitude"
         />
         <MousePosition />
+        <UpdateGroupingButton
+          options={groupingOptions}
+          update={(options) => setGroupingOptions(options)}
+        />
       </Ogma>
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}

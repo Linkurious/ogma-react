@@ -15,11 +15,11 @@ import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeCollapsingProps<ND, ED>
   extends NodeCollapsingOptions<ND, ED>,
-    TransformationProps {}
+    TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {}
 
 export function NodeCollapsingComponent<ND = any, ED = any>(
   props: NodeCollapsingProps<ND, ED>,
-  ref: Ref<NodeCollapsingTransformation<ND, ED>>
+  ref: Ref<NodeCollapsingTransformation<ND, ED>>,
 ) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] =

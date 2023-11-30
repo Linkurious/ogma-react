@@ -15,11 +15,11 @@ import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NeighborMergingProps<ND, ED>
   extends NeighborMergingOptions<ND, ED>,
-    TransformationProps {}
+    TransformationProps<ND, ED, NeighborMergingOptions<ND, ED>> {}
 
 function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
-  ref: Ref<NeighborMergingTransformation<ND, ED>>
+  ref: Ref<NeighborMergingTransformation<ND, ED>>,
 ) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] =

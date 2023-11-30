@@ -8,7 +8,11 @@ import {
   useImperativeHandle,
 } from "react";
 
-import OgmaLib, { Overlay, Size, Point } from "@linkurious/ogma";
+import OgmaLib, {
+  Overlay as OverlayLayer,
+  Size,
+  Point,
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
   getContent,
@@ -62,12 +66,12 @@ const PopupComponent = (
     size,
     closeOnEsc = true,
   }: PopupProps,
-  ref?: Ref<Overlay>
+  ref?: Ref<OverlayLayer>,
 ) => {
   const ogma = useOgma();
-  const [layer, setLayer] = useState<Overlay | null>(null);
+  const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
-  useImperativeHandle(ref, () => layer as Overlay, [layer]);
+  useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
   useEffect(() => {
     // register listener
@@ -88,7 +92,7 @@ const PopupComponent = (
 
     const onClick = (evt: MouseEvent) => {
       const closeButton = popupLayer.element.querySelector(
-        `.${closeButtonClass}`
+        `.${closeButtonClass}`,
       ) as Element;
       if (evt.target && closeButton.contains(evt.target as Node)) {
         evt.stopPropagation();
@@ -137,7 +141,7 @@ const PopupComponent = (
 
   return createPortal(
     children,
-    layer!.element.querySelector(`.${popupBodyClass}`)!
+    layer!.element.querySelector(`.${popupBodyClass}`)!,
   );
 };
 

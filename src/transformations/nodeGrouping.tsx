@@ -7,7 +7,7 @@ import {
 } from "react";
 import OgmaLib, {
   NodeGroupingOptions,
-  NodeGrouping as Transformation,
+  NodeGrouping as NodeGroupingTransformation,
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { toggle, useTransformationCallbacks } from "./utils";
@@ -15,15 +15,15 @@ import { TransformationProps } from "./types";
 
 export interface NodeGroupingProps<ND, ED>
   extends NodeGroupingOptions<ND, ED>,
-    TransformationProps {}
+    TransformationProps<ND, ED, NodeGroupingOptions<ND, ED>> {}
 
 function NodeGroupingComponent<ND, ED>(
   props: NodeGroupingProps<ND, ED>,
-  ref?: Ref<Transformation<ND, ED>>
+  ref?: Ref<NodeGroupingTransformation<ND, ED>>,
 ) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] =
-    useState<Transformation<ND, ED>>();
+    useState<NodeGroupingTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
   useEffect(() => {

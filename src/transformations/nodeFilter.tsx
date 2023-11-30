@@ -15,11 +15,11 @@ import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeFilterProps<ED, ND>
   extends NodeFilterOptions<ED, ND>,
-    TransformationProps {}
+    TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
-  ref?: Ref<NodeFilterTransformation<ND, ED>>
+  ref?: Ref<NodeFilterTransformation<ND, ED>>,
 ) {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [transformation, setTransformation] =
