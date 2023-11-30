@@ -30,20 +30,20 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "start": "vite dev web",
+    "start": "vite dev demo",
     "build": "npm ls @linkurious/ogma && npm run build:lib && npm run build:ts",
     "build:ts": "npm run typecheck && npm run types",
-    "build:demo": "vite build web",
+    "build:demo": "vite build demo",
     "build:lib": "vite build && npm run build:files",
     "build:umd": "./scripts/umd.js",
     "build:files": "scripts/prepublish.js && cp README.md dist",
-    "format": "prettier -w src/**/*.{ts,tsx} web/**/*.{ts,tsx} test/**/*.{ts,tsx}",
+    "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "typecheck": "tsc --noEmit",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run build:demo && gh-pages -d web/dist"
+    "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^4.5.1",
