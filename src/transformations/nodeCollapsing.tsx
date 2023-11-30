@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, {
+import {
   NodeCollapsingOptions,
   NodeCollapsing as NodeCollapsingTransformation,
 } from "@linkurious/ogma";
@@ -21,7 +21,7 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
   props: NodeCollapsingProps<ND, ED>,
   ref: Ref<NodeCollapsingTransformation<ND, ED>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
+  const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
     useState<NodeCollapsingTransformation<ND, ED>>();
 

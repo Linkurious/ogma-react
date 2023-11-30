@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, {
+import {
   EdgeFilterOptions,
   EdgeFilter as EdgeFilterTransformation,
 } from "@linkurious/ogma";
@@ -21,7 +21,7 @@ function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ED, ND>,
   ref?: Ref<EdgeFilterTransformation<ED, ND>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
+  const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
     useState<EdgeFilterTransformation<ED, ND>>();
 

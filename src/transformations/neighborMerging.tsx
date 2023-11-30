@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, {
+import {
   NeighborMergingOptions,
   NeighborMerging as NeighborMergingTransformation,
 } from "@linkurious/ogma";
@@ -21,7 +21,7 @@ function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
   ref: Ref<NeighborMergingTransformation<ND, ED>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
+  const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
     useState<NeighborMergingTransformation<ND, ED>>();
 
