@@ -202,6 +202,8 @@ export default function App () {
   - [`<Popup />`](#popup-)
   - [`<Tooltip />`](#tooltip-)
   - [`<CanvasLayer />`](#canvaslayer-)
+  - [`<Layer />`](#layer-)
+  - [`<Overlay />`](#overlay-)
 - Transformations:
   - [`<NodeGrouping />`](#nodegrouping-)
   - [`<EdgeGrouping />`](#edgegrouping-)
@@ -356,6 +358,49 @@ Custom canvas layer.
       ctx.fillRect(0, 0, 100, 100);
     }}
   />
+</Ogma>
+```
+
+### `<Layer />`
+
+Generic DOM layer.
+
+#### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `children`         | `React.ReactNode`  | `null`| The children of the layer |
+#### Example
+
+```tsx
+<Ogma>
+  <Layer>
+    <span>Layer content here!</span>
+  </Layer>
+</Ogma>
+```
+
+### `<Overlay />`
+
+Generic Overlay layer.
+
+#### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `children`         | `React.ReactNode`  | `null`| The children of the layer |
+| `className`         | `string`  | `null`| Classname for the Overlay |
+| `scaled`         | `boolean`  | `true`| Wether the Overlay is scaled on zoom or not |
+| `position`  | `Point \| (ogma: Ogma) => Point` |  | Position of the Overlay             |
+| `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | Size of the Overlay |
+
+#### Example
+
+```tsx
+<Ogma>
+  <Overlay position={{x: 0, y: 0}} >
+    <span>Layer content here!</span>
+  </Overlay>
 </Ogma>
 ```
 
