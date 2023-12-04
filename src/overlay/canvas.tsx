@@ -9,10 +9,15 @@ import { CanvasLayer as OgmaCanvasLayer } from "@linkurious/ogma";
 import { useOgma } from "../context";
 
 interface CanvasLayerProps {
+  /** Rendering function */
   render: (ctx: CanvasRenderingContext2D) => void;
+  /** Whether or not the layer should be moved with the graph */
   isStatic?: boolean;
+  /** Avoid redraw */
   noClear?: boolean;
+  /** Layer index */
   index?: number;
+  /** Layer visibility */
   visible?: boolean;
 }
 
@@ -24,7 +29,7 @@ const CanvasLayerComponent = (
     index,
     visible,
   }: CanvasLayerProps,
-  ref?: Ref<OgmaCanvasLayer>,
+  ref?: Ref<OgmaCanvasLayer>
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OgmaCanvasLayer | null>(null);
@@ -35,7 +40,7 @@ const CanvasLayerComponent = (
     const newLayer = ogma.layers.addCanvasLayer(
       render,
       { isStatic, noClear },
-      index,
+      index
     );
     setLayer(newLayer);
 
