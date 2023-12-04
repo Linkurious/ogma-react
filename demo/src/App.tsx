@@ -3,9 +3,9 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  Transformation,
+  NodeGrouping as NodeGroupingTransformation,
 } from "@linkurious/ogma";
-import { useEffect, useState, createRef } from "react";
+import { useEffect, useState, createRef, useCallback } from "react";
 // loading indicator
 import { Loading } from "@geist-ui/core";
 // for geo mode
@@ -19,7 +19,7 @@ import {
   NodeGrouping,
   Popup,
   Geo,
-  NodeGroupingProps
+  NodeGroupingProps,
 } from "../../src";
 
 // cusotm components:
@@ -29,10 +29,15 @@ import { LayoutService } from "./components/Layout";
 import { GraphOutlines } from "./components/GraphOutlines";
 // control panel
 import { Controls } from "./components/Controls";
+import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
+import { UpdateGroupingButton } from "./components/UpdateGroupingButton";
 
 // to enable geo mode integration
 OgmaLib.libraries["leaflet"] = L;
+
+type ND = unknown;
+type ED = unknown;
 
 export default function App() {
   // graph state
@@ -45,7 +50,7 @@ export default function App() {
 
   // ogma instance and grouping references
   const ref = createRef<OgmaLib>();
-  const groupingRef = createRef<Transformation>();
+  const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
 
   // grouping and geo states
   const [nodeGrouping, setNodeGrouping] = useState(true);
@@ -53,24 +58,31 @@ export default function App() {
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.25);
-  const [groupingOptions, setGroupingOptions] = useState<NodeGroupingProps<any, any>>({
+  const [groupingOptions, setGroupingOptions] = useState<
+    NodeGroupingProps<any, any>
+  >({
     groupIdFunction: (node) => {
       const categories = node.getData("categories");
+      if (!categories) return undefined;
       return categories[0] === "INVESTOR" ? "INVESTOR" : undefined;
     },
     nodeGenerator: (nodes) => {
       return { data: { multiplier: nodes.size } };
-    }
+    },
+    disabled: true,
   });
-
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
-    x: -1e5,
-    y: -1e5,
+    x: 0,
+    y: 0,
   });
   const [target, setTarget] = useState<Node | Edge | null>();
+
+  const requestSetTooltipPosition = useCallback((pos: Point) => {
+    requestAnimationFrame(() => setTooltipPosition(pos));
+  }, []);
 
   // load the graph
   useEffect(() => {
@@ -82,16 +94,6 @@ export default function App() {
         setLoading(false);
       });
   }, []);
-
-  function updateGrouping() {
-    setGroupingOptions({
-      ...groupingOptions,
-      groupIdFunction: (node) => {
-        const categories = node.getData("categories");
-        return categories[0] === "INVESTOR" ? "INVESTOR" : "OTHER";
-      }
-    })
-  }
 
   // nothing to render yet
   if (loading) return <Loading />;
@@ -112,14 +114,14 @@ export default function App() {
             })
             .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
-              setTooltipPosition(
-                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
+              requestSetTooltipPosition(
+                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y }),
               );
               setTarget(ptr.target);
             })
             // locate graph when the nodes are added
             .on("addNodes", () =>
-              ogma.view.locateGraph({ duration: 250, padding: 50 })
+              ogma.view.locateGraph({ duration: 250, padding: 50 }),
             );
         }}
       >
@@ -135,6 +137,15 @@ export default function App() {
 
         {/* Layout */}
         <LayoutService />
+
+        {/* Grouping */}
+        <NodeGrouping
+          ref={groupingRef}
+          disabled={!nodeGrouping && !geoEnabled}
+          groupIdFunction={groupingOptions.groupIdFunction}
+          nodeGenerator={groupingOptions.nodeGenerator}
+          duration={500}
+        />
 
         {/* context-aware UI */}
         <Popup
@@ -155,19 +166,16 @@ export default function App() {
         </Tooltip>
         <GraphOutlines visible={outlines} />
 
-        {/* Grouping */}
-        <NodeGrouping
-          ref={groupingRef}
-          disabled={!nodeGrouping && !geoEnabled}
-          groupIdFunction={groupingOptions.groupIdFunction}
-          nodeGenerator={groupingOptions.nodeGenerator}
-          duration={500}
-        />
         {/* Geo mode */}
         <Geo
           enabled={geoEnabled}
           longitudePath="properties.longitude"
           latitudePath="properties.latitude"
+        />
+        <MousePosition />
+        <UpdateGroupingButton
+          options={groupingOptions}
+          update={(options) => setGroupingOptions(options)}
         />
       </Ogma>
       <Controls
@@ -180,8 +188,6 @@ export default function App() {
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
       />
-      <button id="button" onClick={updateGrouping}>update grouping</button>
-
     </div>
   );
 }

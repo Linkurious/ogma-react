@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "4.3.3",
+  "version": "4.6.0",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -9,15 +9,15 @@
     "webgl",
     "graph"
   ],
-  "jsdelivr": "dist/index.js",
-  "browser": "dist/index.umd.js",
-  "main": "dist/index.js",
-  "module": "dist/index-esm.js",
+  "jsdelivr": "dist/ogma-react.mjs",
+  "browser": "dist/ogma-react.umd.js",
+  "main": "dist/ogma-react.mjs",
+  "module": "dist/ogma-react.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index-esm.js",
-    "require": "./dist/index.js",
-    "default": "./dist/index.js"
+    "import": "./dist/ogma-react.mjs",
+    "require": "./dist/ogma-react.js",
+    "default": "./dist/ogma-react.mjs"
   },
   "files": [
     "dist/*.d.ts",
@@ -25,32 +25,28 @@
     "dist/*.js.map",
     "dist/*.md"
   ],
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "tsc": "tsc",
-    "tsc:watch": "tsc --watch",
-    "start": "typehead serve",
-    "doc": "esbuild --bundle --minify --outfile=./web/index-bundle.js ./web/index.tsx",
-    "build": "npm ls @linkurious/ogma && npm run build:ts && npm run build:js && npm run build:files",
+    "start": "vite dev demo",
+    "build": "npm ls @linkurious/ogma && npm run build:lib && npm run build:ts",
     "build:ts": "npm run typecheck && npm run types",
-    "build:js": "typehead build && npm run build:umd",
+    "build:demo": "vite build demo",
+    "build:lib": "vite build && npm run build:files",
     "build:umd": "./scripts/umd.js",
     "build:files": "scripts/prepublish.js && cp README.md dist",
-    "format": "prettier -w src/**/*.{ts,tsx} web/**/*.tsx test/**/*.tsx",
+    "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "typecheck": "tsc --noEmit",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run doc && gh-pages -d web"
+    "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
   },
   "peerDependencies": {
-    "@linkurious/ogma": "^4.4.1",
+    "@linkurious/ogma": "^4.5.1",
     "react": "^18.0.8",
     "react-dom": "^18.0.8",
     "typescript": "^4.8.4"
@@ -59,7 +55,7 @@
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.1",
     "@linkurious/code-tools": "^0.0.14",
-    "@mapbox/typehead": "^1.1.0",
+    "@linkurious/eslint-config-ogma": "^1.0.5",
     "@next/bundle-analyzer": "^14.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^14.0.0",

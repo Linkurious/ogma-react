@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from './utils'
+import { render } from "./utils";
 
 import OgmaLib, { RawGraph } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../src";
@@ -32,17 +32,17 @@ describe("Ogma", () => {
   });
 
   it("Ogma container renders with onReady callback", () => {
-    return new Promise(resolve => {
-      render(<Ogma graph={graph} onReady={ogma => resolve(ogma)} />, div);
+    return new Promise((resolve) => {
+      render(<Ogma graph={graph} onReady={(ogma) => resolve(ogma)} />, div);
     }).then((ogma) => {
       expect(ogma).toBeInstanceOf(OgmaLib);
-    })
+    });
   });
 
   it("Ogma container renders and takes options", () => {
     const backgroundColor = "red";
     const minimumWidth = 500;
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const onReady = (ogma: OgmaLib) => {
         const options = ogma.getOptions();
         expect(options.backgroundColor).toBe(backgroundColor);
@@ -57,11 +57,11 @@ describe("Ogma", () => {
         />,
         div
       );
-    })
+    });
   });
 
   it("Ogma container passes the ogma instance to children", () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const Component = () => {
         const ogma = useOgma();
         expect(ogma).toBeInstanceOf(OgmaLib);
@@ -76,5 +76,4 @@ describe("Ogma", () => {
       );
     });
   });
-
 });

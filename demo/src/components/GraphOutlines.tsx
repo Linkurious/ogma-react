@@ -13,12 +13,13 @@ export function GraphOutlines({ visible = true }: GraphOutlinesProps) {
   const render = useCallback((ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = "rgba(157, 197, 187, 0.25)";
     ctx.beginPath();
-    ogma.getNodes().forEach((node) => {
-      const { x, y } = node.getPosition();
-      const radius = node.getAttribute("radius");
-      ctx.moveTo(x, y);
-      ctx.arc(x, y, (radius as number) * 6, 0, 2 * Math.PI);
-    });
+    ogma
+      .getNodes()
+      .getAttributes(["x", "y", "radius"])
+      .forEach(({ x, y, radius }) => {
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, (radius as number) * 6, 0, 2 * Math.PI);
+      });
     ctx.fill();
   }, []);
 
@@ -26,7 +27,7 @@ export function GraphOutlines({ visible = true }: GraphOutlinesProps) {
     const refresh = () => {
       layerRef.current?.refresh();
     };
-    ogma.events.on("nodesDragProgress", refresh);
+    ogma.events.on(["nodesDragProgress", "idle"], refresh);
     return () => {
       ogma.events.off(refresh);
     };

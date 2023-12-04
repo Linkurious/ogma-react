@@ -5,25 +5,27 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, { EdgeFilterOptions, Transformation } from "@linkurious/ogma";
+import {
+  EdgeFilterOptions,
+  EdgeFilter as EdgeFilterTransformation,
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface EdgeFilterProps<ED, ND>
   extends EdgeFilterOptions<ED, ND>,
-  TransformationProps { }
+    TransformationProps<ED, ND, EdgeFilterOptions<ED, ND>> {}
 
 function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ED, ND>,
-  ref?: Ref<Transformation<ND, ED>>
+  ref?: Ref<EdgeFilterTransformation<ED, ND>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [transformation, setTransformation] = useState<Transformation>();
+  const ogma = useOgma<ND, ED>();
+  const [transformation, setTransformation] =
+    useState<EdgeFilterTransformation<ED, ND>>();
 
-  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
-    transformation,
-  ]);
+  useImperativeHandle(ref, () => transformation!, [transformation]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addEdgeFilter({

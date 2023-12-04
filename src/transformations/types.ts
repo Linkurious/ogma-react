@@ -1,12 +1,23 @@
 import { Transformation } from "@linkurious/ogma";
 
+/** TODO: expose that in Ogma */
+export interface TransformationOptions {
+  duration?: number;
+  enabled?: boolean;
+}
 
-
-export interface TransformationProps {
+export interface TransformationProps<
+  ND,
+  ED,
+  O extends TransformationOptions = TransformationOptions,
+> {
   disabled?: boolean;
-  onEnabled?: (transformation: Transformation) => void;
-  onDisabled?: (transformation: Transformation) => void;
-  onDestroyed?: (transformation: Transformation) => void;
-  onUpdated?: (transformation: Transformation) => void;
-  onSetIndex?: (transformation: Transformation, index: number) => void;
+  onEnabled?: (transformation: Transformation<ND, ED, O>) => void;
+  onDisabled?: (transformation: Transformation<ND, ED, O>) => void;
+  onDestroyed?: (transformation: Transformation<ND, ED, O>) => void;
+  onUpdated?: (transformation: Transformation<ND, ED, O>) => void;
+  onSetIndex?: (
+    transformation: Transformation<ND, ED, O>,
+    index: number,
+  ) => void;
 }

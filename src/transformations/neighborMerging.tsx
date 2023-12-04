@@ -5,9 +5,9 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, {
+import {
   NeighborMergingOptions,
-  Transformation,
+  NeighborMerging as NeighborMergingTransformation,
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -15,18 +15,17 @@ import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NeighborMergingProps<ND, ED>
   extends NeighborMergingOptions<ND, ED>,
-  TransformationProps { }
+    TransformationProps<ND, ED, NeighborMergingOptions<ND, ED>> {}
 
 function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
-  ref: Ref<Transformation<ND, ED>>
+  ref: Ref<NeighborMergingTransformation<ND, ED>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [transformation, setTransformation] = useState<Transformation>();
+  const ogma = useOgma<ND, ED>();
+  const [transformation, setTransformation] =
+    useState<NeighborMergingTransformation<ND, ED>>();
 
-  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
-    transformation,
-  ]);
+  useImperativeHandle(ref, () => transformation!, [transformation]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborMerging({
@@ -49,7 +48,7 @@ function NeighborMergingComponent<ND = any, ED = any>(
 
   useEffect(() => {
     transformation?.setOptions(props);
-  }, [props.dataFunction, props.selector])
+  }, [props.dataFunction, props.selector]);
 
   return null;
 }
