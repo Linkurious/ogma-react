@@ -17,10 +17,14 @@ import { getPosition } from "./utils";
 import { createPortal } from "react-dom";
 
 interface PopupProps {
+  /** Overlay position */
   position: Point | ((ogma: OgmaLib) => Point | null);
+  /** Overlay size */
   size?: Size;
   children?: ReactNode;
+  /** Overlay container className */
   className?: string;
+  /** Whether the overlay should be scaled with the graph */
   scaled?: boolean;
 }
 
@@ -30,7 +34,7 @@ const offScreenPos: Point = { x: -9999, y: -9999 };
 export const Overlay = forwardRef(
   (
     { position, children, className = "", size, scaled }: PopupProps,
-    ref?: Ref<OverlayLayer>,
+    ref?: Ref<OverlayLayer>
   ) => {
     const ogma = useOgma();
     const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -73,5 +77,5 @@ export const Overlay = forwardRef(
     if (!layer) return null;
 
     return createPortal(children, layer.element);
-  },
+  }
 );
