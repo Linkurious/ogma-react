@@ -5,9 +5,9 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, {
+import {
   NeighborGenerationOptions,
-  Transformation,
+  NeighborGeneration as NeighborGenerationTransformation,
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -15,18 +15,17 @@ import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NeighborGenerationProps<ND, ED>
   extends NeighborGenerationOptions<ND, ED>,
-  TransformationProps { }
+    TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {}
 
 function NeighborGenerationComponent<ND = any, ED = any>(
   props: NeighborGenerationProps<ND, ED>,
-  ref: Ref<Transformation<ND, ED>>
+  ref: Ref<NeighborGenerationTransformation<ND, ED>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [transformation, setTransformation] = useState<Transformation>();
+  const ogma = useOgma<ND, ED>();
+  const [transformation, setTransformation] =
+    useState<NeighborGenerationTransformation<ND, ED>>();
 
-  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
-    transformation,
-  ]);
+  useImperativeHandle(ref, () => transformation!, [transformation]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborGeneration({
@@ -49,7 +48,12 @@ function NeighborGenerationComponent<ND = any, ED = any>(
 
   useEffect(() => {
     transformation?.setOptions(props);
-  }, [props.edgeGenerator, props.nodeGenerator, props.neighborIdFunction, props.selector])
+  }, [
+    props.edgeGenerator,
+    props.nodeGenerator,
+    props.neighborIdFunction,
+    props.selector,
+  ]);
 
   return null;
 }

@@ -1,4 +1,8 @@
-import OgmaLib, { Point, Size, Overlay } from "@linkurious/ogma";
+import OgmaLib, {
+  Point,
+  Size,
+  Overlay as OverlayLayer,
+} from "@linkurious/ogma";
 import {
   useEffect,
   useState,
@@ -41,16 +45,16 @@ const TooltipComponent = (
     content,
     visible = true,
   }: TooltipProps,
-  ref?: Ref<Overlay>
+  ref?: Ref<OverlayLayer>,
 ) => {
   const ogma = useOgma();
-  const [layer, setLayer] = useState<Overlay>();
+  const [layer, setLayer] = useState<OverlayLayer>();
   const [coords, setCoords] = useState<Point | null>();
   const [html, setHtml] = useState("");
   const [dimensions, setDimensions] = useState<Size>();
   const raf = useRef<number>();
 
-  useImperativeHandle(ref, () => layer as Overlay, [layer]);
+  useImperativeHandle(ref, () => layer!, [layer]);
 
   // component is mounted
   useEffect(() => {
@@ -93,7 +97,7 @@ const TooltipComponent = (
       if (layer && coords && dimensions) {
         layer.element.className = getContainerClass(
           tooltipClass,
-          getAdjustedPlacement(coords, placement, dimensions, ogma)
+          getAdjustedPlacement(coords, placement, dimensions, ogma),
         );
         layer.setPosition(coords); // throttledSetPosition(coords);
       }

@@ -8,7 +8,11 @@ import {
   useImperativeHandle,
 } from "react";
 
-import OgmaLib, { Overlay, Size, Point } from "@linkurious/ogma";
+import OgmaLib, {
+  Overlay as OverlayLayer,
+  Size,
+  Point,
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
   getContent,
@@ -18,6 +22,7 @@ import {
 } from "./utils";
 import { noop } from "../utils";
 import { Placement } from "./types";
+import { createPortal } from "react-dom";
 
 interface PopupProps {
   content?: string | ReactElement;
@@ -61,12 +66,12 @@ const PopupComponent = (
     size,
     closeOnEsc = true,
   }: PopupProps,
-  ref?: Ref<Overlay>
+  ref?: Ref<OverlayLayer>,
 ) => {
   const ogma = useOgma();
-  const [layer, setLayer] = useState<Overlay | null>(null);
+  const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
-  useImperativeHandle(ref, () => layer as Overlay, [layer]);
+  useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
   useEffect(() => {
     // register listener
@@ -87,7 +92,7 @@ const PopupComponent = (
 
     const onClick = (evt: MouseEvent) => {
       const closeButton = popupLayer.element.querySelector(
-        `.${closeButtonClass}`
+        `.${closeButtonClass}`,
       ) as Element;
       if (evt.target && closeButton.contains(evt.target as Node)) {
         evt.stopPropagation();
@@ -118,7 +123,7 @@ const PopupComponent = (
   useEffect(() => {
     if (layer) {
       const pos = getPosition(position, ogma) || offScreenPos;
-      const html = getContent(ogma, pos, content, children);
+      const html = getContent(ogma, pos, content);
       const { element } = layer;
       element.className = getContainerClass(popupClass, placement);
       element.querySelector(`.${popupBodyClass}`)!.innerHTML = `
@@ -132,7 +137,12 @@ const PopupComponent = (
     }
   }, [content, position, isOpen, placement]);
 
-  return null;
+  if (!layer || !children) return null;
+
+  return createPortal(
+    children,
+    layer!.element.querySelector(`.${popupBodyClass}`)!,
+  );
 };
 
 /**

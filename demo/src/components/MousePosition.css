@@ -1,0 +1,8 @@
+.position-control__container {
+  position: absolute;
+  top: 15px;
+  left: 20em;
+  color: #888;
+  padding: 0.5em;
+  font-size: x-small;
+}

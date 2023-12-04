@@ -1,5 +1,5 @@
 import { createRef } from "react";
-import { render } from './utils'
+import { render } from "./utils";
 
 import { Ogma, Popup } from "../src";
 import { Overlay, Point } from "@linkurious/ogma";
@@ -41,11 +41,19 @@ describe("Popup", () => {
         </Popup>
       </Ogma>,
       div
-    )
-    expect(ref.current?.element.querySelector(".ogma-popup--body")).toBeInstanceOf(HTMLElement);
-    expect(ref.current?.element.querySelector(".ogma-popup--close")).toBeDefined();
-    expect(ref.current?.element.querySelector(".custom-child-div")).toBeInstanceOf(HTMLElement);
-    expect(ref.current?.element.querySelector(".custom-child-div")!.textContent).toBe(text);
+    );
+    expect(
+      ref.current?.element.querySelector(".ogma-popup--body")
+    ).toBeInstanceOf(HTMLElement);
+    expect(
+      ref.current?.element.querySelector(".ogma-popup--close")
+    ).toBeDefined();
+    expect(
+      ref.current?.element.querySelector(".custom-child-div")
+    ).toBeInstanceOf(HTMLElement);
+    expect(
+      ref.current?.element.querySelector(".custom-child-div")!.textContent
+    ).toBe(text);
   });
 
   it("should support positioning", () => {
@@ -66,9 +74,9 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect(
-      (ref.current?.element as HTMLDivElement).style.transform
-    ).toContain(`translate(150px, 150px) rotate(0rad) translate(0px, 0px)`);
+    expect((ref.current?.element as HTMLDivElement).style.transform).toContain(
+      `translate(150px, 150px) rotate(0rad) translate(0px, 0px)`
+    );
   });
 
   it("should support custom className", () => {
@@ -88,7 +96,7 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect(ref.current?.element.classList.contains('custom-class')).toBe(true);
+    expect(ref.current?.element.classList.contains("custom-class")).toBe(true);
   });
 
   it("should support custom close button", () => {
@@ -108,9 +116,9 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect(ref.current?.element.querySelector(".custom-close-button")).toBeInstanceOf(
-      HTMLSpanElement
-    );
+    expect(
+      ref.current?.element.querySelector(".custom-close-button")
+    ).toBeInstanceOf(HTMLSpanElement);
   });
 
   it("should support custom bottom placement", () => {
@@ -184,6 +192,4 @@ describe("Popup", () => {
       )
     ).toBe(true);
   });
-
-
 });

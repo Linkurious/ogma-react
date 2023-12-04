@@ -5,9 +5,9 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, {
+import {
   NodeCollapsingOptions,
-  Transformation,
+  NodeCollapsing as NodeCollapsingTransformation,
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -15,23 +15,22 @@ import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeCollapsingProps<ND, ED>
   extends NodeCollapsingOptions<ND, ED>,
-  TransformationProps { }
+    TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {}
 
 export function NodeCollapsingComponent<ND = any, ED = any>(
   props: NodeCollapsingProps<ND, ED>,
-  ref: Ref<Transformation<ND, ED>>
+  ref: Ref<NodeCollapsingTransformation<ND, ED>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [transformation, setTransformation] = useState<Transformation>();
+  const ogma = useOgma<ND, ED>();
+  const [transformation, setTransformation] =
+    useState<NodeCollapsingTransformation<ND, ED>>();
 
-  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
-    transformation,
-  ]);
+  useImperativeHandle(ref, () => transformation!, [transformation]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeCollapsing({
       ...props,
-      enabled: !props.disabled
+      enabled: !props.disabled,
     });
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
@@ -50,7 +49,7 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
 
   useEffect(() => {
     transformation?.setOptions(props);
-  }, [props.edgeGenerator, props.selector])
+  }, [props.edgeGenerator, props.selector]);
 
   return null;
 }

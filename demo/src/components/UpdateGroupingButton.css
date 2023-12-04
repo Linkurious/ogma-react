@@ -1,0 +1,16 @@
+.grouping-controls button {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 18px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.grouping-controls button:hover {
+  border-color: #444;
+  color: #444;
+}

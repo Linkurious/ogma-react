@@ -5,25 +5,27 @@ import {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import OgmaLib, { NodeFilterOptions, Transformation } from "@linkurious/ogma";
+import {
+  NodeFilterOptions,
+  NodeFilter as NodeFilterTransformation,
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeFilterProps<ED, ND>
   extends NodeFilterOptions<ED, ND>,
-  TransformationProps { }
+    TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
-  ref?: Ref<Transformation<ND, ED>>
+  ref?: Ref<NodeFilterTransformation<ND, ED>>,
 ) {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [transformation, setTransformation] = useState<Transformation>();
+  const ogma = useOgma<ND, ED>();
+  const [transformation, setTransformation] =
+    useState<NodeFilterTransformation<ND, ED>>();
 
-  useImperativeHandle(ref, () => transformation as Transformation<ND, ED>, [
-    transformation,
-  ]);
+  useImperativeHandle(ref, () => transformation!, [transformation]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeFilter({
@@ -46,7 +48,7 @@ function NodeFilterComponent<ND = any, ED = any>(
 
   useEffect(() => {
     transformation?.setOptions(props);
-  }, [props.criteria])
+  }, [props.criteria]);
 
   return null;
 }
