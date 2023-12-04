@@ -25,18 +25,30 @@ import { Placement } from "./types";
 import { createPortal } from "react-dom";
 
 interface PopupProps {
+  /** Overlay content */
   content?: string | ReactElement;
+  /** Overlay position */
   position: Point | ((ogma: OgmaLib) => Point | null);
+  /** Overlay size */
   size?: Size;
+  /** Open state, whether or not the overlay should be shown  */
   isOpen?: boolean;
-  closeButton?: ReactNode | null;
-  onClose?: () => void;
-  placement?: Placement;
-  closeOnEsc?: boolean;
 
+  /** Close button */
+  closeButton?: ReactNode | null;
+  /** Close callback */
+  onClose?: () => void;
+  /** Overlay placement relative to the position */
+  placement?: Placement;
+  /** Close on Escape key */
+  closeOnEsc?: boolean;
+  /** Overlay container className */
   popupClass?: string;
+  /** Overlay content className */
   contentClass?: string;
+  /** Overlay body className */
   popupBodyClass?: string;
+  /** Close button className */
   closeButtonClass?: string;
 
   children?: ReactNode;
@@ -66,7 +78,7 @@ const PopupComponent = (
     size,
     closeOnEsc = true,
   }: PopupProps,
-  ref?: Ref<OverlayLayer>,
+  ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -92,7 +104,7 @@ const PopupComponent = (
 
     const onClick = (evt: MouseEvent) => {
       const closeButton = popupLayer.element.querySelector(
-        `.${closeButtonClass}`,
+        `.${closeButtonClass}`
       ) as Element;
       if (evt.target && closeButton.contains(evt.target as Node)) {
         evt.stopPropagation();
@@ -141,7 +153,7 @@ const PopupComponent = (
 
   return createPortal(
     children,
-    layer!.element.querySelector(`.${popupBodyClass}`)!,
+    layer!.element.querySelector(`.${popupBodyClass}`)!
   );
 };
 

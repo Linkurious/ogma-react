@@ -24,12 +24,19 @@ import {
 type PositionGetter = (ogma: OgmaLib) => Point | null;
 
 interface TooltipProps {
+  /** Tooltip id */
   id?: string;
+  /** Tooltip position */
   position: Point | PositionGetter;
+  /** Tooltip content */
   content?: Content;
+  /** Tooltip size */
   size?: Size;
+  /** Tooltip visibility */
   visible?: boolean;
+  /** Tooltip placement relative to the position */
   placement?: Placement;
+  /** Tooltip container className */
   tooltipClass?: string;
 
   children?: ReactNode;
@@ -45,7 +52,7 @@ const TooltipComponent = (
     content,
     visible = true,
   }: TooltipProps,
-  ref?: Ref<OverlayLayer>,
+  ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OverlayLayer>();
@@ -97,7 +104,7 @@ const TooltipComponent = (
       if (layer && coords && dimensions) {
         layer.element.className = getContainerClass(
           tooltipClass,
-          getAdjustedPlacement(coords, placement, dimensions, ogma),
+          getAdjustedPlacement(coords, placement, dimensions, ogma)
         );
         layer.setPosition(coords); // throttledSetPosition(coords);
       }

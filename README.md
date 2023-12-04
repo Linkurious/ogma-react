@@ -1,6 +1,6 @@
 # `@linkurious/ogma-react`
 
-![logo](/web/logo.svg)
+![logo](/demo/logo.svg)
 
 Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [React](https://reactjs.org).
 
@@ -363,7 +363,7 @@ Custom canvas layer.
 
 ### `<Layer />`
 
-Generic DOM layer.
+Generic DOM layer, see [`ogma.layers.addLayer`](https://doc.linkurious.com/ogma/latest/api.html#Ogma-layers-addLayer).
 
 #### Props
 
@@ -382,7 +382,7 @@ Generic DOM layer.
 
 ### `<Overlay />`
 
-Generic Overlay layer.
+Generic Overlay layer, see [`ogma.layers.addOverlay`](https://doc.linkurious.com/ogma/latest/api.html#Ogma-layers-addOverlay).
 
 #### Props
 

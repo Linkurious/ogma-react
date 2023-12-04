@@ -12,7 +12,9 @@ import { useOgma } from "../context";
 
 export interface LayerProps {
   children?: ReactNode;
+  /** Overlay container className */
   className?: string;
+  /** Layer index */
   index?: number;
 }
 
@@ -45,5 +47,5 @@ export const Layer = forwardRef(
     if (!layer) return null;
 
     return createPortal(children, layer.element);
-  },
+  }
 );
