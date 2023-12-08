@@ -15,6 +15,8 @@ Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [
       - [`<Popup />`](#popup-)
       - [`<Tooltip />`](#tooltip-)
       - [`<CanvasLayer />`](#canvaslayer-)
+      - [`<Layer />`](#layer-)
+      - [`<Overlay />`](#overlay-)
     - Transformations:
       - [`<NodeGrouping />`](#nodegrouping-)
       - [`<EdgeGrouping />`](#edgegrouping-)
