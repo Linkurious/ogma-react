@@ -115,13 +115,13 @@ export default function App() {
             .on("mousemove", () => {
               const ptr = ogma.getPointerInformation();
               requestSetTooltipPosition(
-                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y }),
+                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
               );
               setTarget(ptr.target);
             })
             // locate graph when the nodes are added
             .on("addNodes", () =>
-              ogma.view.locateGraph({ duration: 250, padding: 50 }),
+              ogma.view.locateGraph({ duration: 250, padding: 50 })
             );
         }}
       >
