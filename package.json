@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "4.6.1",
+  "version": "5.0.2",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -47,7 +47,7 @@
     "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
   },
   "peerDependencies": {
-    "@linkurious/ogma": "^4.5.1",
+    "@linkurious/ogma": "^5.0.2",
     "react": "^18.0.8",
     "react-dom": "^18.0.8"
   },
