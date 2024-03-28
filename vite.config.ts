@@ -7,12 +7,19 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: { "process.env": { NODE_ENV: "production" } },
   build: {
     minify: true,
+    sourcemap: true,
     lib: {
       name: "OgmaReact",
       entry: "./src/index.ts",
       formats: ["es", "cjs", "umd"],
+      fileName: (format) => {
+        if (format === "umd") return `index.umd.js`;
+        if (format === "cjs") return `index.cjs`;
+        return `index.mjs`;
+      },
     },
     rollupOptions: {
       external: ["@linkurious/ogma", "react", "react-dom", "react-dom/server"],

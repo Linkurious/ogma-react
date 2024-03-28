@@ -16,7 +16,7 @@ import { useOgma } from "../context";
 import { getPosition } from "./utils";
 import { createPortal } from "react-dom";
 
-interface PopupProps {
+interface OverlayProps {
   /** Overlay position */
   position: Point | ((ogma: OgmaLib) => Point | null);
   /** Overlay size */
@@ -33,7 +33,7 @@ const offScreenPos: Point = { x: -9999, y: -9999 };
 // TODO: use props for these classes
 export const Overlay = forwardRef(
   (
-    { position, children, className = "", size, scaled }: PopupProps,
+    { position, children, className = "", size, scaled }: OverlayProps,
     ref?: Ref<OverlayLayer>
   ) => {
     const ogma = useOgma();

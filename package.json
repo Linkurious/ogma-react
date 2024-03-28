@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -9,15 +9,15 @@
     "webgl",
     "graph"
   ],
-  "jsdelivr": "dist/ogma-react.mjs",
-  "browser": "dist/ogma-react.umd.js",
-  "main": "dist/ogma-react.mjs",
-  "module": "dist/ogma-react.mjs",
+  "jsdelivr": "dist/index.mjs",
+  "browser": "dist/index.umd.js",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/ogma-react.mjs",
-    "require": "./dist/ogma-react.js",
-    "default": "./dist/ogma-react.mjs",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.mjs",
     "types": "./dist/index.d.ts"
   },
   "files": [
@@ -69,7 +69,7 @@
     "@vitest/coverage-c8": "^0.24.5",
     "@vitest/ui": "latest",
     "canvas": "^2.11.0",
-    "dts-bundle-generator": "^8.0.0",
+    "dts-bundle-generator": "^9.0.0",
     "gh-pages": "^6.0.0",
     "jsdom": "latest",
     "leaflet": "^1.8.0",
@@ -89,7 +89,5 @@
     "url": "https://github.com/linkurious/ogma-react/issues"
   },
   "homepage": "https://github.com/linkurious/ogma-react#readme",
-  "dependencies": {
-    "lodash.throttle": "^4.1.1"
-  }
+  "dependencies": {}
 }
