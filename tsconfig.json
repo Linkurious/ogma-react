@@ -21,14 +21,8 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "outDir": "./dist/",
-    "types": [
-      "node",
-      "jest"
-    ],
-    "lib": [
-      "ES6",
-      "DOM"
-    ]
+    "types": ["node", "jest"],
+    "lib": ["ES6", "DOM"]
   },
   "include": [
     "src/**/*.ts",
@@ -37,7 +31,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
