@@ -37,10 +37,8 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./test/setup.ts",
-    threads: false,
     coverage: {
       reporter: ["json", "cobertura"],
-      src: ["src"],
       include: ["src/**/*.{ts,tsx}"],
       all: true,
       reportsDirectory: "reports/coverage",

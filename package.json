@@ -47,7 +47,7 @@
     "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
   },
   "peerDependencies": {
-    "@linkurious/ogma": "^5.0.2",
+    "@linkurious/ogma": "^5.1.0",
     "react": "^18.0.8",
     "react-dom": "^18.0.8"
   },
