@@ -1,5 +1,6 @@
 import { NodeGroupingTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
+import { act } from "react";
 import OgmaLib from "@linkurious/ogma";
 describe("Node grouping", () => {
   let div: HTMLDivElement;
@@ -12,7 +13,7 @@ describe("Node grouping", () => {
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
@@ -26,7 +27,7 @@ describe("Node grouping", () => {
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
@@ -40,7 +41,7 @@ describe("Node grouping", () => {
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
       })
-      .then(() => userEvent.click(screen.getByText("setGrouping")))
+      .then(() => act(() => userEvent.click(screen.getByText("setGrouping"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([`group-1`, `group-0`]);
@@ -67,7 +68,7 @@ describe("Node grouping", () => {
       .then(() => {
         expect(count).toEqual(10);
       })
-      .then(() => userEvent.click(screen.getByText("setGrouping")))
+      .then(() => act(() => userEvent.click(screen.getByText("setGrouping"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         //expect(count).toEqual(10);

@@ -31,5 +31,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": ["node_modules", "demo", "test"]
+  "exclude": ["node_modules"]
 }

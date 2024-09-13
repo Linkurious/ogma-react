@@ -1,5 +1,6 @@
 import { EdgeGroupingTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
+import { act } from "react";
 import OgmaLib from "@linkurious/ogma";
 describe("Edge grouping", () => {
   let div: HTMLDivElement;
@@ -12,7 +13,7 @@ describe("Edge grouping", () => {
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0, 1, 2, 3]);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0, 2, `group-1[0-2]`]);
@@ -26,7 +27,7 @@ describe("Edge grouping", () => {
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0, 2, `group-1[0-2]`]);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0, 1, 2, 3]);
@@ -40,7 +41,7 @@ describe("Edge grouping", () => {
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([0, 2, `group-1[0-2]`]);
       })
-      .then(() => userEvent.click(screen.getByText("setGrouping")))
+      .then(() => act(() => userEvent.click(screen.getByText("setGrouping"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().getId()).toEqual([

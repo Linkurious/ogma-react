@@ -1,5 +1,6 @@
 import { NeighborGenerationTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
+import { act } from "react";
 import OgmaLib from "@linkurious/ogma";
 describe("Neighbor generation", () => {
   let div: HTMLDivElement;
@@ -12,7 +13,7 @@ describe("Neighbor generation", () => {
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(0);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
@@ -26,7 +27,7 @@ describe("Neighbor generation", () => {
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(0);
@@ -40,7 +41,7 @@ describe("Neighbor generation", () => {
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
       })
-      .then(() => userEvent.click(screen.getByText("setGenerator")))
+      .then(() => act(() => userEvent.click(screen.getByText("setGenerator"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(3);
