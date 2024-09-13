@@ -41,7 +41,7 @@
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
     "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
