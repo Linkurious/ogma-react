@@ -1,5 +1,6 @@
 import { Transformation } from "@linkurious/ogma";
 
+export interface TransformationContext {}
 /** TODO: expose that in Ogma */
 export interface TransformationOptions {
   duration?: number;
@@ -9,15 +10,15 @@ export interface TransformationOptions {
 export interface TransformationProps<
   ND,
   ED,
-  O extends TransformationOptions = TransformationOptions,
+  C extends TransformationContext = TransformationContext,
 > {
   disabled?: boolean;
-  onEnabled?: (transformation: Transformation<ND, ED, O>) => void;
-  onDisabled?: (transformation: Transformation<ND, ED, O>) => void;
-  onDestroyed?: (transformation: Transformation<ND, ED, O>) => void;
-  onUpdated?: (transformation: Transformation<ND, ED, O>) => void;
+  onEnabled?: (transformation: Transformation<ND, ED, C>) => void;
+  onDisabled?: (transformation: Transformation<ND, ED, C>) => void;
+  onDestroyed?: (transformation: Transformation<ND, ED, C>) => void;
+  onUpdated?: (transformation: Transformation<ND, ED, C>) => void;
   onSetIndex?: (
-    transformation: Transformation<ND, ED, O>,
-    index: number,
+    transformation: Transformation<ND, ED, C>,
+    index: number
   ) => void;
 }

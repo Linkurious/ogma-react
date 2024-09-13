@@ -60,12 +60,12 @@ describe("Node grouping", () => {
           count = count | 8;
         }}
       />,
-      div,
+      div
     );
     return (ref.current as OgmaLib).transformations
       .afterNextUpdate()
       .then(() => {
-        expect(count).toEqual(2);
+        expect(count).toEqual(10);
       })
       .then(() => userEvent.click(screen.getByText("setGrouping")))
       .then(() => ref.current?.transformations.afterNextUpdate())

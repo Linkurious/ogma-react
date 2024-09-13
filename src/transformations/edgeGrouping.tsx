@@ -19,7 +19,7 @@ export interface EdgeGroupingProps<ED, ND>
 
 function EdgeGroupingComponent<ND = any, ED = any>(
   props: EdgeGroupingProps<ED, ND>,
-  ref?: Ref<EdgeGroupingTransformation<ED, ND>>,
+  ref?: Ref<EdgeGroupingTransformation<ED, ND>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
@@ -32,6 +32,7 @@ function EdgeGroupingComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {

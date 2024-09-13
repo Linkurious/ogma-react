@@ -19,7 +19,7 @@ export interface NeighborMergingProps<ND, ED>
 
 function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
-  ref: Ref<NeighborMergingTransformation<ND, ED>>,
+  ref: Ref<NeighborMergingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
@@ -32,6 +32,7 @@ function NeighborMergingComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {

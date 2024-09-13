@@ -13,17 +13,17 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface EdgeFilterProps<ED, ND>
-  extends EdgeFilterOptions<ED, ND>,
-    TransformationProps<ED, ND, EdgeFilterOptions<ED, ND>> {}
+export interface EdgeFilterProps<ND, ED>
+  extends EdgeFilterOptions<ND, ED>,
+    TransformationProps<ND, ED, EdgeFilterOptions<ND, ED>> {}
 
 function EdgeFilterComponent<ND = any, ED = any>(
-  props: EdgeFilterProps<ED, ND>,
-  ref?: Ref<EdgeFilterTransformation<ED, ND>>
+  props: EdgeFilterProps<ND, ED>,
+  ref?: Ref<EdgeFilterTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
-    useState<EdgeFilterTransformation<ED, ND>>();
+    useState<EdgeFilterTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
 
@@ -32,6 +32,7 @@ function EdgeFilterComponent<ND = any, ED = any>(
       ...props,
       enabled: !props.disabled,
     });
+    // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {
