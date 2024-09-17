@@ -1,6 +1,14 @@
 import { useState } from "react";
-import { Drawer, Text, Button, Toggle, Slider, Spacer } from "@geist-ui/core";
-import { Menu as MenuIcon, X as XIcon } from "@geist-ui/icons";
+import {
+  Drawer,
+  Text,
+  Title,
+  Switch as Toggle,
+  Slider,
+  ActionIcon,
+  Space,
+} from "@mantine/core";
+import { Menu as MenuIcon } from "react-feather";
 
 interface ControlsProps {
   toggleNodeGrouping: (value: boolean) => void;
@@ -25,84 +33,90 @@ export function Controls({
 }: ControlsProps) {
   //const ogma = useOgma();
   const [drawerShown, setDrawerShown] = useState(false);
+  const [nodeSize, setNodeSizeLocal] = useState(5);
+  const [edgeWidth, setEdgeWidthLocal] = useState(0.25);
   return (
     <>
       <div className="control-buttons">
-        <Button
-          onClick={() => setDrawerShown(!drawerShown)}
-          icon={<MenuIcon />}
-          w="28px"
-          h="28px"
-          px={0.5}
-          title="Show controls"
-          auto
-        />
+        {!drawerShown && (
+          <ActionIcon
+            onClick={() => setDrawerShown(!drawerShown)}
+            w="28px"
+            h="28px"
+            px={0.5}
+            title="Show controls"
+            variant="outline"
+          >
+            <MenuIcon />
+          </ActionIcon>
+        )}
       </div>
       <Drawer
-        visible={drawerShown}
+        opened={drawerShown}
         onClose={() => setDrawerShown(false)}
-        placement="right"
+        position="right"
         className="controls"
       >
-        <Drawer.Title>
-          <Text>Controls</Text>
-          <Button
+        <Title order={2}>Controls</Title>
+        <Space h="xl" />
+        {/* <Button
             onClick={() => setDrawerShown(!drawerShown)}
             icon={<XIcon />}
             auto
-            type="abort"
+            variant="outline"
             px={0.5}
+          /> */}
+        <div className="controls-section">
+          <Toggle
+            checked={nodeGrouping}
+            onChange={() => toggleNodeGrouping(!nodeGrouping)}
+            label="Node grouping"
           />
-        </Drawer.Title>
-        <Drawer.Content>
-          <div className="controls-section">
-            <Toggle
-              checked={nodeGrouping}
-              onChange={() => toggleNodeGrouping(!nodeGrouping)}
-            />
-            <span className="controls-section-label">Node grouping</span>
-          </div>
-          <Spacer h={1} />
-          <div className="controls-section">
-            <Text>Node size</Text>
-            <Slider
-              initialValue={5}
-              max={50}
-              min={1}
-              step={0.25}
-              onClickCapture={(evt) => evt.stopPropagation()}
-              onChange={setNodeSize}
-            />
-          </div>
-          <Spacer h={1} />
-          <div className="controls-section">
-            <Text>Edge width</Text>
-            <Slider
-              initialValue={0.25}
-              max={5}
-              min={0.05}
-              step={0.5}
-              onClickCapture={(evt) => evt.stopPropagation()}
-              onChange={setEdgeWidth}
-            />
-          </div>
-          <Spacer h={1} />
-          <div className="controls-section">
-            <Toggle
-              checked={outlines}
-              onChange={() => setOutlines(!outlines)}
-            />
-            <span className="controls-section-label">Node outlines</span>
-          </div>
-          <Spacer h={1} />
-          <div className="controls-section">
-            <Toggle
-              checked={geoEnabled}
-              onChange={() => setGeoEnabled(!geoEnabled)}
-            />
-            <span className="controls-section-label">Geo mode</span>
-          </div>
-        </Drawer.Content>
+        </div>
+        <div className="controls-section">
+          <Text>Node size</Text>
+          <Slider
+            value={nodeSize}
+            max={50}
+            min={1}
+            step={0.25}
+            onClickCapture={(evt) => evt.stopPropagation()}
+            onChange={(value) => {
+              setNodeSize(value);
+              setNodeSizeLocal(value);
+            }}
+            label="Node size"
+          />
+        </div>
+        <Space />
+        <div className="controls-section">
+          <Text>Edge width</Text>
+          <Slider
+            value={edgeWidth}
+            max={5}
+            min={0.05}
+            step={0.25}
+            onClickCapture={(evt) => evt.stopPropagation()}
+            onChange={(value) => {
+              setEdgeWidth(value);
+              setEdgeWidthLocal(value);
+            }}
+          />
+        </div>
+        <div className="controls-section">
+          <Toggle
+            checked={outlines}
+            onChange={() => setOutlines(!outlines)}
+            label="Node outlines"
+          />
+        </div>
+        <div className="controls-section">
+          <Toggle
+            checked={geoEnabled}
+            onChange={() => setGeoEnabled(!geoEnabled)}
+            label="Geo mode"
+          />
+        </div>
       </Drawer>
     </>
   );

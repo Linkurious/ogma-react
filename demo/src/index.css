@@ -33,6 +33,7 @@ code {
   top: 15px;
   left: 15px;
   z-index: 401;
+  display: flex;
 }
 
 :root {
@@ -78,7 +79,8 @@ code {
   height: 0;
   border-style: solid;
   border-width: 6px 7px 6px 0;
-  border-color: transparent var(--overlay-background-color) transparent transparent;
+  border-color: transparent var(--overlay-background-color) transparent
+    transparent;
   position: absolute;
   left: 50%;
   top: auto;
@@ -146,14 +148,13 @@ code {
 
 .control-buttons {
   position: absolute;
-  z-index: 401;
+  z-index: 400;
   right: 20px;
   top: 20px;
 }
 
-.controls .controls-section-label {
-  padding-left: 1em;
-  vertical-align: middle;
+.controls-section {
+  margin-bottom: 2em;
 }
 
 #button {
@@ -161,4 +162,8 @@ code {
   left: 10px;
   top: 10px;
   z-index: 401;
+}
+
+.ReactIcon {
+  margin: 3px;
 }

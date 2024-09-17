@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -41,21 +41,20 @@
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
     "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^5.1.0",
-    "react": "^18.0.8",
-    "react-dom": "^18.0.8"
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
   },
   "devDependencies": {
-    "@geist-ui/core": "^2.3.8",
-    "@geist-ui/icons": "^1.0.1",
     "@linkurious/code-tools": "^0.0.14",
     "@linkurious/eslint-config-ogma": "^1.0.5",
+    "@mantine/core": "^7.12.2",
     "@next/bundle-analyzer": "^14.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^14.0.0",
@@ -70,10 +69,12 @@
     "@vitest/ui": "latest",
     "canvas": "^2.11.0",
     "dts-bundle-generator": "^9.0.0",
+    "feather-icons": "^4.29.2",
     "gh-pages": "^6.0.0",
     "jsdom": "latest",
     "leaflet": "^1.8.0",
     "prettier": "^3.0.0",
+    "react-feather": "^2.0.10",
     "tslib": "^2.5.0",
     "typescript": "^5.3.2",
     "vite": "latest",
@@ -88,6 +89,5 @@
   "bugs": {
     "url": "https://github.com/linkurious/ogma-react/issues"
   },
-  "homepage": "https://github.com/linkurious/ogma-react#readme",
-  "dependencies": {}
+  "homepage": "https://github.com/linkurious/ogma-react#readme"
 }

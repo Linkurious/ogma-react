@@ -2,16 +2,18 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import "./src/index.css";
 import App from "./src/App";
-import { GeistProvider, CssBaseline } from "@geist-ui/core";
+import "@mantine/core/styles.css";
+import { MantineProvider, createTheme } from "@mantine/core";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
+const theme = createTheme({});
+
 root.render(
   <React.StrictMode>
-    <GeistProvider>
-      <CssBaseline />
+    <MantineProvider theme={theme}>
       <App />
-    </GeistProvider>
+    </MantineProvider>
   </React.StrictMode>
 );

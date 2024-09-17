@@ -1,5 +1,6 @@
 import { NodeCollapsingTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
+import { act } from "react";
 import OgmaLib from "@linkurious/ogma";
 describe("Node Collapsing", () => {
   let div: HTMLDivElement;
@@ -12,7 +13,7 @@ describe("Node Collapsing", () => {
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);
@@ -26,7 +27,7 @@ describe("Node Collapsing", () => {
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(1);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getEdges().size).toEqual(2);

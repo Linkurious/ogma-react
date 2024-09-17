@@ -7,7 +7,7 @@ import OgmaLib, {
 } from "@linkurious/ogma";
 import { useEffect, useState, createRef, useCallback } from "react";
 // loading indicator
-import { Loading } from "@geist-ui/core";
+import { LoadingOverlay } from "@mantine/core";
 // for geo mode
 import * as L from "leaflet";
 // components
@@ -32,6 +32,7 @@ import { Controls } from "./components/Controls";
 import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
 import { UpdateGroupingButton } from "./components/UpdateGroupingButton";
+import "@mantine/core/styles.css";
 
 // to enable geo mode integration
 OgmaLib.libraries["leaflet"] = L;
@@ -96,7 +97,7 @@ export default function App() {
   }, []);
 
   // nothing to render yet
-  if (loading) return <Loading />;
+  if (loading) return <LoadingOverlay zIndex={400} />;
 
   return (
     <div className="App">

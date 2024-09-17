@@ -1,5 +1,6 @@
 import { NodeFilterTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
+import { act } from "react";
 import OgmaLib from "@linkurious/ogma";
 describe("Node filter", () => {
   let div: HTMLDivElement;
@@ -12,7 +13,7 @@ describe("Node filter", () => {
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0]);
@@ -26,7 +27,7 @@ describe("Node filter", () => {
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0]);
       })
-      .then(() => userEvent.click(screen.getByText("toggle")))
+      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
@@ -40,7 +41,7 @@ describe("Node filter", () => {
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([0]);
       })
-      .then(() => userEvent.click(screen.getByText("setCriteria")))
+      .then(() => act(() => userEvent.click(screen.getByText("setCriteria"))))
       .then(() => ref.current?.transformations.afterNextUpdate())
       .then(() => {
         expect(ref.current?.getNodes().getId()).toEqual([1]);

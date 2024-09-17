@@ -1,10 +1,11 @@
-export const Icon = ({ width = 12, height = 12 }) => (
+export const Icon = ({ width = 12, height = 12, ...props }) => (
   <svg
     width={width}
     height={height}
     role="img"
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
+    {...props}
   >
     <path
       fill="currentColor"
