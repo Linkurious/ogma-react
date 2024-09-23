@@ -44,7 +44,7 @@
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run build:demo && touch ./demo/dist/.nojekyll && gh-pages -d demo/dist"
+    "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^5.1.0",
