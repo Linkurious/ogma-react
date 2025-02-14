@@ -52,7 +52,7 @@
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
-    "@linkurious/code-tools": "^0.0.14",
+    "@linkurious/code-tools": "^0.0.15",
     "@linkurious/eslint-config-ogma": "^1.0.5",
     "@mantine/core": "^7.12.2",
     "@next/bundle-analyzer": "^14.0.0",
