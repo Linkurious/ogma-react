@@ -67,7 +67,7 @@
     "@vitejs/plugin-react": "latest",
     "@vitest/coverage-v8": "latest",
     "@vitest/ui": "latest",
-    "canvas": "^2.11.0",
+    "canvas": "^3.0.0",
     "dts-bundle-generator": "^9.0.0",
     "feather-icons": "^4.29.2",
     "gh-pages": "^6.0.0",
