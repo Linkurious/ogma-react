@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fs = require("fs/promises");
+import fs from "fs/promises";
 
 fs.readFile("package.json", "utf8")
   .then((data) => {

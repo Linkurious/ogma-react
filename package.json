@@ -9,6 +9,7 @@
     "webgl",
     "graph"
   ],
+  "type": "module",
   "jsdelivr": "dist/index.mjs",
   "browser": "dist/index.umd.js",
   "main": "dist/index.mjs",
@@ -36,8 +37,7 @@
     "build:ts": "npm run typecheck && npm run types",
     "build:demo": "vite build demo",
     "build:lib": "vite build && npm run build:files",
-    "build:umd": "./scripts/umd.js",
-    "build:files": "scripts/prepublish.js && cp README.md dist",
+    "build:files": "scripts/prepublish.mjs && cp README.md dist",
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
