@@ -86,75 +86,94 @@ const PopupComponent = (
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
   useEffect(() => {
-    // register listener
-    const pos = getPosition(position, ogma) || offScreenPos;
-    const html = getContent(ogma, pos, content, children);
+    let currentLayer: OverlayLayer | null = null;
+    let onKeyDown: ((event: { code: number }) => void) | null = null;
+    let onClick: ((event: MouseEvent) => void) | null = null;
 
-    const popupLayer = ogma.layers.addOverlay({
-      position: pos || offScreenPos,
-      element: `<div class="${getContainerClass(popupClass, placement)}"/>
+    if (isOpen) {
+      // register listener
+      const pos = getPosition(position, ogma) || offScreenPos;
+      // Create initial empty content container
+      currentLayer = ogma.layers.addOverlay({
+        position: pos || offScreenPos,
+        element: `<div class="${getContainerClass(popupClass, placement)}"/>
           <div class="${popupBodyClass}">
             ${getCloseButton(closeButton, closeButtonClass)}
-            <div class="${contentClass} ">${html}</div>
+            <div class="${contentClass} "></div>
           </div>
         </div>`,
-      size: size || ({ width: "auto", height: "auto" } as any as Size),
-      scaled: false,
-    });
+        size: size || { width: "auto", height: "auto" },
+        scaled: false,
+      });
 
-    const onClick = (evt: MouseEvent) => {
-      const closeButton = popupLayer.element.querySelector(
-        `.${closeButtonClass}`
-      ) as Element;
-      if (evt.target && closeButton.contains(evt.target as Node)) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        onClose();
+      onClick = (evt: MouseEvent) => {
+        const closeButton = currentLayer?.element.querySelector(
+          `.${closeButtonClass}`
+        ) as Element;
+        if (evt.target && closeButton.contains(evt.target as Node)) {
+          evt.stopPropagation();
+          evt.preventDefault();
+          onClose();
+        }
+      };
+      onKeyDown = ({ code }: { code: number }) => {
+        if (code === 27) onClose();
+      };
+
+      if (closeOnEsc) ogma.events.on("keyup", onKeyDown);
+      currentLayer.element.addEventListener("click", onClick);
+
+      setLayer(currentLayer);
+      // Update content if static content is provided
+      if (content && !children) {
+        const contentElement = currentLayer.element.querySelector(
+          `.${contentClass}`
+        );
+        const html = getContent(ogma, pos, content, children);
+        if (contentElement) contentElement.innerHTML = html;
       }
-    };
-    const onKeyDown = ({ code }: { code: number }) => {
-      if (code === 27) onClose();
-    };
-    if (closeOnEsc) ogma.events.on("keyup", onKeyDown);
-    popupLayer.element.addEventListener("click", onClick);
-
-    setLayer(popupLayer);
-    if (!isOpen) popupLayer.hide();
+      setLayer(currentLayer);
+    }
 
     return () => {
       // unregister listener
-      if (layer) {
-        layer.element.removeEventListener("click", onClick);
-        ogma.events.off(onKeyDown);
-        layer.destroy();
+      if (currentLayer) {
+        if (onClick) currentLayer.element.removeEventListener("click", onClick);
+        if (onKeyDown) ogma.events.off(onKeyDown);
+        currentLayer.destroy();
         setLayer(null);
       }
     };
-  }, []);
+  }, [isOpen, ogma]);
 
   useEffect(() => {
-    if (layer) {
+    if (layer && layer.element) {
       const pos = getPosition(position, ogma) || offScreenPos;
-      const html = getContent(ogma, pos, content);
-      const { element } = layer;
-      element.className = getContainerClass(popupClass, placement);
-      element.querySelector(`.${popupBodyClass}`)!.innerHTML = `
-      ${getCloseButton(closeButton, closeButtonClass)}
-      <div class="${contentClass} ">${html}</div>`;
-
       layer.setPosition(pos);
+
+      // Update container classes
+      layer.element.className = getContainerClass(popupClass, placement);
+
+      // Only update static content if provided
+      if (content && !children) {
+        const contentElement = layer.element.querySelector(`.${contentClass}`);
+        if (contentElement) {
+          contentElement.innerHTML = typeof content === "string" ? content : "";
+        }
+      }
 
       if (isOpen) layer.show();
       else layer.hide();
     }
-  }, [content, position, isOpen, placement]);
+  }, [layer, position, isOpen, placement, popupClass, content, children]);
 
-  if (!layer || !children) return null;
+  // Render children through portal if they exist, otherwise render nothing
+  if (!layer || !isOpen) return null;
 
-  return createPortal(
-    children,
-    layer!.element.querySelector(`.${popupBodyClass}`)!
-  );
+  const contentElement = layer.element.querySelector(`.${contentClass}`);
+  if (!contentElement) return null;
+
+  return children ? createPortal(children, contentElement) : null;
 };
 
 /**
