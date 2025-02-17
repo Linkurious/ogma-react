@@ -16,9 +16,9 @@
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
+    "default": "./dist/index.mjs",
     "import": "./dist/index.mjs",
     "require": "./dist/index.cjs",
-    "default": "./dist/index.mjs",
     "types": "./dist/index.d.ts"
   },
   "files": [
