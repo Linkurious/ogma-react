@@ -88,14 +88,13 @@ const PopupComponent = (
   useEffect(() => {
     // register listener
     const pos = getPosition(position, ogma) || offScreenPos;
-    const html = getContent(ogma, pos, content, children);
-
+    // Create initial empty content container
     const popupLayer = ogma.layers.addOverlay({
       position: pos || offScreenPos,
       element: `<div class="${getContainerClass(popupClass, placement)}"/>
           <div class="${popupBodyClass}">
             ${getCloseButton(closeButton, closeButtonClass)}
-            <div class="${contentClass} ">${html}</div>
+            <div class="${contentClass} "></div>
           </div>
         </div>`,
       size: size || ({ width: "auto", height: "auto" } as any as Size),
@@ -115,6 +114,7 @@ const PopupComponent = (
     const onKeyDown = ({ code }: { code: number }) => {
       if (code === 27) onClose();
     };
+
     if (closeOnEsc) ogma.events.on("keyup", onKeyDown);
     popupLayer.element.addEventListener("click", onClick);
 
@@ -130,31 +130,36 @@ const PopupComponent = (
         setLayer(null);
       }
     };
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
     if (layer) {
       const pos = getPosition(position, ogma) || offScreenPos;
-      const html = getContent(ogma, pos, content);
-      const { element } = layer;
-      element.className = getContainerClass(popupClass, placement);
-      element.querySelector(`.${popupBodyClass}`)!.innerHTML = `
-      ${getCloseButton(closeButton, closeButtonClass)}
-      <div class="${contentClass} ">${html}</div>`;
-
       layer.setPosition(pos);
+
+      // Update container classes
+      layer.element.className = getContainerClass(popupClass, placement);
+
+      // Only update static content if provided
+      if (content && !children) {
+        const contentElement = layer.element.querySelector(`.${contentClass}`);
+        if (contentElement) {
+          contentElement.innerHTML = typeof content === "string" ? content : "";
+        }
+      }
 
       if (isOpen) layer.show();
       else layer.hide();
     }
   }, [content, position, isOpen, placement]);
 
-  if (!layer || !children) return null;
+  // Render children through portal if they exist, otherwise render nothing
+  if (!layer || !isOpen) return null;
 
-  return createPortal(
-    children,
-    layer!.element.querySelector(`.${popupBodyClass}`)!
-  );
+  const contentElement = layer.element.querySelector(`.${contentClass}`);
+  if (!contentElement) return null;
+
+  return children ? createPortal(children, contentElement) : null;
 };
 
 /**

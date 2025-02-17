@@ -58,7 +58,7 @@ export default function App() {
   const [geoEnabled, setGeoEnabled] = useState(false);
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
-  const [edgeWidth, setEdgeWidth] = useState(0.25);
+  const [edgeWidth, setEdgeWidth] = useState(0.5);
   const [groupingOptions, setGroupingOptions] = useState<
     NodeGroupingProps<any, any>
   >({
@@ -84,6 +84,12 @@ export default function App() {
   const requestSetTooltipPosition = useCallback((pos: Point) => {
     requestAnimationFrame(() => setTooltipPosition(pos));
   }, []);
+
+  const popupPosition = useCallback(
+    () => (clickedNode ? clickedNode.getPosition() : null),
+    [clickedNode]
+  );
+  const onPopupClose = useCallback(() => setPopupOpen(false), []);
 
   // load the graph
   useEffect(() => {
@@ -131,7 +137,10 @@ export default function App() {
           attributes={{
             color: "#247BA0",
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
-            text: (node) => node?.getData("properties.name"),
+            text: {
+              content: (node) => node?.getData("properties.name"),
+              font: "IBM Plex Sans",
+            },
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
@@ -150,15 +159,19 @@ export default function App() {
 
         {/* context-aware UI */}
         <Popup
-          position={() => (clickedNode ? clickedNode.getPosition() : null)}
-          onClose={() => setPopupOpen(false)}
-          isOpen={clickedNode && popupOpen}
+          position={popupPosition}
+          onClose={onPopupClose}
+          isOpen={!!clickedNode && popupOpen}
         >
-          {clickedNode && (
+          {!!clickedNode && (
             <div className="content">{`Node ${clickedNode.getId()}:`}</div>
           )}
         </Popup>
-        <Tooltip visible={!!target} placement="top" position={tooltipPositon}>
+        <Tooltip
+          visible={!!target && !popupOpen}
+          placement="right"
+          position={tooltipPositon}
+        >
           <div className="x">
             {target
               ? `${target.isNode ? "Node" : "Edge"} #${target.getId()}`

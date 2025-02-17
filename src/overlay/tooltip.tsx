@@ -67,10 +67,10 @@ const TooltipComponent = (
   useEffect(() => {
     const className = getContainerClass(tooltipClass, placement);
     const wrapperHtml = `<div class="${className}"><div class="${tooltipClass}--content" /></div>`;
-    const newCoords = getPosition(position, ogma);
+    const newCoords = { x: -9999, y: -9999 };
     setCoords(newCoords);
     const tooltip = ogma.layers.addOverlay({
-      position: newCoords || { x: -9999, y: -9999 },
+      position: newCoords,
       element: wrapperHtml,
       scaled: false,
       size,
@@ -101,7 +101,7 @@ const TooltipComponent = (
       else layer.hide();
     }
     raf.current = requestAnimationFrame(() => {
-      if (layer && coords && dimensions) {
+      if (layer && layer.element && coords && dimensions) {
         layer.element.className = getContainerClass(
           tooltipClass,
           getAdjustedPlacement(coords, placement, dimensions, ogma)

@@ -1,10 +1,15 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --overlay-background-color: #282c34;
+  --overlay-text-color: #61dafb;
+  --fontFamily: "IBM Plex Sans", sans-serif;
+  --mantine-font-family: var(--fontFamily);
+  --mantine-font-family-headings: var(--fontFamily);
 }
 
 html,
@@ -17,8 +22,8 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .App {
@@ -34,11 +39,7 @@ code {
   left: 15px;
   z-index: 401;
   display: flex;
-}
-
-:root {
-  --overlay-background-color: #282c34;
-  --overlay-text-color: #61dafb;
+  backdrop-filter: blur(5px);
 }
 
 .ogma-tooltip,
@@ -151,6 +152,10 @@ code {
   z-index: 400;
   right: 20px;
   top: 20px;
+}
+
+.control-buttons button {
+  backdrop-filter: blur(5px);
 }
 
 .controls-section {
