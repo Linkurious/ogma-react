@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   EdgeGroupingOptions,
-  EdgeGrouping as EdgeGroupingTransformation,
+  EdgeGrouping as EdgeGroupingTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -30,7 +30,7 @@ function EdgeGroupingComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addEdgeGrouping({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -53,7 +53,7 @@ function EdgeGroupingComponent<ND = any, ED = any>(
     props.selector,
     props.generator,
     props.groupIdFunction,
-    props.separateEdgesByDirection,
+    props.separateEdgesByDirection
   ]);
 
   return null;

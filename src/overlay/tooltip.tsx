@@ -1,7 +1,7 @@
 import OgmaLib, {
   Point,
   Size,
-  Overlay as OverlayLayer,
+  Overlay as OverlayLayer
 } from "@linkurious/ogma";
 import {
   useEffect,
@@ -10,7 +10,7 @@ import {
   ReactNode,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import { useOgma } from "../context";
 import { Placement, Content } from "./types";
@@ -18,7 +18,7 @@ import {
   getAdjustedPlacement,
   getContainerClass,
   getContent,
-  getPosition,
+  getPosition
 } from "./utils";
 
 type PositionGetter = (ogma: OgmaLib) => Point | null;
@@ -50,7 +50,7 @@ const TooltipComponent = (
     size = { width: "auto", height: "auto" } as any as Size,
     children,
     content,
-    visible = true,
+    visible = true
   }: TooltipProps,
   ref?: Ref<OverlayLayer>
 ) => {
@@ -59,7 +59,7 @@ const TooltipComponent = (
   const [coords, setCoords] = useState<Point | null>();
   const [html, setHtml] = useState("");
   const [dimensions, setDimensions] = useState<Size>();
-  const raf = useRef<number>();
+  const raf = useRef<number>(0);
 
   useImperativeHandle(ref, () => layer!, [layer]);
 
@@ -73,7 +73,7 @@ const TooltipComponent = (
       position: newCoords,
       element: wrapperHtml,
       scaled: false,
-      size,
+      size
     });
     setLayer(tooltip);
     return () => {
@@ -90,7 +90,7 @@ const TooltipComponent = (
         setHtml(newContent);
         setDimensions({
           width: layer.element.offsetWidth,
-          height: layer.element.offsetHeight,
+          height: layer.element.offsetHeight
         });
       }
       const newCoords = getPosition(position, ogma);

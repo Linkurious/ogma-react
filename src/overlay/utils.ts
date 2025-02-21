@@ -7,7 +7,7 @@ export function getContent(
   ogma: OgmaLib,
   position: Point,
   content?: Content,
-  children?: ReactNode,
+  children?: ReactNode
 ): string {
   if (typeof content === "string") return content;
   else if (typeof content === "function")
@@ -25,7 +25,7 @@ export const getContainerClass = (popupClass: string, placement: Placement) =>
 
 export function getCloseButton(
   closeButton: string | ReactNode | null = "&times;",
-  closeButtonClass: string,
+  closeButtonClass: string
 ) {
   if (closeButton) {
     const closeButtonElement =
@@ -41,7 +41,7 @@ export function getAdjustedPlacement(
   coords: Point,
   placement: Placement,
   dimensions: Size,
-  ogma: OgmaLib,
+  ogma: OgmaLib
 ): Placement {
   const { width: screenWidth, height: screenHeight } = ogma.view.getSize();
   const { x, y } = ogma.view.graphToScreenCoordinates(coords);

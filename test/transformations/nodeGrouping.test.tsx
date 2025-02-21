@@ -6,72 +6,55 @@ describe("Node grouping", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
-  it("Can be disabled by default and then enabled", () => {
+  it("Can be disabled by default and then enabled", async () => {
     render(<NodeGroupingTest disabled={true} />, div);
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
+    await act(() => userEvent.click(screen.getByText("toggle")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
   });
 
-  it("Can be disabled", () => {
+  it("Can be disabled", async () => {
     render(<NodeGroupingTest />, div);
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
+    await act(() => userEvent.click(screen.getByText("toggle")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(ref.current?.getNodes().getId()).toEqual([0, 1, 2]);
   });
 
-  it("Updates grouping", () => {
+  it("Updates grouping", async () => {
     render(<NodeGroupingTest />, div);
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("setGrouping"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        expect(ref.current?.getNodes().getId()).toEqual([`group-1`, `group-0`]);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(ref.current?.getNodes().getId()).toEqual([0, 2, `group-1`]);
+    await act(() => userEvent.click(screen.getByText("setGrouping")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(ref.current?.getNodes().getId()).toEqual([`group-1`, `group-0`]);
   });
-  it("Triggers callbacks", () => {
-    let count = 0;
+
+  it("Triggers callbacks", async () => {
+    const states = { onEnabled: false, onDestroyed: false, onUpdated: false };
     render(
       <NodeGroupingTest
-        onEnabled={() => {
-          count = count | 2;
-        }}
-        onDestroyed={() => {
-          count = count | 4;
-        }}
-        onUpdated={() => {
-          count = count | 8;
-        }}
+        onEnabled={() => (states.onEnabled = true)}
+        onDestroyed={() => (states.onDestroyed = true)}
+        onUpdated={() => (states.onUpdated = true)}
       />,
       div
     );
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(count).toEqual(10);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("setGrouping"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        //expect(count).toEqual(10);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(states).toEqual({
+      onEnabled: true,
+      onDestroyed: false,
+      onUpdated: false
+    });
+    await act(() => userEvent.click(screen.getByText("setGrouping")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(states).toEqual({
+      onEnabled: true,
+      onDestroyed: false,
+      onUpdated: true
+    });
   });
 });

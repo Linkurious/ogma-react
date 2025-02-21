@@ -1,7 +1,8 @@
 import Ogma, { Transformation } from "@linkurious/ogma";
-import { TransformationProps, TransformationContext } from "./types";
-export function toggle<ND, ED, O extends TransformationContext>(
-  transformation: Transformation<ND, ED, O>,
+import { TransformationProps } from "./types";
+
+export function toggle<ND, ED>(
+  transformation: Transformation<ND, ED>,
   disabled: boolean,
   duration?: number
 ) {
@@ -11,53 +12,37 @@ export function toggle<ND, ED, O extends TransformationContext>(
   }
 }
 
-export function useTransformationCallbacks<
-  ND,
-  ED,
-  C extends TransformationContext,
->(
-  props: TransformationProps<ND, ED, C>,
-  transformation: Transformation<ND, ED, C>,
+export function useTransformationCallbacks<ND, ED>(
+  props: TransformationProps<ND, ED>,
+  transformation: Transformation<ND, ED>,
   ogma: Ogma<ND, ED>
 ) {
-  const enabledListener = ({
-    target,
-  }: {
-    target: Transformation<ND, ED, C>;
-  }) => {
+  const enabledListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
     props.onEnabled && props.onEnabled(transformation);
   };
-  const disabledListener = ({
-    target,
-  }: {
-    target: Transformation<ND, ED, C>;
-  }) => {
+  const disabledListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
     props.onDisabled && props.onDisabled(transformation);
   };
-  const updatedListener = ({
-    target,
-  }: {
-    target: Transformation<ND, ED, C>;
-  }) => {
+  const updatedListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
     props.onUpdated && props.onUpdated(transformation);
   };
   const setIndexListener = ({
     target,
-    index,
+    index
   }: {
-    target: Transformation<ND, ED, C>;
+    target: Transformation<ND, ED>;
     index: number;
   }) => {
     if (target !== transformation) return;
     props.onSetIndex && props.onSetIndex(transformation, index);
   };
   const destroyedListener = ({
-    target,
+    target
   }: {
-    target: Transformation<ND, ED, C>;
+    target: Transformation<ND, ED>;
   }) => {
     if (target !== transformation) return;
     props.onDestroyed && props.onDestroyed(transformation);
@@ -69,15 +54,10 @@ export function useTransformationCallbacks<
       .off(destroyedListener);
   };
   ogma.events
-    // @ts-expect-error TODO: expose that in Ogma
     .on("transformationEnabled", enabledListener)
-    // @ts-expect-error TODO: expose that in Ogma
     .on("transformationDisabled", disabledListener)
-    // @ts-expect-error TODO: expose that in Ogma
     .on("transformationDestroyed", destroyedListener)
-    // @ts-expect-error TODO: expose that in Ogma
     .on("transformationSetIndex", setIndexListener)
-    // @ts-expect-error TODO: expose that in Ogma
     .on("transformationRefresh", updatedListener);
   const cleanup = () => {
     ogma.events

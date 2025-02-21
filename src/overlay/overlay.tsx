@@ -4,13 +4,13 @@ import {
   ReactNode,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 
 import OgmaLib, {
   Overlay as OverlayLayer,
   Size,
-  Point,
+  Point
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { getPosition } from "./utils";
@@ -52,7 +52,7 @@ export const Overlay = forwardRef(
         position: pos || offScreenPos,
         element: newElement,
         size: size || ({ width: "auto", height: "auto" } as any as Size),
-        scaled,
+        scaled
       });
 
       setLayer(overlay);

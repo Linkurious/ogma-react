@@ -18,7 +18,7 @@ import {
   NeighborMerging,
   NeighborMergingProps,
   NodeCollapsing,
-  NodeCollapsingProps,
+  NodeCollapsingProps
 } from "../../src";
 import { createRef, forwardRef, useState } from "react";
 
@@ -30,17 +30,17 @@ function EdgeFilterTestC(
   const [props, setProps] = useState<EdgeFilterProps<unknown, unknown>>({
     criteria: (edge) => edge.getId() === 0,
     disabled: false,
-    ...filter,
+    ...filter
   });
   function updateFilter() {
     setProps({
-      criteria: (edge) => edge.getId() === 1,
+      criteria: (edge) => edge.getId() === 1
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -60,17 +60,17 @@ function NodeFilterTestC(
   const [props, setProps] = useState<NodeFilterProps<unknown, unknown>>({
     criteria: (node) => node.getId() === 0,
     disabled: false,
-    ...filter,
+    ...filter
   });
   function updateFilter() {
     setProps({
-      criteria: (node) => node.getId() === 1,
+      criteria: (node) => node.getId() === 1
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -95,23 +95,23 @@ function EdgeGroupingTestC(
     generator(_, groupId) {
       return {
         id: groupId,
-        data: { key: "value" },
+        data: { key: "value" }
       };
     },
     disabled: false,
-    ...grouping,
+    ...grouping
   });
   function updateGrouping() {
     setProps({
       ...props,
       selector: () => true,
-      groupIdFunction: (edge) => `group-${+edge.getId() % 2}`,
+      groupIdFunction: (edge) => `group-${+edge.getId() % 2}`
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -142,23 +142,23 @@ function NodeGroupingTestC(
     nodeGenerator: (_, groupId) => {
       return {
         id: groupId,
-        data: { key: "value" },
+        data: { key: "value" }
       };
     },
     disabled: false,
-    ...grouping,
+    ...grouping
   });
   function updateGrouping() {
     setProps({
       ...props,
       selector: () => true,
-      groupIdFunction: (node) => `group-${+node.getId() % 2}`,
+      groupIdFunction: (node) => `group-${+node.getId() % 2}`
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -193,19 +193,19 @@ function NeighborGenerationTestC(
       selector: (node) => +node.getId() % 2 === 0,
       neighborIdFunction: () => `even`,
       disabled: false,
-      ...generator,
+      ...generator
     }
   );
   function updateGenerator() {
     setProps({
       ...props,
-      selector: () => true,
+      selector: () => true
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -232,18 +232,18 @@ function NeighborMergingTestC(
     selector: (node) => +node.getId() === 1,
     dataFunction: () => ({ value: 1 }),
     disabled: false,
-    ...generator,
+    ...generator
   });
   function updateGenerator() {
     setProps({
       ...props,
-      selector: (node) => +node.getId() === 0,
+      selector: (node) => +node.getId() === 0
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -271,20 +271,20 @@ function NodeCollapsingTestC(
       return { data: { key1: "value1" } };
     },
     disabled: false,
-    ...generator,
+    ...generator
   });
   function updateCollapse() {
     setProps({
       ...props,
       edgeGenerator: () => {
         return { data: { key2: "value2" } };
-      },
+      }
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (

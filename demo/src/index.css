@@ -6,15 +6,17 @@ body {
 
 :root {
   --overlay-background-color: #282c34;
-  --overlay-text-color: #61dafb;
+  --text-color: #222222;
+  --brand-color: #0094ff;
+  --overlay-text-color: var(--brand-color);
   --fontFamily: "IBM Plex Sans", sans-serif;
-  --mantine-font-family: var(--fontFamily);
-  --mantine-font-family-headings: var(--fontFamily);
+  --border-radius: 5px;
 }
 
 html,
 body {
   height: 100%;
+  font-family: var(--fontFamily);
 }
 
 #root {
@@ -156,6 +158,17 @@ code {
 
 .control-buttons button {
   backdrop-filter: blur(5px);
+  line-height: 1em;
+  width: 2.5em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.control-buttons button:hover {
+  border-color: var(--brand-color);
+  color: var(--brand-color);
 }
 
 .controls-section {
@@ -171,4 +184,8 @@ code {
 
 .ReactIcon {
   margin: 3px;
+}
+
+.gh-link {
+  margin-left: 1em;
 }

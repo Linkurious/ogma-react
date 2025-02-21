@@ -5,20 +5,20 @@ import {
   ReactElement,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 
 import OgmaLib, {
   Overlay as OverlayLayer,
   Size,
-  Point,
+  Point
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
   getContent,
   getPosition,
   getContainerClass,
-  getCloseButton,
+  getCloseButton
 } from "./utils";
 import { noop } from "../utils";
 import { Placement } from "./types";
@@ -76,7 +76,7 @@ const PopupComponent = (
     contentClass = POPUP_CONTENT_CLASS,
     popupBodyClass = POPUP_BODY_CLASS,
     size,
-    closeOnEsc = true,
+    closeOnEsc = true
   }: PopupProps,
   ref?: Ref<OverlayLayer>
 ) => {
@@ -103,7 +103,7 @@ const PopupComponent = (
           </div>
         </div>`,
         size: size || { width: "auto", height: "auto" },
-        scaled: false,
+        scaled: false
       });
 
       onClick = (evt: MouseEvent) => {

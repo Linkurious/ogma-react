@@ -1,14 +1,14 @@
 import OgmaLib, {
   NodeSelector,
   NodeAttributesValue,
-  StyleRule,
+  StyleRule
 } from "@linkurious/ogma";
 import {
   useEffect,
   Ref,
   forwardRef,
   useState,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 import { useOgma } from "../context";
 
@@ -19,7 +19,7 @@ interface NodeRuleProps<ND, ED> {
 
 const NodeStyleRuleComponent = <ND, ED>(
   { selector, attributes }: NodeRuleProps<ND, ED>,
-  ref?: Ref<StyleRule<ND, ED>>,
+  ref?: Ref<StyleRule<ND, ED>>
 ) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [rule, setRule] = useState<StyleRule<ND, ED>>();
