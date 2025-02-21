@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   EdgeFilterOptions,
-  EdgeFilter as EdgeFilterTransformation,
+  EdgeFilter as EdgeFilterTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -30,9 +30,8 @@ function EdgeFilterComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addEdgeFilter({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
-    // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {

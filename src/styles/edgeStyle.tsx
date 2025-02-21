@@ -1,14 +1,14 @@
 import OgmaLib, {
   EdgeSelector,
   EdgeAttributesValue,
-  StyleRule,
+  StyleRule
 } from "@linkurious/ogma";
 import {
   useEffect,
   useState,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 import { useOgma } from "../context";
 
@@ -19,7 +19,7 @@ interface EdgeRuleProps<ND, ED> {
 
 const EdgeStyleRuleComponent = <ND, ED>(
   { selector, attributes }: EdgeRuleProps<ND, ED>,
-  ref?: Ref<StyleRule<ND, ED>>,
+  ref?: Ref<StyleRule<ND, ED>>
 ) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
   const [rule, setRule] = useState<StyleRule<ND, ED>>();

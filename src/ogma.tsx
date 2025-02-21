@@ -24,7 +24,7 @@ const defaultOptions = {};
  */
 export const OgmaComponent = <ND, ED>(
   { options = defaultOptions, children, graph, onReady }: OgmaProps<ND, ED>,
-  ref?: Ref<OgmaLib<ND, ED>>
+  ref?: Ref<OgmaLib<ND, ED>>,
 ) => {
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();

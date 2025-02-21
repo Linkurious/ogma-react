@@ -4,7 +4,7 @@ import {
   ReactNode,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 import { createPortal } from "react-dom";
 import { Layer as OgmaLayer } from "@linkurious/ogma";

@@ -1,6 +1,6 @@
 {
   "name": "@linkurious/ogma-react",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "A light adaptation of Ogma for React application",
   "keywords": [
     "ogma",
@@ -9,16 +9,19 @@
     "webgl",
     "graph"
   ],
+  "type": "module",
   "jsdelivr": "dist/index.mjs",
   "browser": "dist/index.umd.js",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.cjs",
-    "default": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    }
   },
   "files": [
     "dist/*.d.ts",
@@ -36,15 +39,17 @@
     "build:ts": "npm run typecheck && npm run types",
     "build:demo": "vite build demo",
     "build:lib": "vite build && npm run build:files",
-    "build:umd": "./scripts/umd.js",
-    "build:files": "scripts/prepublish.js && cp README.md dist",
+    "build:files": "scripts/prepublish.mjs && cp README.md dist",
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run build:demo && gh-pages -d demo/dist"
+    "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist"
+  },
+  "prettier": {
+    "trailingComma": "none"
   },
   "peerDependencies": {
     "@linkurious/ogma": "^5.1.0",
@@ -52,9 +57,8 @@
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
-    "@linkurious/code-tools": "^0.0.14",
+    "@linkurious/code-tools": "^0.0.15",
     "@linkurious/eslint-config-ogma": "^1.0.5",
-    "@mantine/core": "^7.12.2",
     "@next/bundle-analyzer": "^14.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^14.0.0",
@@ -62,12 +66,12 @@
     "@types/leaflet": "^1.7.9",
     "@types/lodash.throttle": "^4.1.6",
     "@types/node": "^20.0.0",
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "latest",
     "@vitest/coverage-v8": "latest",
     "@vitest/ui": "latest",
-    "canvas": "^2.11.0",
+    "canvas": "^3.0.0",
     "dts-bundle-generator": "^9.0.0",
     "feather-icons": "^4.29.2",
     "gh-pages": "^6.0.0",

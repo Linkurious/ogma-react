@@ -3,11 +3,10 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  NodeGrouping as NodeGroupingTransformation,
+  NodeGrouping as NodeGroupingTransformation
 } from "@linkurious/ogma";
 import { useEffect, useState, createRef, useCallback } from "react";
-// loading indicator
-import { LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay } from "./components/LoadingOverlay";
 // for geo mode
 import * as L from "leaflet";
 // components
@@ -19,7 +18,7 @@ import {
   NodeGrouping,
   Popup,
   Geo,
-  NodeGroupingProps,
+  NodeGroupingProps
 } from "../../src";
 
 // cusotm components:
@@ -31,8 +30,6 @@ import { GraphOutlines } from "./components/GraphOutlines";
 import { Controls } from "./components/Controls";
 import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
-import { UpdateGroupingButton } from "./components/UpdateGroupingButton";
-import "@mantine/core/styles.css";
 
 // to enable geo mode integration
 OgmaLib.libraries["leaflet"] = L;
@@ -58,10 +55,8 @@ export default function App() {
   const [geoEnabled, setGeoEnabled] = useState(false);
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
-  const [edgeWidth, setEdgeWidth] = useState(0.25);
-  const [groupingOptions, setGroupingOptions] = useState<
-    NodeGroupingProps<any, any>
-  >({
+  const [edgeWidth, setEdgeWidth] = useState(0.5);
+  const [groupingOptions] = useState<NodeGroupingProps<any, any>>({
     groupIdFunction: (node) => {
       const categories = node.getData("categories");
       if (!categories) return undefined;
@@ -70,20 +65,26 @@ export default function App() {
     nodeGenerator: (nodes) => {
       return { data: { multiplier: nodes.size } };
     },
-    disabled: true,
+    disabled: true
   });
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
     x: 0,
-    y: 0,
+    y: 0
   });
   const [target, setTarget] = useState<Node | Edge | null>();
 
   const requestSetTooltipPosition = useCallback((pos: Point) => {
     requestAnimationFrame(() => setTooltipPosition(pos));
   }, []);
+
+  const popupPosition = useCallback(
+    () => (clickedNode ? clickedNode.getPosition() : null),
+    [clickedNode]
+  );
+  const onPopupClose = useCallback(() => setPopupOpen(false), []);
 
   // load the graph
   useEffect(() => {
@@ -97,7 +98,7 @@ export default function App() {
   }, []);
 
   // nothing to render yet
-  if (loading) return <LoadingOverlay zIndex={400} />;
+  if (loading) return <LoadingOverlay />;
 
   return (
     <div className="App">
@@ -131,7 +132,11 @@ export default function App() {
           attributes={{
             color: "#247BA0",
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
-            text: (node) => node?.getData("properties.name"),
+            text: {
+              content: (node) => node?.getData("properties.name"),
+              font: "IBM Plex Sans",
+              minVisibleSize: 3
+            }
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
@@ -150,15 +155,19 @@ export default function App() {
 
         {/* context-aware UI */}
         <Popup
-          position={() => (clickedNode ? clickedNode.getPosition() : null)}
-          onClose={() => setPopupOpen(false)}
-          isOpen={clickedNode && popupOpen}
+          position={popupPosition}
+          onClose={onPopupClose}
+          isOpen={!!clickedNode && popupOpen}
         >
-          {clickedNode && (
+          {!!clickedNode && (
             <div className="content">{`Node ${clickedNode.getId()}:`}</div>
           )}
         </Popup>
-        <Tooltip visible={!!target} placement="top" position={tooltipPositon}>
+        <Tooltip
+          visible={!!target && !popupOpen}
+          placement="right"
+          position={tooltipPositon}
+        >
           <div className="x">
             {target
               ? `${target.isNode ? "Node" : "Edge"} #${target.getId()}`
@@ -174,10 +183,6 @@ export default function App() {
           latitudePath="properties.latitude"
         />
         <MousePosition />
-        <UpdateGroupingButton
-          options={groupingOptions}
-          update={(options) => setGroupingOptions(options)}
-        />
       </Ogma>
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}

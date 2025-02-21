@@ -1,13 +1,7 @@
 import { useState } from "react";
-import {
-  Drawer,
-  Text,
-  Title,
-  Switch as Toggle,
-  Slider,
-  ActionIcon,
-  Space,
-} from "@mantine/core";
+import { Drawer } from "./Drawer";
+import { Toggle } from "./Toggle";
+import { Slider } from "./Slider";
 import { Menu as MenuIcon } from "react-feather";
 
 interface ControlsProps {
@@ -39,64 +33,47 @@ export function Controls({
     <>
       <div className="control-buttons">
         {!drawerShown && (
-          <ActionIcon
+          <button
             onClick={() => setDrawerShown(!drawerShown)}
-            w="28px"
-            h="28px"
-            px={0.5}
             title="Show controls"
-            variant="outline"
           >
-            <MenuIcon />
-          </ActionIcon>
+            <MenuIcon width={18} />
+          </button>
         )}
       </div>
       <Drawer
-        opened={drawerShown}
-        onClose={() => setDrawerShown(false)}
-        position="right"
+        isOpen={drawerShown}
+        onClosed={() => setDrawerShown(false)}
         className="controls"
       >
-        <Title order={2}>Controls</Title>
-        <Space h="xl" />
-        {/* <Button
-            onClick={() => setDrawerShown(!drawerShown)}
-            icon={<XIcon />}
-            auto
-            variant="outline"
-            px={0.5}
-          /> */}
+        <h2>Controls</h2>
         <div className="controls-section">
           <Toggle
             checked={nodeGrouping}
-            onChange={() => toggleNodeGrouping(!nodeGrouping)}
             label="Node grouping"
+            onChange={() => toggleNodeGrouping(!nodeGrouping)}
           />
         </div>
         <div className="controls-section">
-          <Text>Node size</Text>
+          <h3>Node size</h3>
           <Slider
             value={nodeSize}
             max={50}
             min={1}
             step={0.25}
-            onClickCapture={(evt) => evt.stopPropagation()}
             onChange={(value) => {
               setNodeSize(value);
               setNodeSizeLocal(value);
             }}
-            label="Node size"
           />
         </div>
-        <Space />
         <div className="controls-section">
-          <Text>Edge width</Text>
+          <h3>Edge width</h3>
           <Slider
             value={edgeWidth}
             max={5}
             min={0.05}
             step={0.25}
-            onClickCapture={(evt) => evt.stopPropagation()}
             onChange={(value) => {
               setEdgeWidth(value);
               setEdgeWidthLocal(value);

@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   NodeGroupingOptions,
-  NodeGrouping as NodeGroupingTransformation,
+  NodeGrouping as NodeGroupingTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { toggle, useTransformationCallbacks } from "./utils";
@@ -29,9 +29,8 @@ function NodeGroupingComponent<ND, ED>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeGrouping({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
-    // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
     return () => {
@@ -57,7 +56,7 @@ function NodeGroupingComponent<ND, ED>(
     props.padding,
     props.selector,
     props.showContents,
-    props.separateEdgesByDirection,
+    props.separateEdgesByDirection
   ]);
 
   return null;

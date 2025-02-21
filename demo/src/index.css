@@ -1,15 +1,22 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --overlay-background-color: #282c34;
+  --text-color: #222222;
+  --brand-color: #0094ff;
+  --overlay-text-color: var(--brand-color);
+  --fontFamily: "IBM Plex Sans", sans-serif;
+  --border-radius: 5px;
 }
 
 html,
 body {
   height: 100%;
+  font-family: var(--fontFamily);
 }
 
 #root {
@@ -17,8 +24,8 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .App {
@@ -34,11 +41,7 @@ code {
   left: 15px;
   z-index: 401;
   display: flex;
-}
-
-:root {
-  --overlay-background-color: #282c34;
-  --overlay-text-color: #61dafb;
+  backdrop-filter: blur(5px);
 }
 
 .ogma-tooltip,
@@ -153,6 +156,21 @@ code {
   top: 20px;
 }
 
+.control-buttons button {
+  backdrop-filter: blur(5px);
+  line-height: 1em;
+  width: 2.5em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.control-buttons button:hover {
+  border-color: var(--brand-color);
+  color: var(--brand-color);
+}
+
 .controls-section {
   margin-bottom: 2em;
 }
@@ -166,4 +184,8 @@ code {
 
 .ReactIcon {
   margin: 3px;
+}
+
+.gh-link {
+  margin-left: 1em;
 }
