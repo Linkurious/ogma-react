@@ -6,6 +6,7 @@ body {
 
 :root {
   --overlay-background-color: #282c34;
+  --text-color: #222222;
   --brand-color: #0094ff;
   --overlay-text-color: var(--brand-color);
   --fontFamily: "IBM Plex Sans", sans-serif;

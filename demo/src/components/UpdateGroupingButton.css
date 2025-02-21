@@ -5,12 +5,14 @@
   background-color: transparent;
   border: 1px solid #ddd;
   border-radius: 6px;
-  min-width: 18px;
-  color: #aaa;
+  min-width: 20px;
+  color: var(--text-color);
   cursor: pointer;
+  line-height: 18px;
+  padding-top: 5px;
 }
 
 .grouping-controls button:hover {
-  border-color: #444;
-  color: #444;
+  border-color: var(--brand-color);
+  color: var(--brand-color);
 }

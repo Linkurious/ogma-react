@@ -138,6 +138,7 @@ export default function App() {
             text: {
               content: (node) => node?.getData("properties.name"),
               font: "IBM Plex Sans",
+              minVisibleSize: 3,
             },
           }}
         />
@@ -185,10 +186,6 @@ export default function App() {
           latitudePath="properties.latitude"
         />
         <MousePosition />
-        <UpdateGroupingButton
-          options={groupingOptions}
-          update={(options) => setGroupingOptions(options)}
-        />
       </Ogma>
       <Controls
         toggleNodeGrouping={(value) => setNodeGrouping(value)}

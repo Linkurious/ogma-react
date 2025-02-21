@@ -23,7 +23,7 @@ export const UpdateGroupingButton: FC<{
   return (
     <Layer className="grouping-controls">
       <button onClick={onClick}>
-        <ShuffleIcon />
+        <ShuffleIcon width={18} height={18} />
       </button>
     </Layer>
   );
