@@ -30,7 +30,6 @@ import { GraphOutlines } from "./components/GraphOutlines";
 import { Controls } from "./components/Controls";
 import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
-import { UpdateGroupingButton } from "./components/UpdateGroupingButton";
 
 // to enable geo mode integration
 OgmaLib.libraries["leaflet"] = L;
