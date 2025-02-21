@@ -78,7 +78,7 @@ const PopupComponent = (
     size,
     closeOnEsc = true,
   }: PopupProps,
-  ref?: Ref<OverlayLayer>
+  ref?: Ref<OverlayLayer>,
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -108,7 +108,7 @@ const PopupComponent = (
 
       onClick = (evt: MouseEvent) => {
         const closeButton = currentLayer?.element.querySelector(
-          `.${closeButtonClass}`
+          `.${closeButtonClass}`,
         ) as Element;
         if (evt.target && closeButton.contains(evt.target as Node)) {
           evt.stopPropagation();
@@ -127,7 +127,7 @@ const PopupComponent = (
       // Update content if static content is provided
       if (content && !children) {
         const contentElement = currentLayer.element.querySelector(
-          `.${contentClass}`
+          `.${contentClass}`,
         );
         const html = getContent(ogma, pos, content, children);
         if (contentElement) contentElement.innerHTML = html;

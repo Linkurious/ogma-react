@@ -52,7 +52,7 @@ const TooltipComponent = (
     content,
     visible = true,
   }: TooltipProps,
-  ref?: Ref<OverlayLayer>
+  ref?: Ref<OverlayLayer>,
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OverlayLayer>();
@@ -104,7 +104,7 @@ const TooltipComponent = (
       if (layer && layer.element && coords && dimensions) {
         layer.element.className = getContainerClass(
           tooltipClass,
-          getAdjustedPlacement(coords, placement, dimensions, ogma)
+          getAdjustedPlacement(coords, placement, dimensions, ogma),
         );
         layer.setPosition(coords); // throttledSetPosition(coords);
       }

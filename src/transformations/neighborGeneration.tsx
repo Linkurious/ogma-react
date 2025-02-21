@@ -19,7 +19,7 @@ export interface NeighborGenerationProps<ND, ED>
 
 function NeighborGenerationComponent<ND = any, ED = any>(
   props: NeighborGenerationProps<ND, ED>,
-  ref: Ref<NeighborGenerationTransformation<ND, ED>>
+  ref: Ref<NeighborGenerationTransformation<ND, ED>>,
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =

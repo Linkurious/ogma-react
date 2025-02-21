@@ -19,7 +19,7 @@ export interface EdgeFilterProps<ND, ED>
 
 function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ND, ED>,
-  ref?: Ref<EdgeFilterTransformation<ND, ED>>
+  ref?: Ref<EdgeFilterTransformation<ND, ED>>,
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =

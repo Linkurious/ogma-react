@@ -3,7 +3,7 @@ import { TransformationProps, TransformationContext } from "./types";
 export function toggle<ND, ED, O extends TransformationContext>(
   transformation: Transformation<ND, ED, O>,
   disabled: boolean,
-  duration?: number
+  duration?: number,
 ) {
   if (disabled === transformation.isEnabled()) {
     if (disabled) transformation.disable(duration as number);
@@ -18,7 +18,7 @@ export function useTransformationCallbacks<
 >(
   props: TransformationProps<ND, ED, C>,
   transformation: Transformation<ND, ED, C>,
-  ogma: Ogma<ND, ED>
+  ogma: Ogma<ND, ED>,
 ) {
   const enabledListener = ({
     target,

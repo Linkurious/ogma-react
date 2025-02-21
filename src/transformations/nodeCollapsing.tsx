@@ -19,7 +19,7 @@ export interface NodeCollapsingProps<ND, ED>
 
 export function NodeCollapsingComponent<ND = any, ED = any>(
   props: NodeCollapsingProps<ND, ED>,
-  ref: Ref<NodeCollapsingTransformation<ND, ED>>
+  ref: Ref<NodeCollapsingTransformation<ND, ED>>,
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =

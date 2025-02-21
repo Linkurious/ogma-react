@@ -56,9 +56,7 @@ export default function App() {
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.5);
-  const [groupingOptions, setGroupingOptions] = useState<
-    NodeGroupingProps<any, any>
-  >({
+  const [groupingOptions] = useState<NodeGroupingProps<any, any>>({
     groupIdFunction: (node) => {
       const categories = node.getData("categories");
       if (!categories) return undefined;

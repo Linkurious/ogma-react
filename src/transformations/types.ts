@@ -19,6 +19,6 @@ export interface TransformationProps<
   onUpdated?: (transformation: Transformation<ND, ED, C>) => void;
   onSetIndex?: (
     transformation: Transformation<ND, ED, C>,
-    index: number
+    index: number,
   ) => void;
 }

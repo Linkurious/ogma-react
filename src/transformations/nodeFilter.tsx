@@ -19,7 +19,7 @@ export interface NodeFilterProps<ED, ND>
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
-  ref?: Ref<NodeFilterTransformation<ND, ED>>
+  ref?: Ref<NodeFilterTransformation<ND, ED>>,
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =

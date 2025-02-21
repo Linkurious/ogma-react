@@ -47,5 +47,5 @@ export const Layer = forwardRef(
     if (!layer) return null;
 
     return createPortal(children, layer.element);
-  }
+  },
 );
