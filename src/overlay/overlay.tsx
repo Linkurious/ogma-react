@@ -4,13 +4,13 @@ import {
   ReactNode,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 
 import OgmaLib, {
   Overlay as OverlayLayer,
   Size,
-  Point,
+  Point
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { getPosition } from "./utils";
@@ -34,7 +34,7 @@ const offScreenPos: Point = { x: -9999, y: -9999 };
 export const Overlay = forwardRef(
   (
     { position, children, className = "", size, scaled }: OverlayProps,
-    ref?: Ref<OverlayLayer>,
+    ref?: Ref<OverlayLayer>
   ) => {
     const ogma = useOgma();
     const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -52,7 +52,7 @@ export const Overlay = forwardRef(
         position: pos || offScreenPos,
         element: newElement,
         size: size || ({ width: "auto", height: "auto" } as any as Size),
-        scaled,
+        scaled
       });
 
       setLayer(overlay);
@@ -77,5 +77,5 @@ export const Overlay = forwardRef(
     if (!layer) return null;
 
     return createPortal(children, layer.element);
-  },
+  }
 );

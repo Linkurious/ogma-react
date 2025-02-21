@@ -1,14 +1,14 @@
 import OgmaLib, {
   NodeSelector,
   NodeAttributesValue,
-  StyleRule,
+  StyleRule
 } from "@linkurious/ogma";
 import {
   useEffect,
   Ref,
   forwardRef,
   useState,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 import { useOgma } from "../context";
 

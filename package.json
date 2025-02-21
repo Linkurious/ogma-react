@@ -48,6 +48,9 @@
     "postversion": "sync_versions",
     "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist"
   },
+  "prettier": {
+    "trailingComma": "none"
+  },
   "peerDependencies": {
     "@linkurious/ogma": "^5.1.0",
     "react": ">=17.0.0",

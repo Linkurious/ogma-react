@@ -47,14 +47,14 @@ describe("Node grouping", () => {
     expect(states).toEqual({
       onEnabled: true,
       onDestroyed: false,
-      onUpdated: false,
+      onUpdated: false
     });
     await act(() => userEvent.click(screen.getByText("setGrouping")));
     await ref.current?.transformations.afterNextUpdate();
     expect(states).toEqual({
       onEnabled: true,
       onDestroyed: false,
-      onUpdated: true,
+      onUpdated: true
     });
   });
 });

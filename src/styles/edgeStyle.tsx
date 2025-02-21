@@ -1,14 +1,14 @@
 import OgmaLib, {
   EdgeSelector,
   EdgeAttributesValue,
-  StyleRule,
+  StyleRule
 } from "@linkurious/ogma";
 import {
   useEffect,
   useState,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 import { useOgma } from "../context";
 

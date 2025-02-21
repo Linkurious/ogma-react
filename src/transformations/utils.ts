@@ -1,5 +1,6 @@
 import Ogma, { Transformation } from "@linkurious/ogma";
-import { TransformationProps, TransformationContext } from "./types";
+import { TransformationProps } from "./types";
+
 export function toggle<ND, ED>(
   transformation: Transformation<ND, ED>,
   disabled: boolean,
@@ -30,7 +31,7 @@ export function useTransformationCallbacks<ND, ED>(
   };
   const setIndexListener = ({
     target,
-    index,
+    index
   }: {
     target: Transformation<ND, ED>;
     index: number;
@@ -39,7 +40,7 @@ export function useTransformationCallbacks<ND, ED>(
     props.onSetIndex && props.onSetIndex(transformation, index);
   };
   const destroyedListener = ({
-    target,
+    target
   }: {
     target: Transformation<ND, ED>;
   }) => {

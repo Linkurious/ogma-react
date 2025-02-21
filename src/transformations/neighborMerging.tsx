@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   NeighborMergingOptions,
-  NeighborMerging as NeighborMergingTransformation,
+  NeighborMerging as NeighborMergingTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -19,7 +19,7 @@ export interface NeighborMergingProps<ND, ED>
 
 function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
-  ref: Ref<NeighborMergingTransformation<ND, ED>>,
+  ref: Ref<NeighborMergingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
@@ -30,7 +30,7 @@ function NeighborMergingComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborMerging({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);

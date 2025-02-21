@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   NeighborGenerationOptions,
-  NeighborGeneration as NeighborGenerationTransformation,
+  NeighborGeneration as NeighborGenerationTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -30,7 +30,7 @@ function NeighborGenerationComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborGeneration({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -53,7 +53,7 @@ function NeighborGenerationComponent<ND = any, ED = any>(
     props.edgeGenerator,
     props.nodeGenerator,
     props.neighborIdFunction,
-    props.selector,
+    props.selector
   ]);
 
   return null;

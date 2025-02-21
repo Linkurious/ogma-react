@@ -32,7 +32,7 @@ describe("Edge grouping", () => {
     await ref.current?.transformations.afterNextUpdate();
     expect(ref.current?.getEdges().getId()).toEqual([
       `group-1[0-2]`,
-      `group-0[0-1]`,
+      `group-0[0-1]`
     ]);
   });
 });

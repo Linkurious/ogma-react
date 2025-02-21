@@ -3,7 +3,7 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  NodeGrouping as NodeGroupingTransformation,
+  NodeGrouping as NodeGroupingTransformation
 } from "@linkurious/ogma";
 import { useEffect, useState, createRef, useCallback } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
@@ -18,7 +18,7 @@ import {
   NodeGrouping,
   Popup,
   Geo,
-  NodeGroupingProps,
+  NodeGroupingProps
 } from "../../src";
 
 // cusotm components:
@@ -65,14 +65,14 @@ export default function App() {
     nodeGenerator: (nodes) => {
       return { data: { multiplier: nodes.size } };
     },
-    disabled: true,
+    disabled: true
   });
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
   const [tooltipPositon, setTooltipPosition] = useState<Point>({
     x: 0,
-    y: 0,
+    y: 0
   });
   const [target, setTarget] = useState<Node | Edge | null>();
 
@@ -135,8 +135,8 @@ export default function App() {
             text: {
               content: (node) => node?.getData("properties.name"),
               font: "IBM Plex Sans",
-              minVisibleSize: 3,
-            },
+              minVisibleSize: 3
+            }
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />

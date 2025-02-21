@@ -10,7 +10,7 @@ export interface TransformationOptions {
 export interface TransformationProps<
   ND,
   ED,
-  C extends TransformationContext = TransformationContext,
+  C extends TransformationContext = TransformationContext
 > {
   disabled?: boolean;
   onEnabled?: (transformation: Transformation<ND, ED, C>) => void;
@@ -19,6 +19,6 @@ export interface TransformationProps<
   onUpdated?: (transformation: Transformation<ND, ED, C>) => void;
   onSetIndex?: (
     transformation: Transformation<ND, ED, C>,
-    index: number,
+    index: number
   ) => void;
 }

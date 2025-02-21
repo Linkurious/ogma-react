@@ -5,20 +5,20 @@ import {
   ReactElement,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 
 import OgmaLib, {
   Overlay as OverlayLayer,
   Size,
-  Point,
+  Point
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
   getContent,
   getPosition,
   getContainerClass,
-  getCloseButton,
+  getCloseButton
 } from "./utils";
 import { noop } from "../utils";
 import { Placement } from "./types";
@@ -76,9 +76,9 @@ const PopupComponent = (
     contentClass = POPUP_CONTENT_CLASS,
     popupBodyClass = POPUP_BODY_CLASS,
     size,
-    closeOnEsc = true,
+    closeOnEsc = true
   }: PopupProps,
-  ref?: Ref<OverlayLayer>,
+  ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -103,12 +103,12 @@ const PopupComponent = (
           </div>
         </div>`,
         size: size || { width: "auto", height: "auto" },
-        scaled: false,
+        scaled: false
       });
 
       onClick = (evt: MouseEvent) => {
         const closeButton = currentLayer?.element.querySelector(
-          `.${closeButtonClass}`,
+          `.${closeButtonClass}`
         ) as Element;
         if (evt.target && closeButton.contains(evt.target as Node)) {
           evt.stopPropagation();
@@ -127,7 +127,7 @@ const PopupComponent = (
       // Update content if static content is provided
       if (content && !children) {
         const contentElement = currentLayer.element.querySelector(
-          `.${contentClass}`,
+          `.${contentClass}`
         );
         const html = getContent(ogma, pos, content, children);
         if (contentElement) contentElement.innerHTML = html;

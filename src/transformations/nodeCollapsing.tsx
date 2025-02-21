@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   NodeCollapsingOptions,
-  NodeCollapsing as NodeCollapsingTransformation,
+  NodeCollapsing as NodeCollapsingTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -30,7 +30,7 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeCollapsing({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);

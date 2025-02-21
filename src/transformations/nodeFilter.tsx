@@ -3,11 +3,11 @@ import {
   useState,
   Ref,
   useImperativeHandle,
-  forwardRef,
+  forwardRef
 } from "react";
 import {
   NodeFilterOptions,
-  NodeFilter as NodeFilterTransformation,
+  NodeFilter as NodeFilterTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -19,7 +19,7 @@ export interface NodeFilterProps<ED, ND>
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,
-  ref?: Ref<NodeFilterTransformation<ND, ED>>,
+  ref?: Ref<NodeFilterTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] =
@@ -30,7 +30,7 @@ function NodeFilterComponent<ND = any, ED = any>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeFilter({
       ...props,
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);

@@ -3,7 +3,7 @@ import {
   useEffect,
   useImperativeHandle,
   forwardRef,
-  Ref,
+  Ref
 } from "react";
 import { CanvasLayer as OgmaCanvasLayer } from "@linkurious/ogma";
 import { useOgma } from "../context";
@@ -27,7 +27,7 @@ const CanvasLayerComponent = (
     isStatic = false,
     render,
     index,
-    visible,
+    visible
   }: CanvasLayerProps,
   ref?: Ref<OgmaCanvasLayer>
 ) => {
