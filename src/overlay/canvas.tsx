@@ -29,7 +29,7 @@ const CanvasLayerComponent = (
     index,
     visible,
   }: CanvasLayerProps,
-  ref?: Ref<OgmaCanvasLayer>,
+  ref?: Ref<OgmaCanvasLayer>
 ) => {
   const ogma = useOgma();
   const [layer, setLayer] = useState<OgmaCanvasLayer | null>(null);
@@ -40,7 +40,7 @@ const CanvasLayerComponent = (
     const newLayer = ogma.layers.addCanvasLayer(
       render,
       { isStatic, noClear },
-      index,
+      index
     );
     setLayer(newLayer);
 
