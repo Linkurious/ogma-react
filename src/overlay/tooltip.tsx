@@ -59,7 +59,7 @@ const TooltipComponent = (
   const [coords, setCoords] = useState<Point | null>();
   const [html, setHtml] = useState("");
   const [dimensions, setDimensions] = useState<Size>();
-  const raf = useRef<number>();
+  const raf = useRef<number>(0);
 
   useImperativeHandle(ref, () => layer!, [layer]);
 
