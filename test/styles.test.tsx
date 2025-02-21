@@ -5,7 +5,7 @@ import OgmaLib from "@linkurious/ogma";
 import { Ogma, NodeStyleRule, EdgeStyleRule } from "../src";
 import graph from "./fixtures/simple_graph.json";
 
-describe("styles", () => {
+describe("styles", async () => {
   let div: Root;
   let element: HTMLDivElement;
 

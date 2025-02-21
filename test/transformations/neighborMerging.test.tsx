@@ -6,45 +6,30 @@ describe("Neighbor merging", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
-  it("Can be disabled by default and then enabled", () => {
+  it("Can be disabled by default and then enabled", async () => {
     render(<NeighborMergingTest disabled={true} />, div);
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(ref.current?.getEdges().size).toEqual(2);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        expect(ref.current?.getEdges().size).toEqual(1);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(ref.current?.getEdges().size).toEqual(2);
+    await act(() => userEvent.click(screen.getByText("toggle")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(ref.current?.getEdges().size).toEqual(1);
   });
 
-  it("Can be disabled", () => {
+  it("Can be disabled", async () => {
     render(<NeighborMergingTest />, div);
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(ref.current?.getEdges().size).toEqual(1);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("toggle"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        expect(ref.current?.getEdges().size).toEqual(2);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(ref.current?.getEdges().size).toEqual(1);
+    await act(() => userEvent.click(screen.getByText("toggle")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(ref.current?.getEdges().size).toEqual(2);
   });
 
-  it("Updates criteria", () => {
+  it("Updates criteria", async () => {
     render(<NeighborMergingTest />, div);
-    return (ref.current as OgmaLib).transformations
-      .afterNextUpdate()
-      .then(() => {
-        expect(ref.current?.getEdges().size).toEqual(1);
-      })
-      .then(() => act(() => userEvent.click(screen.getByText("setGenerator"))))
-      .then(() => ref.current?.transformations.afterNextUpdate())
-      .then(() => {
-        expect(ref.current?.getEdges().size).toEqual(0);
-      });
+    await (ref.current as OgmaLib).transformations.afterNextUpdate();
+    expect(ref.current?.getEdges().size).toEqual(1);
+    await act(() => userEvent.click(screen.getByText("setGenerator")));
+    await ref.current?.transformations.afterNextUpdate();
+    expect(ref.current?.getEdges().size).toEqual(0);
   });
 });
