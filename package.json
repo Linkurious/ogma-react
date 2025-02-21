@@ -16,10 +16,12 @@
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.cjs",
-    "types": "./dist/index.d.ts",
-    "default": "./dist/index.mjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    }
   },
   "files": [
     "dist/*.d.ts",
