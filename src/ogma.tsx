@@ -46,7 +46,10 @@ export const OgmaComponent = <ND, ED>(
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
   const instanceRef = useRef<OgmaLib<ND, ED>>();
 
-  useImperativeHandle(ref, () => ogma as OgmaLib<ND, ED>, [ogma]);
+  useImperativeHandle(ref, () => {
+    if (!ogma) console.error("ogma ref is not inited");
+    return ogma as OgmaLib<ND, ED>;
+  }, [ogma]);
 
   useEffect(() => {
     if (container) {
@@ -62,7 +65,7 @@ export const OgmaComponent = <ND, ED>(
       setReady(true);
       if (onReady) onReady(instance);
     }
-  }, [setOgma, container]);
+  }, [container]);
 
   // resize handler
   useLayoutEffect(() => {
@@ -131,7 +134,7 @@ export const OgmaComponent = <ND, ED>(
 
       // If it's a new handler or changed handler, add it
       if (!existingHandler || existingHandler !== handler) {
-        //console.log(555, "add handler", eventName, existingHandler === handler);
+        console.log(555, "add handler", eventName, existingHandler === handler);
         ogma.events.on(eventName, handler);
         // @ts-expect-error type union
         eventHandlersRef.current[eventName] = handler;
@@ -140,14 +143,16 @@ export const OgmaComponent = <ND, ED>(
   }, [props]);
 
   return (
-    <OgmaContext.Provider value={ogma}>
-      <div
-        style={{ width: "100%", height: "100%" }}
-        ref={(containerRef) => setContainer(containerRef)}
-      >
-        {ready && children}
-      </div>
-    </OgmaContext.Provider>
+    <div
+      style={{ width: "100%", height: "100%" }}
+      ref={(containerRef) => setContainer(containerRef)}
+    >
+      {ogma && (
+        <OgmaContext.Provider value={ogma}>
+          {ready && children}
+        </OgmaContext.Provider>
+      )}
+    </div>
   );
 };
 

@@ -49,6 +49,7 @@ export default function App() {
 
   // ogma instance and grouping references
   const ogmaInstanceRef = createRef<OgmaLib>();
+  const [initialized, setInitialized] = useState(false);
   const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
 
   // grouping and geo states
@@ -109,33 +110,34 @@ export default function App() {
     ({}: EventTypes<ND, ED>["mousemove"]) => {
       if (!ogmaInstanceRef.current) return;
       const ptr = ogmaInstanceRef.current.getPointerInformation();
-      requestSetTooltipPosition(
-        ogmaInstanceRef.current.view.screenToGraphCoordinates({
-          x: ptr.x,
-          y: ptr.y
-        })
-      );
-      setTarget(ptr.target);
+      console.log("onMousemove", ptr);
+      // requestSetTooltipPosition(
+      //   ogmaInstanceRef.current.view.screenToGraphCoordinates({
+      //     x: ptr.x,
+      //     y: ptr.y
+      //   })
+      // );
+      // setTarget(ptr.target);
     },
-    [ogmaInstanceRef]
+    [initialized]
   );
 
   const onAddNodes = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
     console.log("ON ADD");
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
-  }, [ogmaInstanceRef]);
+  }, [initialized, ogmaInstanceRef]);
 
   useEffect(() => {
     console.log("ogma changed", ogmaInstanceRef);
-  }, [ogmaInstanceRef]);
+  }, [initialized]);
 
   const addNode = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.addNode({
       id: ogmaInstanceRef.current.getNodes().size
     });
-  }, [ogmaInstanceRef]);
+  }, [initialized, ogmaInstanceRef]);
 
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
@@ -149,6 +151,10 @@ export default function App() {
         onClick={onClick}
         onMousemove={onMousemove}
         onAddNodes={onAddNodes}
+        onReady={() => {
+          console.log("onReady", ogmaInstanceRef.current);
+          setInitialized(true);
+        }}
       >
         {/* Styling */}
         <NodeStyleRule
