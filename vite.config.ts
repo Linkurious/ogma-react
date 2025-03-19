@@ -6,7 +6,11 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: "classic"
+    })
+  ],
   define: { "process.env": { NODE_ENV: "production" } },
   build: {
     minify: true,
@@ -19,7 +23,7 @@ export default defineConfig({
         if (format === "umd") return `index.umd.js`;
         if (format === "cjs") return `index.cjs`;
         return `index.mjs`;
-      },
+      }
     },
     rollupOptions: {
       external: ["@linkurious/ogma", "react", "react-dom", "react-dom/server"],
@@ -28,10 +32,14 @@ export default defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
           "react-dom/server": "ReactDOMServer",
-          "@linkurious/ogma": "Ogma",
-        },
-      },
-    },
+          "@linkurious/ogma": "Ogma"
+        }
+      }
+    }
+  },
+  esbuild: {
+    jsxInject: "import React from 'react';",
+    jsx: "automatic"
   },
   test: {
     globals: true,
@@ -41,7 +49,7 @@ export default defineConfig({
       reporter: ["json", "cobertura"],
       include: ["src/**/*.{ts,tsx}"],
       all: true,
-      reportsDirectory: "reports/coverage",
-    },
-  },
+      reportsDirectory: "reports/coverage"
+    }
+  }
 });
