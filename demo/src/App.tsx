@@ -3,7 +3,8 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  NodeGrouping as NodeGroupingTransformation
+  NodeGrouping as NodeGroupingTransformation,
+  EventTypes
 } from "@linkurious/ogma";
 import { useEffect, useState, createRef, useCallback } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
@@ -47,7 +48,7 @@ export default function App() {
   const [clickedNode, setClickedNode] = useState<Node>();
 
   // ogma instance and grouping references
-  const ref = createRef<OgmaLib>();
+  const ogmaInstanceRef = createRef<OgmaLib>();
   const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
 
   // grouping and geo states
@@ -97,6 +98,33 @@ export default function App() {
       });
   }, []);
 
+  const onClick = useCallback(({ target }: EventTypes<ND, ED>["click"]) => {
+    if (target && target.isNode) {
+      setClickedNode(target);
+      setPopupOpen(true);
+    }
+  }, []);
+
+  const onMousemove = useCallback(
+    ({}: EventTypes<ND, ED>["mousemove"]) => {
+      if (!ogmaInstanceRef.current) return;
+      const ptr = ogmaInstanceRef.current.getPointerInformation();
+      requestSetTooltipPosition(
+        ogmaInstanceRef.current.view.screenToGraphCoordinates({
+          x: ptr.x,
+          y: ptr.y
+        })
+      );
+      setTarget(ptr.target);
+    },
+    [ogmaInstanceRef]
+  );
+
+  const onAddNodes = useCallback(() => {
+    if (!ogmaInstanceRef.current) return;
+    ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
+  }, [ogmaInstanceRef]);
+
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
 
@@ -104,28 +132,11 @@ export default function App() {
     <div className="App">
       <Logo />
       <Ogma
-        ref={ref}
+        ref={ogmaInstanceRef}
         graph={graph}
-        onReady={(ogma) => {
-          ogma.events
-            .on("click", ({ target }) => {
-              if (target && target.isNode) {
-                setClickedNode(target);
-                setPopupOpen(true);
-              }
-            })
-            .on("mousemove", () => {
-              const ptr = ogma.getPointerInformation();
-              requestSetTooltipPosition(
-                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
-              );
-              setTarget(ptr.target);
-            })
-            // locate graph when the nodes are added
-            .on("addNodes", () =>
-              ogma.view.locateGraph({ duration: 250, padding: 50 })
-            );
-        }}
+        onClick={onClick}
+        onMousemove={onMousemove}
+        onAddNodes={onAddNodes}
       >
         {/* Styling */}
         <NodeStyleRule

@@ -5,3 +5,4 @@ export * from "./styles";
 export * from "./transformations";
 export * from "./overlay";
 export * from "./geo";
+export * from "./types";

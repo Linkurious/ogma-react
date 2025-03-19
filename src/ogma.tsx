@@ -1,16 +1,27 @@
 import {
   useState,
   useEffect,
+  useRef,
   useLayoutEffect,
   forwardRef,
   useImperativeHandle,
   ReactNode,
-  Ref,
+  Ref
 } from "react";
-import OgmaLib, { Options as OgmaOptions, RawGraph } from "@linkurious/ogma";
+import OgmaLib, {
+  Options as OgmaOptions,
+  RawGraph,
+  EventTypes
+} from "@linkurious/ogma";
 import { OgmaContext } from "./context";
+import {
+  EventHandlerProps,
+  getEventNameFromProp,
+  EventHandlers,
+  forEachEventHandler
+} from "./types";
 
-interface OgmaProps<ND, ED> {
+interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
   options?: Partial<OgmaOptions>;
   onReady?: (ogma: OgmaLib) => void;
   graph?: RawGraph<ND, ED>;
@@ -23,9 +34,11 @@ const defaultOptions = {};
  * Main component for the Ogma library.
  */
 export const OgmaComponent = <ND, ED>(
-  { options = defaultOptions, children, graph, onReady }: OgmaProps<ND, ED>,
-  ref?: Ref<OgmaLib<ND, ED>>,
+  props: OgmaProps<ND, ED>,
+  ref?: Ref<OgmaLib<ND, ED>>
 ) => {
+  const { options = defaultOptions, children, graph, onReady } = props;
+  const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
@@ -39,7 +52,7 @@ export const OgmaComponent = <ND, ED>(
       const instance = new OgmaLib<ND, ED>({
         container,
         graph,
-        options,
+        options
       });
 
       setOgma(instance);
@@ -69,6 +82,54 @@ export const OgmaComponent = <ND, ED>(
       }
     }
   }, [graph, options]);
+
+  // Set up event handlers whenever props change
+  useEffect(() => {
+    if (!ogma) return;
+
+    // Get all current event handler props
+    const currentEventHandlers: EventHandlers<ND, ED> = {};
+
+    // Check all props for event handlers (onXxx)
+    Object.keys(props).forEach((propName) => {
+      const name = propName as keyof EventTypes<ND, ED>;
+      const eventName = getEventNameFromProp<ND, ED>(name);
+      const propValue = props[propName as keyof OgmaProps<ND, ED>];
+
+      if (eventName && typeof propValue === "function") {
+        // No type assertion needed, eventName is already verified
+        currentEventHandlers[eventName] = propValue as (
+          event: EventTypes<ND, ED>[NonNullable<typeof eventName>]
+        ) => void;
+      }
+    });
+
+    // Remove handlers that are no longer present
+    forEachEventHandler(eventHandlersRef.current, (eventName, handler) => {
+      if (!currentEventHandlers[eventName]) {
+        // Handler was removed
+        ogma.events.off(handler);
+        delete eventHandlersRef.current[eventName];
+      }
+    });
+
+    // Add new handlers
+    forEachEventHandler(currentEventHandlers, (eventName, handler) => {
+      const existingHandler = eventHandlersRef.current[eventName];
+
+      // If handler changed, remove old one
+      if (existingHandler && existingHandler !== handler) {
+        ogma.events.off(existingHandler);
+      }
+
+      // If it's a new handler or changed handler, add it
+      if (!existingHandler || existingHandler !== handler) {
+        ogma.events.on(eventName, handler);
+        // @ts-expect-error type union
+        eventHandlersRef.current[eventName] = handler;
+      }
+    });
+  }, [props]);
 
   return (
     <OgmaContext.Provider value={ogma}>
