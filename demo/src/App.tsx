@@ -122,7 +122,19 @@ export default function App() {
 
   const onAddNodes = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
+    console.log("ON ADD");
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
+  }, [ogmaInstanceRef]);
+
+  useEffect(() => {
+    console.log("ogma changed", ogmaInstanceRef);
+  }, [ogmaInstanceRef]);
+
+  const addNode = useCallback(() => {
+    if (!ogmaInstanceRef.current) return;
+    ogmaInstanceRef.current.addNode({
+      id: ogmaInstanceRef.current.getNodes().size
+    });
   }, [ogmaInstanceRef]);
 
   // nothing to render yet
@@ -161,7 +173,6 @@ export default function App() {
           disabled={!nodeGrouping && !geoEnabled}
           groupIdFunction={groupingOptions.groupIdFunction}
           nodeGenerator={groupingOptions.nodeGenerator}
-          duration={500}
         />
 
         {/* context-aware UI */}
@@ -204,6 +215,7 @@ export default function App() {
         setOutlines={setOutlines}
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
+        addNode={addNode}
       />
     </div>
   );

@@ -30,7 +30,8 @@ export function forEachEventHandler<ND, ED>(
 // Helper to convert onEventName to eventname
 export function getEventNameFromProp<ND, ED>(propName: string) {
   if (propName.startsWith("on") && propName.length > 2) {
-    const eventName = propName.slice(2).toLowerCase();
+    // remove 'on' and convert first letter to lowercase
+    const eventName = propName[2].toLowerCase() + propName.substring(3);
     return eventName as EventNames<ND, ED>;
   }
   return null;

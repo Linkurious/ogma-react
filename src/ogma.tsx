@@ -44,6 +44,7 @@ export const OgmaComponent = <ND, ED>(
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
+  const instanceRef = useRef<OgmaLib<ND, ED>>();
 
   useImperativeHandle(ref, () => ogma as OgmaLib<ND, ED>, [ogma]);
 
@@ -55,6 +56,8 @@ export const OgmaComponent = <ND, ED>(
         options
       });
 
+      console.info("new instance");
+      instanceRef.current = instance;
       setOgma(instance);
       setReady(true);
       if (onReady) onReady(instance);
@@ -92,6 +95,7 @@ export const OgmaComponent = <ND, ED>(
 
     // Check all props for event handlers (onXxx)
     Object.keys(props).forEach((propName) => {
+      if (!propName.startsWith("on")) return;
       const name = propName as keyof EventTypes<ND, ED>;
       const eventName = getEventNameFromProp<ND, ED>(name);
       const propValue = props[propName as keyof OgmaProps<ND, ED>];
@@ -113,9 +117,12 @@ export const OgmaComponent = <ND, ED>(
       }
     });
 
+    //console.log(2, currentEventHandlers, eventHandlersRef.current);
+
     // Add new handlers
     forEachEventHandler(currentEventHandlers, (eventName, handler) => {
       const existingHandler = eventHandlersRef.current[eventName];
+      //console.log("check", eventName, existingHandler === handler);
 
       // If handler changed, remove old one
       if (existingHandler && existingHandler !== handler) {
@@ -124,6 +131,7 @@ export const OgmaComponent = <ND, ED>(
 
       // If it's a new handler or changed handler, add it
       if (!existingHandler || existingHandler !== handler) {
+        //console.log(555, "add handler", eventName, existingHandler === handler);
         ogma.events.on(eventName, handler);
         // @ts-expect-error type union
         eventHandlersRef.current[eventName] = handler;
