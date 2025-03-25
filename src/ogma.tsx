@@ -6,6 +6,7 @@ import {
   useImperativeHandle,
   ReactNode,
   Ref,
+  useCallback
 } from "react";
 import OgmaLib, { Options as OgmaOptions, RawGraph } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
@@ -15,38 +16,49 @@ interface OgmaProps<ND, ED> {
   onReady?: (ogma: OgmaLib) => void;
   graph?: RawGraph<ND, ED>;
   children?: ReactNode;
+  style?: React.CSSProperties;
 }
 
 const defaultOptions = {};
+
+type InstanceRef<ND, ED> = OgmaLib<ND, ED> | null;
 
 /**
  * Main component for the Ogma library.
  */
 export const OgmaComponent = <ND, ED>(
-  { options = defaultOptions, children, graph, onReady }: OgmaProps<ND, ED>,
-  ref?: Ref<OgmaLib<ND, ED>>,
+  {
+    options = defaultOptions,
+    children,
+    graph,
+    onReady,
+    style = { width: "100%", height: "100%" }
+  }: OgmaProps<ND, ED>,
+  ref?: Ref<OgmaLib<ND, ED>>
 ) => {
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
-  const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
 
-  useImperativeHandle(ref, () => ogma as OgmaLib<ND, ED>, [ogma]);
-
-  useEffect(() => {
-    if (container) {
+  const containerRef = useCallback((container: HTMLDivElement | null) => {
+    if (container !== null && !ogma) {
       const instance = new OgmaLib<ND, ED>({
         container,
         graph,
-        options,
+        options
       });
-
       setOgma(instance);
       setReady(true);
       if (onReady) onReady(instance);
     }
-  }, [setOgma, container]);
+  }, []);
+
+  useImperativeHandle<InstanceRef<ND, ED>, InstanceRef<ND, ED>>(
+    ref,
+    () => ogma ?? null,
+    [ogma]
+  );
 
   // resize handler
   useLayoutEffect(() => {
@@ -70,15 +82,17 @@ export const OgmaComponent = <ND, ED>(
     }
   }, [graph, options]);
 
-  return (
+  // Prepare the instance first before initializing the context
+  const contents = ogma ? (
     <OgmaContext.Provider value={ogma}>
-      <div
-        style={{ width: "100%", height: "100%" }}
-        ref={(containerRef) => setContainer(containerRef)}
-      >
-        {ready && children}
-      </div>
+      {ready && children}
     </OgmaContext.Provider>
+  ) : null;
+
+  return (
+    <div style={style} ref={containerRef}>
+      {contents}
+    </div>
   );
 };
 
