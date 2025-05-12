@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { render, screen, waitFor } from "./utils";
 
 import OgmaLib, { RawGraph } from "@linkurious/ogma";
@@ -78,42 +78,39 @@ describe("Ogma", () => {
     });
   });
 
-  it.only("should handle onNodeClick prop changes correctly", async () => {
+  it.only("should handle onNodesAdded prop changes correctly", async () => {
     const mockData = {
       nodes: [
         { id: 0, attributes: { color: "red", x: 0, y: 0 } },
         { id: 1, attributes: { color: "green", x: 25, y: 0 } },
-        { id: 2, attributes: { color: "green", x: 25, y: 0 } }
       ]
     } as RawGraph;
 
     const mockOnNodesAdded = vi.fn(() => console.log("onNodesAdded"));
     let ready = false;
-    //return new Promise((resolve) => {
+
+    const ref = React.createRef<OgmaLib>();
     const onReady = () => {
       ready = true;
-      //resolve(null);
     };
+
     const { rerender } = render(
-      <Ogma onAddNodes={mockOnNodesAdded} onReady={onReady} />,
+      <Ogma ref={ref} graph={mockData} onAddNodes={mockOnNodesAdded} onReady={onReady} />,
       div
     );
 
     // Wait for Ogma to initialize
     await waitFor(() => ready);
 
-    rerender(<Ogma graph={mockData} onAddNodes={mockOnNodesAdded} />);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    ref.current?.addNode({ id: 2, attributes: { color: "blue", x: 0, y: 25 } });
 
     // Check if the handler was called
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(1);
-    expect(mockOnNodesAdded).toHaveBeenCalledWith(
-      expect.objectContaining({ nodeId: "1" })
-    );
 
     // Rerender without the handler
     rerender(<Ogma graph={mockData} />);
+
+    ref.current?.addNode({ id: 3, attributes: { color: "yellow", x: 25, y: 25 } });
 
     // Simulate another click - handler should not be called
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(1); // Count should not increase

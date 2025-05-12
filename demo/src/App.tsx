@@ -110,7 +110,6 @@ export default function App() {
     ({ }: EventTypes<ND, ED>["mousemove"]) => {
       if (!ogmaInstanceRef.current) return;
       const ptr = ogmaInstanceRef.current.getPointerInformation();
-      console.log("onMousemove", ptr);
       // requestSetTooltipPosition(
       //   ogmaInstanceRef.current.view.screenToGraphCoordinates({
       //     x: ptr.x,
@@ -130,7 +129,6 @@ export default function App() {
 
   const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
     ogmaInstanceRef.current = instance;
-    console.log("onReady", ogmaInstanceRef.current);
     setInitialized(true);
   }, []);
 
