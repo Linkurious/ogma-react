@@ -107,7 +107,7 @@ export default function App() {
   }, []);
 
   const onMousemove = useCallback(
-    ({}: EventTypes<ND, ED>["mousemove"]) => {
+    ({ }: EventTypes<ND, ED>["mousemove"]) => {
       if (!ogmaInstanceRef.current) return;
       const ptr = ogmaInstanceRef.current.getPointerInformation();
       console.log("onMousemove", ptr);
@@ -119,14 +119,20 @@ export default function App() {
       // );
       // setTarget(ptr.target);
     },
-    [initialized]
+    []
   );
 
   const onAddNodes = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
     console.log("ON ADD");
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
-  }, [initialized, ogmaInstanceRef]);
+  }, []);
+
+  const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
+    ogmaInstanceRef.current = instance;
+    console.log("onReady", ogmaInstanceRef.current);
+    setInitialized(true);
+  }, []);
 
   useEffect(() => {
     console.log("ogma changed", ogmaInstanceRef);
@@ -137,7 +143,7 @@ export default function App() {
     ogmaInstanceRef.current.addNode({
       id: ogmaInstanceRef.current.getNodes().size
     });
-  }, [initialized, ogmaInstanceRef]);
+  }, []);
 
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
@@ -151,10 +157,7 @@ export default function App() {
         onClick={onClick}
         onMousemove={onMousemove}
         onAddNodes={onAddNodes}
-        onReady={() => {
-          console.log("onReady", ogmaInstanceRef.current);
-          setInitialized(true);
-        }}
+        onReady={onReady}
       >
         {/* Styling */}
         <NodeStyleRule
