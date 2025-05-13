@@ -13,13 +13,14 @@ import OgmaLib, {
   RawGraph,
   EventTypes,
 } from "@linkurious/ogma";
-import { Theme } from "@linkurious/ogma";
+// import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import {
   EventHandlerProps,
   getEventNameFromProp,
   EventHandlers,
-  forEachEventHandler
+  forEachEventHandler,
+  Theme
 } from "./types";
 
 interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
@@ -61,6 +62,12 @@ export const OgmaComponent = <ND, ED>(
       graph,
       options
     });
+    if (theme) {
+      setGraphTheme(theme);
+      instance.styles.setTheme(theme);
+      console.log(theme);
+      console.log(instance.getNodes().get(0).getAttribute("color"));
+    }
 
     //console.info("new instance");
     instanceRef.current = instance;

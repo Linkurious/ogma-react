@@ -3,6 +3,8 @@ import { render, waitFor } from "./utils";
 
 import OgmaLib, { RawGraph } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../src";
+import { Theme } from "../src/types";
+import { afternoonNap, morningBreeze } from '@linkurious/ogma-styles';
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
 const graph: RawGraph = {
@@ -102,6 +104,7 @@ describe("Ogma", () => {
     // Wait for Ogma to initialize
     await waitFor(() => ready);
 
+    // add a node
     ref.current?.addNode({ id: 2, attributes: { color: "blue", x: 0, y: 25 } });
 
     // Check if the handler was called
@@ -112,7 +115,41 @@ describe("Ogma", () => {
 
     ref.current?.addNode({ id: 3, attributes: { color: "yellow", x: 25, y: 25 } });
 
-    // Simulate another click - handler should not be called
-    expect(mockOnNodesAdded).toHaveBeenCalledTimes(1); // Count should not increase
+    // add another node - handler should not be called
+    expect(mockOnNodesAdded).toHaveBeenCalledTimes(1);
   });
+
+  it("should set the theme of the graph correctly with the prop changes"), async () => {
+    const mockData = {
+      nodes: [
+        { id: 0, attributes: { x: 0, y: 0 } },
+      ]
+    } as RawGraph;
+
+    const theme: Theme = afternoonNap as Theme<unknown, unknown>;
+    let ready = false;
+    const ref = React.createRef<OgmaLib>();
+    const onReady = () => {
+      ready = true;
+    };
+
+    const { rerender } = render(
+      <Ogma ref={ref} graph={mockData} theme={theme} onReady={onReady} />,
+      div
+    );
+
+    await waitFor(() => ready);
+
+    // node color should be the theme's node color
+    const nodeColor = ref.current?.getNodes().get(0).getAttribute("color");
+    expect(nodeColor).toMatch("#BD8A61");
+
+    const theme2: Theme = morningBreeze as Theme<unknown, unknown>;
+    rerender(<Ogma graph={mockData} theme={theme2} />)
+
+    // node color should be the new theme's node color after rerendering
+    const nodeColor2 = ref.current?.getNodes().get(0).getAttribute("color");
+    expect(nodeColor2).toMatch("##43a2ca");
+
+  }
 });

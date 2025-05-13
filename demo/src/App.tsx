@@ -4,8 +4,7 @@ import OgmaLib, {
   Point,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
-  EventTypes,
-  Theme
+  EventTypes
 } from "@linkurious/ogma";
 import { morningBreeze } from '@linkurious/ogma-styles';
 import { useEffect, useState, createRef, useCallback } from "react";
@@ -15,14 +14,16 @@ import * as L from "leaflet";
 // components
 import {
   Ogma,
-  NodeStyleRule,
-  EdgeStyleRule,
+  // NodeStyleRule,
+  // EdgeStyleRule,
   Tooltip,
   NodeGrouping,
   Popup,
   Geo,
   NodeGroupingProps
 } from "../../src";
+
+import { Theme } from "../../src/types";
 
 // cusotm components:
 // layout component, to be applied on certain events
