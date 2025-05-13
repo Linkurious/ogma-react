@@ -4,8 +4,10 @@ import OgmaLib, {
   Point,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
-  EventTypes
+  EventTypes,
+  Theme
 } from "@linkurious/ogma";
+import { morningBreeze } from '@linkurious/ogma-styles';
 import { useEffect, useState, createRef, useCallback } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 // for geo mode
@@ -149,8 +151,11 @@ export default function App() {
         onMousemove={onMousemove}
         onAddNodes={onAddNodes}
         onReady={onReady}
+        theme={morningBreeze as Theme<ND, ED>}
       >
-        {/* Styling */}
+
+        { // this overwrites the theme's style
+        /* Styling 
         <NodeStyleRule
           attributes={{
             color: "#247BA0",
@@ -163,6 +168,7 @@ export default function App() {
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
+        */ }
 
         {/* Layout */}
         <LayoutService />

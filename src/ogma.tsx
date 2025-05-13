@@ -11,8 +11,9 @@ import {
 import OgmaLib, {
   Options as OgmaOptions,
   RawGraph,
-  EventTypes
+  EventTypes,
 } from "@linkurious/ogma";
+import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import {
   EventHandlerProps,
@@ -26,6 +27,7 @@ interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
   onReady?: (ogma: OgmaLib) => void;
   graph?: RawGraph<ND, ED>;
   children?: ReactNode;
+  theme?: Theme<ND, ED>;
 }
 
 const defaultOptions = {};
@@ -37,13 +39,14 @@ export const OgmaComponent = <ND, ED>(
   props: OgmaProps<ND, ED>,
   ref?: Ref<OgmaLib<ND, ED>>
 ) => {
-  const { options = defaultOptions, children, graph, onReady } = props;
+  const { options = defaultOptions, children, graph, onReady, theme } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
+  const [graphTheme, setGraphTheme] = useState<Theme<ND, ED>>();
   const instanceRef = useRef<OgmaLib<ND, ED>>(null);
 
   useImperativeHandle(ref, () => {
@@ -51,21 +54,21 @@ export const OgmaComponent = <ND, ED>(
   }, [ogma]);
 
   useEffect(() => {
-    if (container) {
-      const instance = new OgmaLib<ND, ED>({
-        container,
-        graph,
-        options
-      });
+    if (!container) return;
 
-      //console.info("new instance");
-      instanceRef.current = instance;
-      setOgma(instance);
-      setReady(true);
+    const instance = new OgmaLib<ND, ED>({
+      container,
+      graph,
+      options
+    });
 
-      // send the new instance to the parent component
-      if (onReady) onReady(instance);
-    }
+    //console.info("new instance");
+    instanceRef.current = instance;
+    setOgma(instance);
+    setReady(true);
+
+    // send the new instance to the parent component
+    if (onReady) onReady(instance);
   }, [container]);
 
   // resize handler
@@ -78,17 +81,26 @@ export const OgmaComponent = <ND, ED>(
   }, []);
 
   useEffect(() => {
-    if (ogma) {
-      if (graph && ogma && graph !== graphData) {
-        setGraphData(graph);
-        ogma.setGraph(graph);
-      }
-      if (options && ogmaOptions !== options) {
-        setOgmaOptions(options);
-        ogma.setOptions(options);
-      }
+    if (!ogma) return;
+
+    if (graph && graph !== graphData) {
+      setGraphData(graph);
+      ogma.setGraph(graph);
+    }
+    if (options && ogmaOptions !== options) {
+      setOgmaOptions(options);
+      ogma.setOptions(options);
     }
   }, [graph, options]);
+
+  useEffect(() => {
+    if (!ogma) return;
+
+    if (theme && theme !== graphTheme) {
+      setGraphTheme(theme);
+      ogma.styles.setTheme(theme);
+    }
+  }, [theme])
 
   // Set up event handlers whenever props change
   useEffect(() => {
