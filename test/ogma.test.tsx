@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { render, screen, waitFor } from "./utils";
+import React from "react";
+import { render, waitFor } from "./utils";
 
 import OgmaLib, { RawGraph } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../src";

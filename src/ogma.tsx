@@ -44,10 +44,9 @@ export const OgmaComponent = <ND, ED>(
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
-  const instanceRef = useRef<OgmaLib<ND, ED>>();
+  const instanceRef = useRef<OgmaLib<ND, ED>>(null);
 
   useImperativeHandle(ref, () => {
-    if (!ogma) console.error("ogma ref is not inited");
     return ogma as OgmaLib<ND, ED>;
   }, [ogma]);
 
@@ -59,10 +58,12 @@ export const OgmaComponent = <ND, ED>(
         options
       });
 
-      console.info("new instance");
+      //console.info("new instance");
       instanceRef.current = instance;
       setOgma(instance);
       setReady(true);
+
+      // send the new instance to the parent component
       if (onReady) onReady(instance);
     }
   }, [container]);
@@ -134,7 +135,7 @@ export const OgmaComponent = <ND, ED>(
 
       // If it's a new handler or changed handler, add it
       if (!existingHandler || existingHandler !== handler) {
-        console.log(555, "add handler", eventName, existingHandler === handler);
+        //console.log(555, "add handler", eventName, existingHandler === handler);
         ogma.events.on(eventName, handler);
         // @ts-expect-error type union
         eventHandlersRef.current[eventName] = handler;

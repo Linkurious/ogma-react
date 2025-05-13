@@ -49,7 +49,6 @@ export default function App() {
 
   // ogma instance and grouping references
   const ogmaInstanceRef = createRef<OgmaLib>();
-  const [initialized, setInitialized] = useState(false);
   const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
 
   // grouping and geo states
@@ -110,31 +109,25 @@ export default function App() {
     ({ }: EventTypes<ND, ED>["mousemove"]) => {
       if (!ogmaInstanceRef.current) return;
       const ptr = ogmaInstanceRef.current.getPointerInformation();
-      // requestSetTooltipPosition(
-      //   ogmaInstanceRef.current.view.screenToGraphCoordinates({
-      //     x: ptr.x,
-      //     y: ptr.y
-      //   })
-      // );
-      // setTarget(ptr.target);
+      requestSetTooltipPosition(
+        ogmaInstanceRef.current.view.screenToGraphCoordinates({
+          x: ptr.x,
+          y: ptr.y
+        })
+      );
+      setTarget(ptr.target);
     },
     []
   );
 
   const onAddNodes = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
-    console.log("ON ADD");
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
   }, []);
 
   const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
     ogmaInstanceRef.current = instance;
-    setInitialized(true);
   }, []);
-
-  useEffect(() => {
-    console.log("ogma changed", ogmaInstanceRef);
-  }, [initialized]);
 
   const addNode = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
