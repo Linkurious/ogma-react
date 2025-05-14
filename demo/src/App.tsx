@@ -14,8 +14,8 @@ import * as L from "leaflet";
 // components
 import {
   Ogma,
-  // NodeStyleRule,
-  // EdgeStyleRule,
+  NodeStyleRule,
+  EdgeStyleRule,
   Tooltip,
   NodeGrouping,
   Popup,
@@ -25,7 +25,7 @@ import {
 
 import { Theme } from "../../src/types";
 
-// cusotm components:
+// custom components:
 // layout component, to be applied on certain events
 import { LayoutService } from "./components/Layout";
 // outlines canvas layer with halos
@@ -155,11 +155,9 @@ export default function App() {
         theme={morningBreeze as Theme<ND, ED>}
       >
 
-        { // this overwrites the theme's style
-        /* Styling 
+        { /* Styling */}
         <NodeStyleRule
           attributes={{
-            color: "#247BA0",
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
             text: {
               content: (node) => node?.getData("properties.name"),
@@ -169,7 +167,6 @@ export default function App() {
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
-        */ }
 
         {/* Layout */}
         <LayoutService />
