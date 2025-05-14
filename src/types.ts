@@ -1,4 +1,20 @@
-import { EdgeAttributes, EventTypes, HoverEdgeOptions, HoverNodeOptions, NodeAttributes } from "@linkurious/ogma";
+import {
+  EdgeAttributes,
+  EventTypes,
+  HoverEdgeOptions,
+  HoverNodeOptions,
+  NodeAttributes
+} from "@linkurious/ogma";
+
+// temporary while the type import gets added
+export interface Theme<NodeData = unknown, EdgeData = unknown> {
+  nodeAttributes?: NodeAttributes;
+  edgeAttributes?: EdgeAttributes;
+  selectedNodeAttributes?: NodeAttributes;
+  selectedEdgeAttributes?: EdgeAttributes;
+  hoveredNodeAttributes?: HoverNodeOptions<NodeData, EdgeData>;
+  hoveredEdgeAttributes?: HoverEdgeOptions<EdgeData, NodeData>;
+}
 
 export type EventNames<ND, ED> = keyof EventTypes<ND, ED>;
 
@@ -28,21 +44,13 @@ export function forEachEventHandler<ND, ED>(
 }
 
 // Helper to convert onEventName to eventname
-export function getEventNameFromProp<ND, ED>(propName: string) {
+export function getEventNameFromProp<ND, ED>(
+  propName: string
+): keyof EventTypes<ND, ED> | null {
   if (propName.startsWith("on") && propName.length > 2) {
     // remove 'on' and convert first letter to lowercase
     const eventName = propName[2].toLowerCase() + propName.substring(3);
     return eventName as EventNames<ND, ED>;
   }
   return null;
-}
-
-// temporary while the type import gets added
-export interface Theme<ND = unknown, ED = unknown> {
-  nodeAttributes?: NodeAttributes;
-  edgeAttributes?: EdgeAttributes;
-  selectedNodeAttributes?: NodeAttributes;
-  selectedEdgeAttributes?: EdgeAttributes;
-  hoveredNodeAttributes?: HoverNodeOptions<ND, ED>;
-  hoveredEdgeAttributes?: HoverEdgeOptions<ED, ND>;
 }
