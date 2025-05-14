@@ -3,11 +3,9 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  NodeGrouping as NodeGroupingTransformation,
-  EventTypes
+  NodeGrouping as NodeGroupingTransformation
 } from "@linkurious/ogma";
-import useEvent from 'react-use-event-hook';
-import { morningBreeze } from '@linkurious/ogma-styles';
+import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 // for geo mode
@@ -21,7 +19,8 @@ import {
   NodeGrouping,
   Popup,
   Geo,
-  NodeGroupingProps
+  NodeGroupingProps,
+  useEvent
 } from "../../src";
 
 import { Theme } from "../../src/types";
@@ -102,41 +101,40 @@ export default function App() {
       });
   }, []);
 
-  const onClick = useEvent(({ target }: EventTypes<ND, ED>["click"]) => {
+  const onClick = useEvent("click", ({ target }) => {
     if (target && target.isNode) {
       setClickedNode(target);
       setPopupOpen(true);
     }
   });
 
-  const onMousemove = useEvent(
-    ({ }: EventTypes<ND, ED>["mousemove"]) => {
-      if (!ogmaInstanceRef.current) return;
-      const ptr = ogmaInstanceRef.current.getPointerInformation();
-      requestSetTooltipPosition(
-        ogmaInstanceRef.current.view.screenToGraphCoordinates({
-          x: ptr.x,
-          y: ptr.y
-        })
-      );
-      setTarget(ptr.target);
-    });
+  const onMousemove = useEvent("mousemove", () => {
+    if (!ogmaInstanceRef.current) return;
+    const ptr = ogmaInstanceRef.current.getPointerInformation();
+    requestSetTooltipPosition(
+      ogmaInstanceRef.current.view.screenToGraphCoordinates({
+        x: ptr.x,
+        y: ptr.y
+      })
+    );
+    setTarget(ptr.target);
+  });
 
-  const onAddNodes = useEvent(() => {
+  const onAddNodes = useEvent("addNodes", () => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
   });
 
-  const onReady = useEvent((instance: OgmaLib<ND, ED>) => {
+  const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
     ogmaInstanceRef.current = instance;
-  });
+  }, []);
 
-  const addNode = useEvent(() => {
+  const addNode = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.addNode({
       id: ogmaInstanceRef.current.getNodes().size
     });
-  });
+  }, []);
 
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
@@ -153,8 +151,7 @@ export default function App() {
         onReady={onReady}
         theme={morningBreeze as Theme<ND, ED>}
       >
-
-        { /* Styling */}
+        {/* Styling */}
         <NodeStyleRule
           attributes={{
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
