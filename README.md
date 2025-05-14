@@ -230,7 +230,10 @@ Main visualisation component. You can use `onReady` or `ref` prop to get a refer
 | `graph?`   | `Ogma.RawGraph`        | `null`  | The graph to render                                                                                                                                                     |
 | `onReady?` | `(ogma: Ogma) => void` | `null`  | Callback when the Ogma instance is ready                                                                                                                                |
 | `ref?`     | `React.Ref<Ogma>`      | `null`  | Reference to the Ogma instance                                                                                                                                          |
-| `children` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
+| `children?` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
+| `theme?` | `Ogma.Themes`      | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles 
+|
+| `onEventName` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useCallback` function to memoize it and avoid reassigning the same handler at every render. |
 
 ### `<NodeStyle />`
 
