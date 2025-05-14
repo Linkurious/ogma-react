@@ -80,7 +80,7 @@ describe("Ogma", () => {
     });
   });
 
-  it.only("should handle onNodesAdded prop changes correctly", async () => {
+  it("should handle onNodesAdded prop changes correctly", async () => {
     const mockData = {
       nodes: [
         { id: 0, attributes: { color: "red", x: 0, y: 0 } },
@@ -119,7 +119,7 @@ describe("Ogma", () => {
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(1);
   });
 
-  it("should set the theme of the graph correctly with the prop changes"), async () => {
+  it("should set the theme of the graph correctly with the prop changes", async () => {
     const mockData = {
       nodes: [
         { id: 0, attributes: { x: 0, y: 0 } },
@@ -145,11 +145,11 @@ describe("Ogma", () => {
     expect(nodeColor).toMatch("#BD8A61");
 
     const theme2: Theme = morningBreeze as Theme<unknown, unknown>;
-    rerender(<Ogma graph={mockData} theme={theme2} />)
+    rerender(<Ogma ref={ref} graph={mockData} theme={theme2} />)
 
     // node color should be the new theme's node color after rerendering
     const nodeColor2 = ref.current?.getNodes().get(0).getAttribute("color");
-    expect(nodeColor2).toMatch("##43a2ca");
+    expect(nodeColor2).toMatch("#43a2ca");
 
-  }
+  })
 });

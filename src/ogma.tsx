@@ -65,8 +65,6 @@ export const OgmaComponent = <ND, ED>(
     if (theme) {
       setGraphTheme(theme);
       instance.styles.setTheme(theme);
-      console.log(theme);
-      console.log(instance.getNodes().get(0).getAttribute("color"));
     }
 
     //console.info("new instance");
