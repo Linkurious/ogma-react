@@ -33,8 +33,6 @@ interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
 
 const defaultOptions = {};
 
-type InstanceRef<ND, ED> = OgmaLib<ND, ED> | null;
-
 /**
  * Main component for the Ogma library.
  */
@@ -46,6 +44,7 @@ export const OgmaComponent = <ND, ED>(
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
   const [graphTheme, setGraphTheme] = useState<Theme<ND, ED>>();
