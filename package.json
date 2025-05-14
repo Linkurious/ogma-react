@@ -82,6 +82,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-feather": "^2.0.10",
+    "react-use-event-hook": "latest",
     "tslib": "^2.5.0",
     "typescript": "^5.3.2",
     "vite": "latest",

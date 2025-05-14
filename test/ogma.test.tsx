@@ -111,7 +111,7 @@ describe("Ogma", () => {
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(1);
 
     // Rerender without the handler
-    rerender(<Ogma graph={mockData} />);
+    rerender(<Ogma ref={ref} graph={mockData} />);
 
     ref.current?.addNode({ id: 3, attributes: { color: "yellow", x: 25, y: 25 } });
 

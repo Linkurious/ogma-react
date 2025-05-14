@@ -67,7 +67,6 @@ export const OgmaComponent = <ND, ED>(
       instance.styles.setTheme(theme);
     }
 
-    //console.info("new instance");
     instanceRef.current = instance;
     setOgma(instance);
     setReady(true);
@@ -138,12 +137,9 @@ export const OgmaComponent = <ND, ED>(
       }
     });
 
-    //console.log(2, currentEventHandlers, eventHandlersRef.current);
-
     // Add new handlers
     forEachEventHandler(currentEventHandlers, (eventName, handler) => {
       const existingHandler = eventHandlersRef.current[eventName];
-      //console.log("check", eventName, existingHandler === handler);
 
       // If handler changed, remove old one
       if (existingHandler && existingHandler !== handler) {

@@ -6,6 +6,7 @@ import OgmaLib, {
   NodeGrouping as NodeGroupingTransformation,
   EventTypes
 } from "@linkurious/ogma";
+import useEvent from 'react-use-event-hook';
 import { morningBreeze } from '@linkurious/ogma-styles';
 import { useEffect, useState, createRef, useCallback } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
@@ -101,14 +102,14 @@ export default function App() {
       });
   }, []);
 
-  const onClick = useCallback(({ target }: EventTypes<ND, ED>["click"]) => {
+  const onClick = useEvent(({ target }: EventTypes<ND, ED>["click"]) => {
     if (target && target.isNode) {
       setClickedNode(target);
       setPopupOpen(true);
     }
-  }, []);
+  });
 
-  const onMousemove = useCallback(
+  const onMousemove = useEvent(
     ({ }: EventTypes<ND, ED>["mousemove"]) => {
       if (!ogmaInstanceRef.current) return;
       const ptr = ogmaInstanceRef.current.getPointerInformation();
@@ -119,25 +120,23 @@ export default function App() {
         })
       );
       setTarget(ptr.target);
-    },
-    []
-  );
+    });
 
-  const onAddNodes = useCallback(() => {
+  const onAddNodes = useEvent(() => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
-  }, []);
+  });
 
-  const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
+  const onReady = useEvent((instance: OgmaLib<ND, ED>) => {
     ogmaInstanceRef.current = instance;
-  }, []);
+  });
 
-  const addNode = useCallback(() => {
+  const addNode = useEvent(() => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.addNode({
       id: ogmaInstanceRef.current.getNodes().size
     });
-  }, []);
+  });
 
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
