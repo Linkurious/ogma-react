@@ -5,6 +5,7 @@ import OgmaLib, {
   RawGraph,
   NodeGrouping as NodeGroupingTransformation
 } from "@linkurious/ogma";
+import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 // for geo mode
@@ -18,10 +19,13 @@ import {
   NodeGrouping,
   Popup,
   Geo,
-  NodeGroupingProps
+  NodeGroupingProps,
+  useEvent
 } from "../../src";
 
-// cusotm components:
+import { Theme } from "../../src/types";
+
+// custom components:
 // layout component, to be applied on certain events
 import { LayoutService } from "./components/Layout";
 // outlines canvas layer with halos
@@ -47,7 +51,7 @@ export default function App() {
   const [clickedNode, setClickedNode] = useState<Node>();
 
   // ogma instance and grouping references
-  const ref = createRef<OgmaLib>();
+  const ogmaInstanceRef = createRef<OgmaLib>();
   const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
 
   // grouping and geo states
@@ -97,6 +101,41 @@ export default function App() {
       });
   }, []);
 
+  const onClick = useEvent("click", ({ target }) => {
+    if (target && target.isNode) {
+      setClickedNode(target);
+      setPopupOpen(true);
+    }
+  });
+
+  const onMousemove = useEvent("mousemove", () => {
+    if (!ogmaInstanceRef.current) return;
+    const ptr = ogmaInstanceRef.current.getPointerInformation();
+    requestSetTooltipPosition(
+      ogmaInstanceRef.current.view.screenToGraphCoordinates({
+        x: ptr.x,
+        y: ptr.y
+      })
+    );
+    setTarget(ptr.target);
+  });
+
+  const onAddNodes = useEvent("addNodes", () => {
+    if (!ogmaInstanceRef.current) return;
+    ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
+  });
+
+  const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
+    ogmaInstanceRef.current = instance;
+  }, []);
+
+  const addNode = useCallback(() => {
+    if (!ogmaInstanceRef.current) return;
+    ogmaInstanceRef.current.addNode({
+      id: ogmaInstanceRef.current.getNodes().size
+    });
+  }, []);
+
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
 
@@ -104,33 +143,17 @@ export default function App() {
     <div className="App">
       <Logo />
       <Ogma
-        ref={ref}
+        ref={ogmaInstanceRef}
         graph={graph}
-        onReady={(ogma) => {
-          ogma.events
-            .on("click", ({ target }) => {
-              if (target && target.isNode) {
-                setClickedNode(target);
-                setPopupOpen(true);
-              }
-            })
-            .on("mousemove", () => {
-              const ptr = ogma.getPointerInformation();
-              requestSetTooltipPosition(
-                ogma.view.screenToGraphCoordinates({ x: ptr.x, y: ptr.y })
-              );
-              setTarget(ptr.target);
-            })
-            // locate graph when the nodes are added
-            .on("addNodes", () =>
-              ogma.view.locateGraph({ duration: 250, padding: 50 })
-            );
-        }}
+        onClick={onClick}
+        onMousemove={onMousemove}
+        onAddNodes={onAddNodes}
+        onReady={onReady}
+        theme={morningBreeze as Theme<ND, ED>}
       >
         {/* Styling */}
         <NodeStyleRule
           attributes={{
-            color: "#247BA0",
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
             text: {
               content: (node) => node?.getData("properties.name"),
@@ -150,7 +173,6 @@ export default function App() {
           disabled={!nodeGrouping && !geoEnabled}
           groupIdFunction={groupingOptions.groupIdFunction}
           nodeGenerator={groupingOptions.nodeGenerator}
-          duration={500}
         />
 
         {/* context-aware UI */}
@@ -193,6 +215,7 @@ export default function App() {
         setOutlines={setOutlines}
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
+        addNode={addNode}
       />
     </div>
   );

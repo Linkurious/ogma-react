@@ -8,6 +8,7 @@ body {
   --overlay-background-color: #282c34;
   --text-color: #222222;
   --brand-color: #0094ff;
+  --brand-color-darker: #0074cc;
   --overlay-text-color: var(--brand-color);
   --fontFamily: "IBM Plex Sans", sans-serif;
   --border-radius: 5px;
@@ -188,4 +189,17 @@ code {
 
 .gh-link {
   margin-left: 1em;
+}
+
+.link-button {
+  cursor: pointer;
+  color: var(--brand-color);
+  text-decoration: underline;
+  text-align: left;
+}
+
+.link-button:hover,
+.link-button:focus,
+.link-button:active {
+  color: var(--brand-color-darker);
 }
