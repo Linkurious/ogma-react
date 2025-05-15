@@ -43,7 +43,7 @@ yarn i <YOUR_LINK_WITH_API_KEY>
 yarn add @linkurious/ogma-react
 ```
 
-You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/web/src/index.css) for an example). No CSS is included by default.
+You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
 
 ```tsx
 import { Ogma, NodeStyle, Popup } from '@linkurious/ogma-react';
