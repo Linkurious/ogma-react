@@ -14,6 +14,8 @@ interface ControlsProps {
   geoEnabled: boolean;
   setGeoEnabled: (value: boolean) => void;
   addNode: () => void;
+  useClass: boolean;
+  setUseClass: (value: boolean) => void;
 }
 
 export function Controls({
@@ -25,7 +27,9 @@ export function Controls({
   setGeoEnabled,
   outlines,
   setOutlines,
-  addNode
+  addNode,
+  useClass,
+  setUseClass
 }: ControlsProps) {
   //const ogma = useOgma();
   const [drawerShown, setDrawerShown] = useState(false);
@@ -100,6 +104,13 @@ export function Controls({
           <div className="link-button" onClick={() => addNode()}>
             Add node
           </div>
+        </div>
+        <div className="controls-section">
+          <Toggle
+            checked={useClass}
+            onChange={setUseClass}
+            label="Use class"
+          />
         </div>
       </Drawer>
     </>

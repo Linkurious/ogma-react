@@ -7,8 +7,9 @@ export function useEvent<
   ED = unknown,
   K extends EventNames<ND, ED> = EventNames<ND, ED>
   // @ts-expect-error evtName is used to infer the type of the event
->(eventName: K, handler: (event: EventTypes<ND, ED>[K]) => void) {
-  const callback = useCallback(handler, []);
+>(eventName: K, handler: (event: EventTypes<ND, ED>[K]) => void, dependencies?: any[]) {
+  const dep = dependencies ? dependencies : [];
+  const callback = useCallback(handler, dep);
 
   return callback;
 }

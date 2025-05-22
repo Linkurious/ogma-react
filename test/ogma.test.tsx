@@ -117,6 +117,13 @@ describe("Ogma", () => {
 
     // add another node - handler should not be called
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(1);
+
+    rerender(<Ogma ref={ref} graph={mockData} onAddNodes={mockOnNodesAdded} />);
+
+    ref.current?.addNode({ id: 4, attributes: { color: "purple", x: 50, y: 50 } });
+
+    // Check if the handler was called again
+    expect(mockOnNodesAdded).toHaveBeenCalledTimes(2);
   });
 
   it("should set the theme of the graph correctly with the prop changes", async () => {
