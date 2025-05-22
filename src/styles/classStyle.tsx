@@ -1,22 +1,12 @@
 import OgmaLib, {
-    EdgeAttributesValue,
-    EdgeDependencies,
-    EdgeOutput,
-    NodeAttributesValue,
-    NodeOutput,
+    StyleClassDefinition,
     StyleClass
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { forwardRef, Ref, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
 
-interface StyleProps<ED, ND> {
+interface StyleProps<ED, ND> extends StyleClassDefinition<ED, ND> {
     name: string;
-    edgeAttributes?: EdgeAttributesValue<ND, ED>;
-    edgeDependencies?: EdgeDependencies;
-    edgeOutput?: EdgeOutput;
-    nodeAttributes?: NodeAttributesValue<ED, ND>;
-    nodeDependencies?: EdgeDependencies;
-    nodeOutput?: NodeOutput;
 }
 
 const classStyle = <ED, ND>(
@@ -33,12 +23,20 @@ const classStyle = <ED, ND>(
 ) => {
     const ogma = useOgma() as OgmaLib<ED, ND>;
     const [styleClass, setStyleClass] = useState<StyleClass<ED, ND>>();
+    const hasRun = useRef(0);
 
     useImperativeHandle(ref, () => styleClass as StyleClass<ED, ND>, [styleClass]);
     
     useEffect(() => {
+        // Letting react execute the useEffect twice in development will throw
+        // an error in Ogma
+        if (process.env.NODE_ENV === "development" && hasRun.current === 1) {
+            hasRun.current++;
+            return;
+        }
+        hasRun.current++;
+        
         const style = {
-            name,
             edgeAttributes,
             edgeDependencies,
             edgeOutput,
@@ -46,17 +44,28 @@ const classStyle = <ED, ND>(
             nodeDependencies,
             nodeOutput
         };
-        const c = ogma.styles.createClass(style);
+        let c;
+        if (styleClass?.getName() === name) {
+            // Replace the style class somehow?
+            return;
+            // c = styleClass.update(style);
+        } else {
+            c = ogma.styles.createClass({ name, ...style});
+        } 
         setStyleClass(c);
         return () => {
-            c.destroy();
+            console.log("unmount");
+            if (styleClass) {
+                styleClass.destroy().then();
+                setStyleClass(undefined);
+            }
         };
     }, [name, edgeAttributes, edgeDependencies, edgeOutput, nodeAttributes, nodeDependencies, nodeOutput]);
     return null;
 };
 
 /**
- * This component wraps around Ogma [`ClassStyle`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle) API. It allows you to add a class style to the
+ * This component wraps around Ogma [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle) API. It allows you to add a class style to the
  * Ogma instance to calculate the visual appearance attributes of the nodes and edges.
  */
-export const ClassStyle = forwardRef(classStyle);
+export const ClassRule = forwardRef(classStyle);

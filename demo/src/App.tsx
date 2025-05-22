@@ -20,10 +20,10 @@ import {
   Popup,
   Geo,
   NodeGroupingProps,
-  useEvent
+  useEvent,
+  Theme,
+  ClassRule
 } from "../../src";
-
-import { Theme } from "../../src/types";
 
 // custom components:
 // layout component, to be applied on certain events
@@ -71,6 +71,7 @@ export default function App() {
     },
     disabled: true
   });
+  const [useClass, setUseClass] = useState(false);
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
@@ -131,9 +132,12 @@ export default function App() {
 
   const addNode = useCallback(() => {
     if (!ogmaInstanceRef.current) return;
-    ogmaInstanceRef.current.addNode({
-      id: ogmaInstanceRef.current.getNodes().size
+    const size = ogmaInstanceRef.current.getNodes().size;
+    const node = ogmaInstanceRef.current.addNode({
+      id: size
     });
+    if (size % 2) node.addClass("class");
+    else node.addClass("class2");
   }, []);
 
   // nothing to render yet
@@ -163,6 +167,33 @@ export default function App() {
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
+        
+        { useClass && <ClassRule
+          name="class"
+          nodeAttributes={{
+            color: (node) => {
+              const categories : string[] = node.getData("categories");
+              if (!categories) return "#000000";
+              return categories.includes("INVESTOR") ? "#FF0000" : "#00FF00";
+            },
+            halo: {
+              width: 0,
+            }
+          }}
+        />}
+        {/* <ClassRule
+          name="class2"
+          nodeAttributes={{
+            color: (node) => {
+              const categories : string[] = node.getData("categories");
+              if (!categories) return "#000000";
+              return categories.includes("INVESTOR") ? "#FF0000" : "#00FF00";
+            },
+            halo: {
+              width: 25,
+            }
+          }}
+        /> */}
 
         {/* Layout */}
         <LayoutService />
@@ -216,6 +247,8 @@ export default function App() {
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
         addNode={addNode}
+        useClass={useClass}
+        setUseClass={setUseClass}
       />
     </div>
   );
