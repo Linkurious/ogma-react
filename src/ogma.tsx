@@ -48,7 +48,6 @@ export const OgmaComponent = <ND, ED>(
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
   const [graphTheme, setGraphTheme] = useState<Theme<ND, ED>>();
-  const instanceRef = useRef<OgmaLib<ND, ED>>(null);
 
   useImperativeHandle(ref, () => {
     return ogma as OgmaLib<ND, ED>;
@@ -67,7 +66,6 @@ export const OgmaComponent = <ND, ED>(
       instance.styles.setTheme(theme);
     }
 
-    instanceRef.current = instance;
     setOgma(instance);
     setReady(true);
 
