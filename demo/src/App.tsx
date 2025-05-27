@@ -3,10 +3,11 @@ import OgmaLib, {
   Node,
   Point,
   RawGraph,
-  NodeGrouping as NodeGroupingTransformation
+  NodeGrouping as NodeGroupingTransformation,
+  NodeAttributesValue
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
-import { useEffect, useState, createRef, useCallback } from "react";
+import { useEffect, useState, createRef, useCallback, useMemo } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 // for geo mode
 import * as L from "leaflet";
@@ -15,14 +16,14 @@ import {
   Ogma,
   NodeStyleRule,
   EdgeStyleRule,
+  StyleClass,
   Tooltip,
   NodeGrouping,
   Popup,
   Geo,
   NodeGroupingProps,
   useEvent,
-  Theme,
-  ClassRule
+  Theme
 } from "../../src";
 
 // custom components:
@@ -137,8 +138,22 @@ export default function App() {
       id: size
     });
     if (size % 2) node.addClass("class");
-    else node.addClass("class2");
   }, []);
+
+  const styleClassNodeAttributes = useMemo<NodeAttributesValue<ND, ED>>(() => {
+    console.log("Creating styleClassNodeAttributes");
+    return {
+      shape: "diamond",
+      color: (node) => {
+        const categories: string[] = node.getData("categories");
+        if (!categories) return "#000000";
+        return categories.includes("INVESTOR") ? "#FF0000" : "#00FF00";
+      },
+      halo: {
+        width: 0
+      }
+    };
+  }, []); // memoize the style class props
 
   // nothing to render yet
   if (loading) return <LoadingOverlay />;
@@ -156,6 +171,7 @@ export default function App() {
         theme={morningBreeze as Theme<ND, ED>}
       >
         {/* Styling */}
+
         <NodeStyleRule
           attributes={{
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
@@ -167,33 +183,9 @@ export default function App() {
           }}
         />
         <EdgeStyleRule attributes={{ width: edgeWidth }} />
-        
-        { useClass && <ClassRule
-          name="class"
-          nodeAttributes={{
-            color: (node) => {
-              const categories : string[] = node.getData("categories");
-              if (!categories) return "#000000";
-              return categories.includes("INVESTOR") ? "#FF0000" : "#00FF00";
-            },
-            halo: {
-              width: 0,
-            }
-          }}
-        />}
-        {/* <ClassRule
-          name="class2"
-          nodeAttributes={{
-            color: (node) => {
-              const categories : string[] = node.getData("categories");
-              if (!categories) return "#000000";
-              return categories.includes("INVESTOR") ? "#FF0000" : "#00FF00";
-            },
-            halo: {
-              width: 25,
-            }
-          }}
-        /> */}
+        {useClass && (
+          <StyleClass name="class" nodeAttributes={styleClassNodeAttributes} />
+        )}
 
         {/* Layout */}
         <LayoutService />

@@ -27,7 +27,7 @@ const CanvasLayerComponent = (
     isStatic = false,
     render,
     index,
-    visible
+    visible = true
   }: CanvasLayerProps,
   ref?: Ref<OgmaCanvasLayer>
 ) => {
