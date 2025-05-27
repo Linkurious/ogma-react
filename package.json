@@ -46,7 +46,8 @@
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
-    "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist"
+    "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist",
+    "bump:patch": "npm version patch --no-git-tag-version"
   },
   "prettier": {
     "trailingComma": "none"
