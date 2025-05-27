@@ -1,4 +1,3 @@
-import React from "react";
 import { render, act } from "@testing-library/react";
 import { describe, it, beforeEach, vi, expect } from "vitest";
 import { StyleClass } from "../src/styles/classStyle";
@@ -26,7 +25,7 @@ const mockOgma = {
 };
 
 vi.mock("../src/context", async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = (await importOriginal()) as {};
   return {
     ...actual,
     useOgma: () => mockOgma
@@ -74,7 +73,7 @@ describe("StyleClass", () => {
         <Ogma graph={graph}>
           <StyleClass
             name="test"
-            edgeAttributes={{ a: 2 }}
+            edgeAttributes={{ color: "red" }}
             edgeOutput={{}}
             nodeAttributes={{}}
             nodeOutput={{}}
