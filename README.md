@@ -11,6 +11,7 @@ Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [
     - Styles:
       - [`<NodeStyle />`](#nodestyle-)
       - [`<EdgeStyle />`](#edgestyle-)
+      - [`<StyleClass />`](#styleclass-)
     - Overlays:
       - [`<Popup />`](#popup-)
       - [`<Tooltip />`](#tooltip-)
@@ -200,6 +201,7 @@ export default function App () {
 - Styles:
   - [`<NodeStyle />`](#nodestyle-)
   - [`<EdgeStyle />`](#edgestyle-)
+  - [`<StyleClass />`](#styleclass-)
 - Overlays:
   - [`<Popup />`](#popup-)
   - [`<Tooltip />`](#tooltip-)
@@ -272,6 +274,34 @@ Edge style component.
 <Ogma>
   <EdgeStyle attributes={{ color: "red" }} />
 </Ogma>
+```
+
+### `<StyleClass />`
+
+Wrapper to the Ogma `StyleClass` class. It allows you to apply styles to nodes and edges based on their `class`, much like in CSS.
+
+#### Props
+| Prop         | Type                           | Default | Description                                  |
+| ------------ | ------------------------------ | ------- | -------------------------------------------- |
+| **`name`**  | `string`                       |   | The class name to apply the styles to        |
+| `nodeAttributes` | `NodeAttributeValue` | `{}`    | Attributes to apply to the nodes or edges    |
+| `edgeAttributes` | `EdgeAttributeValue` | `{}`    | Attributes to apply to the edges             |
+
+
+### Example
+
+```tsx
+useEffect(() => {
+  ogma.getNode('x').addClass('my-class');
+}, []);
+
+return (<Ogma>
+  <StyleClass
+    name="my-class"
+    nodeAttributes={{ color: "red", radius: 10 }}
+    edgeAttributes={{ color: "blue" }}
+  />
+</Ogma>);
 ```
 
 ### `<Popup />`
@@ -603,6 +633,13 @@ Geo mode component. It's the first version of this component and we are still ga
   />
 </Ogma>
 ```
+
+
+## `<React.StrictMode/>` incompatibility
+
+If you are using `<React.StrictMode/>` in your application, you may encounter issues with the Ogma instance being created multiple times. This is due to the way React.StrictMode works, which intentionally invokes components twice to help identify side effects. It's not compatible with the way components like `<Ogma />` are designed to work.
+To avoid this issue, we highly recommend not using `<React.StrictMode/>` in your application when using `@linkurious/ogma-react`. If you need to use strict mode, consider wrapping only parts of your application that do not include Ogma components or implementing the mount counters.
+
 
 
 ## License
