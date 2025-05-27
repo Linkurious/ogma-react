@@ -27,7 +27,7 @@ const CanvasLayerComponent = (
     isStatic = false,
     render,
     index,
-    visible
+    visible = true
   }: CanvasLayerProps,
   ref?: Ref<OgmaCanvasLayer>
 ) => {
@@ -55,7 +55,7 @@ const CanvasLayerComponent = (
   useEffect(() => {
     if (layer) {
       if (index !== undefined && isFinite(index)) layer.moveTo(index);
-      if (visible === layer.isHidden()) visible ? layer.show() : layer.hide();
+      if (visible) layer.show();
       else layer.hide();
     }
   }, [layer, index, visible]);

@@ -6,12 +6,13 @@ import {
   forwardRef,
   useImperativeHandle,
   ReactNode,
-  Ref
+  Ref,
+  memo
 } from "react";
 import OgmaLib, {
   Options as OgmaOptions,
   RawGraph,
-  EventTypes,
+  EventTypes
 } from "@linkurious/ogma";
 // import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
@@ -48,7 +49,6 @@ export const OgmaComponent = <ND, ED>(
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
   const [graphTheme, setGraphTheme] = useState<Theme<ND, ED>>();
-  const instanceRef = useRef<OgmaLib<ND, ED>>(null);
 
   useImperativeHandle(ref, () => {
     return ogma as OgmaLib<ND, ED>;
@@ -67,7 +67,6 @@ export const OgmaComponent = <ND, ED>(
       instance.styles.setTheme(theme);
     }
 
-    instanceRef.current = instance;
     setOgma(instance);
     setReady(true);
 
@@ -104,7 +103,7 @@ export const OgmaComponent = <ND, ED>(
       setGraphTheme(theme);
       ogma.styles.setTheme(theme);
     }
-  }, [theme])
+  }, [theme]);
 
   // Set up event handlers whenever props change
   useEffect(() => {
@@ -170,4 +169,4 @@ export const OgmaComponent = <ND, ED>(
   );
 };
 
-export const Ogma = forwardRef(OgmaComponent);
+export const Ogma = memo(forwardRef(OgmaComponent));

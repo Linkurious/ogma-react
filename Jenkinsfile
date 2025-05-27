@@ -2,11 +2,12 @@
 
 nodeJob {
   projectName = "linkurious/ogma-react"
-  podTemplateNames = ['jnlp-agent-node']  
+  podTemplateNames = ['jnlp-agent-node']
   runPreReleaseOnUpload = false
   npmPackPath = './dist'
-  createGitTag = false
+  createGitTag = true
   gitTagPrefix = 'v'
   runNpmPublish = true
   runDependencyVersionCheck = false
+  runBookeeping = true
 }
