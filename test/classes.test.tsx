@@ -73,7 +73,8 @@ describe("StyleClass", () => {
         <Ogma graph={graph}>
           <StyleClass
             name="test"
-            edgeAttributes={{ color: "red" }}
+            // @ts-expect-error: Testing prop change
+            edgeAttributes={{ a: 2 }}
             edgeOutput={{}}
             nodeAttributes={{}}
             nodeOutput={{}}
