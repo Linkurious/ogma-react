@@ -45,7 +45,7 @@ function NodeFilterComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled]);
+  }, [props.disabled, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);
