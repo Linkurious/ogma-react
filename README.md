@@ -135,7 +135,7 @@ It's unintuitive to implement the layouts as a React component declaratively. We
 import { LayoutService } from './components/LayoutService';
 
 export default function App() {
-  ... // retreive the graph here
+  ... // retrieve the graph here
 
   return (<Ogma options={options} graph={graph}>
     <LayoutService />
