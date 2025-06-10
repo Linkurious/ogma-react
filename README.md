@@ -257,6 +257,44 @@ Node style component.
 </Ogma>
 ```
 
+### `<NodeStyle.Hovered />`
+
+Node style component.
+
+#### Props
+
+| Prop         | Type                           | Default | Description                                  |
+| ------------ | ------------------------------ | ------- | -------------------------------------------- |
+| `attributes` | `Ogma.HoverNodeOptions`      | `{}`    | Attributes to apply to the hovered node              |
+| `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on hover will be exactly the ones supplied. |
+
+#### Example
+
+```tsx
+<Ogma>
+  <NodeStyle.Hovered attributes={{ color: "red", radius: 10 }} />
+</Ogma>
+```
+
+### `<NodeStyle.Selected />`
+
+Node style component.
+
+#### Props
+
+| Prop         | Type                           | Default | Description                                  |
+| ------------ | ------------------------------ | ------- | -------------------------------------------- |
+| `attributes` | `Ogma.NodeAttributeValue`      | `{}`    | Attributes to apply to the selected node              |
+| `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on selection will be exactly the ones supplied. |
+
+#### Example
+
+```tsx
+<Ogma>
+  <NodeStyle.Selected attributes={{ color: "red", radius: 10 }} />
+</Ogma>
+```
+
 ### `<EdgeStyle />`
 
 Edge style component.
@@ -274,6 +312,44 @@ Edge style component.
 ```tsx
 <Ogma>
   <EdgeStyle attributes={{ color: "red" }} />
+</Ogma>
+```
+
+### `<EdgeStyle.Hovered />`
+
+Edge style component.
+
+#### Props
+
+| Prop         | Type                           | Default | Description                                  |
+| ------------ | ------------------------------ | ------- | -------------------------------------------- |
+| `attributes` | `Ogma.HoveredEdgeOptions`      | `{}`    | Attributes to apply to the Hovered edge              |
+| `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on hover will be exactly the ones supplied. |
+
+#### Example
+
+```tsx
+<Ogma>
+  <EdgeStyle.Hovered attributes={{ color: "red" }} />
+</Ogma>
+```
+
+### `<EdgeStyle.Selected />`
+
+Edge style component.
+
+#### Props
+
+| Prop         | Type                           | Default | Description                                  |
+| ------------ | ------------------------------ | ------- | -------------------------------------------- |
+| `attributes` | `Ogma.EdgeAttributeValue`      | `{}`    | Attributes to apply to the selected edge              |
+| `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on selection will be exactly the ones supplied. | |
+
+#### Example
+
+```tsx
+<Ogma>
+  <EdgeStyle.Selected attributes={{ color: "red" }} />
 </Ogma>
 ```
 
