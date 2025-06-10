@@ -135,7 +135,7 @@ It's unintuitive to implement the layouts as a React component declaratively. We
 import { LayoutService } from './components/LayoutService';
 
 export default function App() {
-  ... // retrive the graph here
+  ... // retreive the graph here
 
   return (<Ogma options={options} graph={graph}>
     <LayoutService />
@@ -235,6 +235,7 @@ Main visualisation component. You can use `onReady` or `ref` prop to get a refer
 | `children?` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
 | `theme?` | `Ogma.Themes`      | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles |
 | `onEventName` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useEvent` hook to have a stable function identity and avoid reassigning the same handler at every render. |
+| `className?`     | `string`      | `ogma-container`  | className for the ogma container                                                                      |
 
 ### `<NodeStyle />`
 

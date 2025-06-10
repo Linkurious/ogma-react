@@ -36,6 +36,12 @@ code {
   min-height: 100vh;
 }
 
+.ogma-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .Logo {
   position: absolute;
   top: 15px;
