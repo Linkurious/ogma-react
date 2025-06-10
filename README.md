@@ -343,7 +343,7 @@ Edge style component.
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
 | `attributes` | `Ogma.EdgeAttributeValue`      | `{}`    | Attributes to apply to the selected edge              |
-| `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on selection will be exactly the ones supplied. | |
+| `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on selection will be exactly the ones supplied. |
 
 #### Example
 
