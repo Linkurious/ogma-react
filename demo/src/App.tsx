@@ -4,7 +4,8 @@ import OgmaLib, {
   Point,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
-  NodeAttributesValue
+  NodeAttributesValue,
+  Theme
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback, useMemo } from "react";
@@ -22,8 +23,7 @@ import {
   Popup,
   Geo,
   NodeGroupingProps,
-  useEvent,
-  Theme
+  useEvent
 } from "../../src";
 
 // custom components:

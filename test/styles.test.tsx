@@ -1,7 +1,7 @@
 import React, { act, createRef } from "react";
 import { Root, createRoot } from "react-dom/client";
 import { userEvent, waitFor } from "./utils";
-import OgmaLib from "@linkurious/ogma";
+import OgmaLib, { Edge } from "@linkurious/ogma";
 import { Ogma, NodeStyle, EdgeStyle } from "../src";
 import graph from "./fixtures/simple_graph.json";
 
@@ -117,6 +117,7 @@ describe("styles", async () => {
     const node = ogma.getNodes().get(0);
     await ogma.mouse.move(ogma.view.graphToScreenCoordinates(node.getPosition()));
     await ogma.view.afterNextFrame();
+    await ogma.view.afterNextFrame();
     expect(node.getAttribute("color")).toStrictEqual("red");
     await ogma.mouse.move({x: -1000, y: -1000});
     await ogma.view.afterNextFrame();
@@ -218,6 +219,39 @@ describe("styles", async () => {
       "grey",
       "grey"
     ]);
+  });
+
+  it("Sets the attributes for hovered edges correctly", async () => {
+    const ref = createRef<OgmaLib>();
+    act(() =>
+      div.render(
+        <Ogma graph={graph} ref={ref}>
+          <EdgeStyle.Hovered
+            attributes={{ color: "red" }}
+          />
+          <EdgeStyle
+            attributes={{ color: "grey" }}
+          />
+        </Ogma>
+      )
+    );
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    const ogma = ref.current!;
+    let edge = ogma.getEdges().get(0);
+    const src = edge.getSource();
+    const dest = edge.getTarget();
+    const midpoint = {
+      x: (src.getPosition().x + dest.getPosition().x) / 2,
+      y: (src.getPosition().y + dest.getPosition().y) / 2,
+    };
+    await ogma.mouse.move(ogma.view.graphToScreenCoordinates(midpoint));
+    await ogma.view.afterNextFrame();
+    await ogma.view.afterNextFrame();
+    edge = ogma.getHoveredElement() as Edge;
+    expect(edge.getAttribute("color")).toStrictEqual("red");
+    await ogma.mouse.move({x: -1000, y: -1000});
+    await ogma.view.afterNextFrame();
+    expect(edge.getAttribute("color")).toStrictEqual("grey");
   });
 
   it("EdgeStyle cleans up after being removed", async () => {
