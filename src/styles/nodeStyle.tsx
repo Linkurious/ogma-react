@@ -57,6 +57,10 @@ const Hovered = <ND, ED>(
 
   useEffect(() => {
     ogma.styles.setHoveredNodeAttributes(attributes, fullOverwrite);
+
+    return () => {
+      ogma.styles.setHoveredNodeAttributes(null);
+    };
   }, [attributes, fullOverwrite]);
   return null;
 };
@@ -68,6 +72,10 @@ const Selected = <ND, ED>(
 
   useEffect(() => {
     ogma.styles.setSelectedNodeAttributes(attributes, fullOverwrite);
+
+    return () => {
+      ogma.styles.setSelectedNodeAttributes(null);
+    };
   }, [attributes, fullOverwrite]);
   return null;
 }

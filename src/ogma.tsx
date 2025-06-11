@@ -14,14 +14,13 @@ import OgmaLib, {
   RawGraph,
   EventTypes
 } from "@linkurious/ogma";
-// import { Theme } from "@linkurious/ogma";
+import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import {
   EventHandlerProps,
   getEventNameFromProp,
   EventHandlers,
-  forEachEventHandler,
-  Theme
+  forEachEventHandler
 } from "./types";
 
 interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
@@ -162,7 +161,9 @@ export const OgmaComponent = <ND, ED>(
       ref={(containerRef) => setContainer(containerRef)}
     >
       {ogma && (
-        <OgmaContext.Provider value={ogma}>
+        <OgmaContext.Provider value={{
+          ogma: ogma,
+        }}>
           {ready && children}
         </OgmaContext.Provider>
       )}
