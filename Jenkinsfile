@@ -10,4 +10,5 @@ nodeJob {
   runNpmPublish = true
   runDependencyVersionCheck = false
   runBookeeping = true
+  githubRelease = true
 }

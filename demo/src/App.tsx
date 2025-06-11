@@ -1,10 +1,11 @@
 import OgmaLib, {
   Edge,
-  Node,
+  Node as OgmaNode,
   Point,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
-  NodeAttributesValue
+  NodeAttributesValue,
+  Theme
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback, useMemo } from "react";
@@ -14,16 +15,15 @@ import * as L from "leaflet";
 // components
 import {
   Ogma,
-  NodeStyleRule,
-  EdgeStyleRule,
+  NodeStyle,
+  EdgeStyle,
   StyleClass,
   Tooltip,
   NodeGrouping,
   Popup,
   Geo,
   NodeGroupingProps,
-  useEvent,
-  Theme
+  useEvent
 } from "../../src";
 
 // custom components:
@@ -49,7 +49,7 @@ export default function App() {
 
   // UI states
   const [popupOpen, setPopupOpen] = useState(false);
-  const [clickedNode, setClickedNode] = useState<Node>();
+  const [clickedNode, setClickedNode] = useState<OgmaNode>();
 
   // ogma instance and grouping references
   const ogmaInstanceRef = createRef<OgmaLib>();
@@ -80,7 +80,7 @@ export default function App() {
     x: 0,
     y: 0
   });
-  const [target, setTarget] = useState<Node | Edge | null>();
+  const [target, setTarget] = useState<OgmaNode | Edge | null>();
 
   const requestSetTooltipPosition = useCallback((pos: Point) => {
     requestAnimationFrame(() => setTooltipPosition(pos));
@@ -172,20 +172,41 @@ export default function App() {
       >
         {/* Styling */}
 
-        <NodeStyleRule
+        <NodeStyle
           attributes={{
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
             text: {
-              content: (node) => node?.getData("properties.name"),
+              content: (node: OgmaNode) => node?.getData("properties.name"),
               font: "IBM Plex Sans",
               minVisibleSize: 3
             }
           }}
         />
-        <EdgeStyleRule attributes={{ width: edgeWidth }} />
+
+        <NodeStyle.Hovered
+          attributes={{
+            radius: (n) => (n?.getData("multiplier") || 1) * nodeSize * 1.5,
+            color: "#FF0000",
+            halo: {
+              width: 2,
+              color: "#FF0000"
+            }
+          }}
+          fullOverwrite={false}
+        />
+
+        <EdgeStyle attributes={{ width: edgeWidth }} />
         {useClass && (
           <StyleClass name="class" nodeAttributes={styleClassNodeAttributes} />
         )}
+
+        <EdgeStyle.Hovered
+          attributes={{
+            width: (e) => e.getData("weight") * edgeWidth,
+            color: "#FF0000"
+          }}
+          fullOverwrite={false}
+        />
 
         {/* Layout */}
         <LayoutService />

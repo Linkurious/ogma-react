@@ -1,20 +1,6 @@
 import {
-  EdgeAttributes,
-  EventTypes,
-  HoverEdgeOptions,
-  HoverNodeOptions,
-  NodeAttributes
+  EventTypes
 } from "@linkurious/ogma";
-
-// temporary while the type import gets added
-export interface Theme<NodeData = unknown, EdgeData = unknown> {
-  nodeAttributes?: NodeAttributes;
-  edgeAttributes?: EdgeAttributes;
-  selectedNodeAttributes?: NodeAttributes;
-  selectedEdgeAttributes?: EdgeAttributes;
-  hoveredNodeAttributes?: HoverNodeOptions<NodeData, EdgeData>;
-  hoveredEdgeAttributes?: HoverEdgeOptions<EdgeData, NodeData>;
-}
 
 export type EventNames<ND, ED> = keyof EventTypes<ND, ED>;
 
