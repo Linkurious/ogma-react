@@ -14,14 +14,13 @@ import OgmaLib, {
   RawGraph,
   EventTypes
 } from "@linkurious/ogma";
-// import { Theme } from "@linkurious/ogma";
+import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import {
   EventHandlerProps,
   getEventNameFromProp,
   EventHandlers,
-  forEachEventHandler,
-  Theme
+  forEachEventHandler
 } from "./types";
 
 interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
@@ -30,6 +29,7 @@ interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
   graph?: RawGraph<ND, ED>;
   children?: ReactNode;
   theme?: Theme<ND, ED>;
+  className?: string;
 }
 
 const defaultOptions = {};
@@ -41,7 +41,7 @@ export const OgmaComponent = <ND, ED>(
   props: OgmaProps<ND, ED>,
   ref?: Ref<OgmaLib<ND, ED>>
 ) => {
-  const { options = defaultOptions, children, graph, onReady, theme } = props;
+  const { options = defaultOptions, children, graph, onReady, theme, className = "ogma-container" } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
@@ -157,11 +157,13 @@ export const OgmaComponent = <ND, ED>(
 
   return (
     <div
-      style={{ width: "100%", height: "100%" }}
+      className={className}
       ref={(containerRef) => setContainer(containerRef)}
     >
       {ogma && (
-        <OgmaContext.Provider value={ogma}>
+        <OgmaContext.Provider value={{
+          ogma: ogma,
+        }}>
           {ready && children}
         </OgmaContext.Provider>
       )}

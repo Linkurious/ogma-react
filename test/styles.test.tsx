@@ -1,8 +1,8 @@
 import React, { act, createRef } from "react";
 import { Root, createRoot } from "react-dom/client";
 import { userEvent, waitFor } from "./utils";
-import OgmaLib from "@linkurious/ogma";
-import { Ogma, NodeStyleRule, EdgeStyleRule } from "../src";
+import OgmaLib, { Edge } from "@linkurious/ogma";
+import { Ogma, NodeStyle, EdgeStyle } from "../src";
 import graph from "./fixtures/simple_graph.json";
 
 describe("styles", async () => {
@@ -18,7 +18,7 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph}>
-          <NodeStyleRule attributes={{ color: "red" }} />
+          <NodeStyle attributes={{ color: "red" }} />
         </Ogma>
       )
     );
@@ -29,7 +29,7 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <NodeStyleRule attributes={{ color: "red" }} />
+          <NodeStyle attributes={{ color: "red" }} />
         </Ogma>
       )
     );
@@ -48,7 +48,7 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <NodeStyleRule
+          <NodeStyle
             attributes={{ color: "red" }}
             selector={(node) => Number(node.getId()) < 2}
           />
@@ -65,6 +65,65 @@ describe("styles", async () => {
     ]);
   });
 
+  it("Sets the attributes for selected nodes correctly", async () => {
+    const ref = createRef<OgmaLib>();
+    act(() =>
+      div.render(
+        <Ogma graph={graph} ref={ref}>
+          <NodeStyle.Selected
+            attributes={{ color: "red" }}
+            fullOverwrite
+          />
+          <NodeStyle
+            attributes={{ color: "grey" }}
+          />
+        </Ogma>
+      )
+    );
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    const ogma = ref.current!;
+    const nodes = ogma.getNodes();
+    nodes.setSelected(true);
+    expect(nodes.getAttribute("color")).toStrictEqual([
+      "red",
+      "red",
+      "red",
+    ]);
+    nodes.setSelected(false);
+    await ogma.view.afterNextFrame();
+    expect(nodes.getAttribute("color")).toStrictEqual([
+      "grey",
+      "grey",
+      "grey",
+    ]);
+  });
+
+  it("Sets the attributes for hovered nodes correctly", async () => {
+    const ref = createRef<OgmaLib>();
+    act(() =>
+      div.render(
+        <Ogma graph={graph} ref={ref}>
+          <NodeStyle.Hovered
+            attributes={{ color: "red" }}
+          />
+          <NodeStyle
+            attributes={{ color: "grey" }}
+          />
+        </Ogma>
+      )
+    );
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    const ogma = ref.current!;
+    const node = ogma.getNodes().get(0);
+    await ogma.mouse.move(ogma.view.graphToScreenCoordinates(node.getPosition()));
+    await ogma.view.afterNextFrame();
+    await ogma.view.afterNextFrame();
+    expect(node.getAttribute("color")).toStrictEqual("red");
+    await ogma.mouse.move({x: -1000, y: -1000});
+    await ogma.view.afterNextFrame();
+    expect(node.getAttribute("color")).toStrictEqual("grey");
+  });
+
   it("NodeStyle cleans up after being removed", async () => {
     const ref = createRef<OgmaLib>();
     const Test = () => {
@@ -72,7 +131,7 @@ describe("styles", async () => {
       return (
         <Ogma graph={graph} ref={ref}>
           <button onClick={() => setStyle(!style)}>Click</button>
-          {style && <NodeStyleRule attributes={{ color: "red" }} />}
+          {style && <NodeStyle attributes={{ color: "red" }} />}
         </Ogma>
       );
     };
@@ -87,7 +146,7 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph}>
-          <EdgeStyleRule attributes={{ color: "red" }} />
+          <EdgeStyle attributes={{ color: "red" }} />
         </Ogma>
       )
     );
@@ -98,7 +157,7 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <EdgeStyleRule attributes={{ color: "red" }} />
+          <EdgeStyle attributes={{ color: "red" }} />
         </Ogma>
       )
     );
@@ -116,7 +175,7 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <EdgeStyleRule
+          <EdgeStyle
             attributes={{ color: "green" }}
             selector={(edge) => Number(edge.getId()) > 0}
           />
@@ -131,6 +190,70 @@ describe("styles", async () => {
     ]);
   });
 
+  it("Sets the attributes for selected edges correctly", async () => {
+    const ref = createRef<OgmaLib>();
+    act(() =>
+      div.render(
+        <Ogma graph={graph} ref={ref}>
+          <EdgeStyle.Selected
+            attributes={{ color: "red" }}
+            fullOverwrite
+          />
+          <EdgeStyle
+            attributes={{ color: "grey" }}
+          />
+        </Ogma>
+      )
+    );
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    const ogma = ref.current!;
+    const edges = ogma.getEdges();
+    edges.setSelected(true);
+    expect(edges.getAttribute("color")).toStrictEqual([
+      "red",
+      "red"
+    ]);
+    edges.setSelected(false);
+    await ogma.view.afterNextFrame();
+    expect(edges.getAttribute("color")).toStrictEqual([
+      "grey",
+      "grey"
+    ]);
+  });
+
+  it("Sets the attributes for hovered edges correctly", async () => {
+    const ref = createRef<OgmaLib>();
+    act(() =>
+      div.render(
+        <Ogma graph={graph} ref={ref}>
+          <EdgeStyle.Hovered
+            attributes={{ color: "red" }}
+          />
+          <EdgeStyle
+            attributes={{ color: "grey" }}
+          />
+        </Ogma>
+      )
+    );
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    const ogma = ref.current!;
+    let edge = ogma.getEdges().get(0);
+    const src = edge.getSource();
+    const dest = edge.getTarget();
+    const midpoint = {
+      x: (src.getPosition().x + dest.getPosition().x) / 2,
+      y: (src.getPosition().y + dest.getPosition().y) / 2,
+    };
+    await ogma.mouse.move(ogma.view.graphToScreenCoordinates(midpoint));
+    await ogma.view.afterNextFrame();
+    await ogma.view.afterNextFrame();
+    edge = ogma.getHoveredElement() as Edge;
+    expect(edge.getAttribute("color")).toStrictEqual("red");
+    await ogma.mouse.move({x: -1000, y: -1000});
+    await ogma.view.afterNextFrame();
+    expect(edge.getAttribute("color")).toStrictEqual("grey");
+  });
+
   it("EdgeStyle cleans up after being removed", async () => {
     const ref = createRef<OgmaLib>();
     const Test = () => {
@@ -138,7 +261,7 @@ describe("styles", async () => {
       return (
         <Ogma graph={graph} ref={ref}>
           <button onClick={() => setStyle(!style)}>Click</button>
-          {style && <EdgeStyleRule attributes={{ color: "red" }} />}
+          {style && <EdgeStyle attributes={{ color: "red" }} />}
         </Ogma>
       );
     };

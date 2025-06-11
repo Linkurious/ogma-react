@@ -1,9 +1,8 @@
 import React from "react";
 import { render, waitFor } from "./utils";
 
-import OgmaLib, { RawGraph } from "@linkurious/ogma";
+import OgmaLib, { RawGraph, Theme } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../src";
-import { Theme } from "../src/types";
 import { afternoonNap, morningBreeze } from '@linkurious/ogma-styles';
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
