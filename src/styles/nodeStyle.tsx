@@ -28,31 +28,34 @@ interface SelectedNodeProps<ND, ED> {
   fullOverwrite?: boolean;
 }
 
-const NodeStyleComponent = forwardRef(<ND, ED>(
-  { selector, attributes }: NodeRuleProps<ND, ED>,
-  ref?: Ref<StyleRule<ND, ED>>
-) => {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [rule, setRule] = useState<StyleRule<ND, ED>>();
+const NodeStyleComponent = forwardRef(
+  <ND, ED>(
+    { selector, attributes }: NodeRuleProps<ND, ED>,
+    ref?: Ref<StyleRule<ND, ED>>
+  ) => {
+    const ogma = useOgma() as OgmaLib<ND, ED>;
+    const [rule, setRule] = useState<StyleRule<ND, ED>>();
 
-  useImperativeHandle(ref, () => rule as StyleRule<ND, ED>, [rule]);
+    useImperativeHandle(ref, () => rule as StyleRule<ND, ED>, [rule]);
 
-  useEffect(() => {
-    const nodeRule = selector
-      ? ogma.styles.addNodeRule(selector, attributes)
-      : ogma.styles.addNodeRule(attributes);
-    setRule(nodeRule);
-    return () => {
-      nodeRule.destroy();
-      setRule(undefined);
-    };
-  }, [selector, attributes]);
-  return null;
-});
+    useEffect(() => {
+      const nodeRule = selector
+        ? ogma.styles.addNodeRule(selector, attributes)
+        : ogma.styles.addNodeRule(attributes);
+      setRule(nodeRule);
+      return () => {
+        nodeRule.destroy();
+        setRule(undefined);
+      };
+    }, [selector, attributes]);
+    return null;
+  }
+);
 
-const Hovered = <ND, ED>(
-  { attributes, fullOverwrite }: HoveredNodeProps<ND, ED>,
-) => {
+const Hovered = <ND, ED>({
+  attributes,
+  fullOverwrite
+}: HoveredNodeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
   useEffect(() => {
@@ -65,9 +68,10 @@ const Hovered = <ND, ED>(
   return null;
 };
 
-const Selected = <ND, ED>(
-  { attributes, fullOverwrite }: SelectedNodeProps<ND, ED>,
-) => {
+const Selected = <ND, ED>({
+  attributes,
+  fullOverwrite
+}: SelectedNodeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
   useEffect(() => {
@@ -78,12 +82,16 @@ const Selected = <ND, ED>(
     };
   }, [attributes, fullOverwrite]);
   return null;
-}
+};
 
 /**
  * This component wraps around Ogma [`NodeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addNodeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the nodes.
  */
-export const NodeStyle = Object.assign(
-  NodeStyleComponent, { Hovered, Selected }
-);
+export const NodeStyle = Object.assign(NodeStyleComponent, {
+  Hovered,
+  Selected
+});
+
+// backward compatibility
+export { NodeStyle as NodeStyleRule };

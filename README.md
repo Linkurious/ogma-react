@@ -47,19 +47,25 @@ yarn add @linkurious/ogma-react
 You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
 
 ```tsx
-import { Ogma, NodeStyle, Popup } from '@linkurious/ogma-react';
-import { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
+import { Ogma, NodeStyle, Popup, useEvent } from '@linkurious/ogma-react';
+import OgmaLib, { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
 ...
 const [clickedNode, setClickedNode] = useState<OgmaNode|null>(null);
-const onMouseMove = ({ target }: MouseButtonEvent) => {
+const ogmaRef = useRef<OgmaLib>();
+const onMouseMove = useEvent('mousemove', ({ target }) => {
+  if (target && target.isNode) console.log(target.getId());
+});
+
+const onClick = useEvent('click', ({ target }) => {
   setClickedNode((target && target.isNode) ? target : null);
-}
+});
 
 <Ogma
   options={...}
-  onReady={(ogma) => {
-    ogma.events.on('click', onClick);
-  }}
+  onMouseMove={onMouseMove}
+  onClick={onClick}
+  ref={ogmaRef}
+  onReady={(ogma) => console.log('ogma instance initialized')}
 >
   <NodeStyle attributes={{ color: 'red', radius: 10 }} />
   <Popup
@@ -233,7 +239,7 @@ Main visualisation component. You can use `onReady` or `ref` prop to get a refer
 | `onReady?` | `(ogma: Ogma) => void` | `null`  | Callback when the Ogma instance is ready                                                                                                                                |
 | `ref?`     | `React.Ref<Ogma>`      | `null`  | Reference to the Ogma instance                                                                                                                                          |
 | `children?` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
-| `theme?` | `Ogma.Themes`      | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles |
+| `theme?` | [`Ogma.Theme`](https://doc.linkurious.com/ogma/latest/api/types/theme.html) | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles |
 | `onEventName` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useEvent` hook to have a stable function identity and avoid reassigning the same handler at every render. |
 | `className?`     | `string`      | `ogma-container`  | className for the ogma container                                                                      |
 
@@ -245,7 +251,7 @@ Node style component.
 
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
-| `attributes` | `Ogma.NodeAttributeValue`      | `{}`    | Attributes to apply to the node              |
+| `attributes` | [`Ogma.NodeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/nodeattributesvalue.html) | `{}`    | Attributes to apply to the node              |
 | `selector?`  | `(node: Ogma.Node) => boolean` | `null`  | Selector to apply the attributes to the node |
 | `ref?`       | `React.Ref<Ogma.StyleRule>`    | `null`  | Reference to the style rule                  |
 
@@ -265,7 +271,7 @@ Node style component.
 
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
-| `attributes` | `Ogma.HoverNodeOptions`      | `{}`    | Attributes to apply to the hovered node              |
+| `attributes` | [`Ogma.HoverNodeOptions`](https://doc.linkurious.com/ogma/latest/api/types/hovernodeoptions.html)      | `{}`    | Attributes to apply to the hovered node              |
 | `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on hover will be exactly the ones supplied. |
 
 #### Example
@@ -284,7 +290,7 @@ Node style component.
 
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
-| `attributes` | `Ogma.NodeAttributeValue`      | `{}`    | Attributes to apply to the selected node              |
+| `attributes` | [`Ogma.NodeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/nodeattributesvalue.html)  | `{}`    | Attributes to apply to the selected node              |
 | `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on selection will be exactly the ones supplied. |
 
 #### Example
@@ -303,7 +309,7 @@ Edge style component.
 
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
-| `attributes` | `Ogma.EdgeAttributeValue`      | `{}`    | Attributes to apply to the edge              |
+| `attributes` | [`Ogma.EdgeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/edgeattributesvalue.html)      | `{}`    | Attributes to apply to the edge              |
 | `selector?`  | `(edge: Ogma.Edge) => boolean` | `null`  | Selector to apply the attributes to the edge |
 | `ref?`       | `React.Ref<Ogma.StyleRule>`    | `null`  | Reference to the style rule                  |
 
@@ -342,7 +348,7 @@ Edge style component.
 
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
-| `attributes` | `Ogma.EdgeAttributeValue`      | `{}`    | Attributes to apply to the selected edge              |
+| `attributes` | [`Ogma.EdgeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/edgeattributesvalue.html)      | `{}`    | Attributes to apply to the selected edge              |
 | `fullOverwrite?`  | `boolean` | `false`  | If `false`, the specified attributes will be merged with the current attributes. If `true`, the attributes applied on selection will be exactly the ones supplied. |
 
 #### Example
@@ -361,8 +367,8 @@ Wrapper to the Ogma `StyleClass` class. It allows you to apply styles to nodes a
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
 | **`name`**  | `string`                       |   | The class name to apply the styles to        |
-| `nodeAttributes` | `NodeAttributeValue` | `{}`    | Attributes to apply to the nodes or edges    |
-| `edgeAttributes` | `EdgeAttributeValue` | `{}`    | Attributes to apply to the edges             |
+| `nodeAttributes` | [`Ogma.NodeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/nodeattributesvalue.html) | `{}`    | Attributes to apply to the nodes or edges    |
+| `edgeAttributes` | [`Ogma.EdgeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/edgeattributesvalue.html) | `{}`    | Attributes to apply to the edges             |
 
 
 ### Example
