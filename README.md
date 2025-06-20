@@ -47,19 +47,25 @@ yarn add @linkurious/ogma-react
 You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
 
 ```tsx
-import { Ogma, NodeStyle, Popup } from '@linkurious/ogma-react';
-import { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
+import { Ogma, NodeStyle, Popup, useEvent } from '@linkurious/ogma-react';
+import OgmaLib, { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
 ...
 const [clickedNode, setClickedNode] = useState<OgmaNode|null>(null);
-const onMouseMove = ({ target }: MouseButtonEvent) => {
+const ogmaRef = useRef<OgmaLib>();
+const onMouseMove = useEvent('mousemove', ({ target }) => {
+  if (target && target.isNode) console.log(target.getId());
+});
+
+const onClick = useEvent('click', ({ target }) => {
   setClickedNode((target && target.isNode) ? target : null);
-}
+});
 
 <Ogma
   options={...}
-  onReady={(ogma) => {
-    ogma.events.on('click', onClick);
-  }}
+  onMouseMove={onMouseMove}
+  onClick={onClick}
+  ref={ogmaRef}
+  onReady={(ogma) => console.log('ogma instance initialized')}
 >
   <NodeStyle attributes={{ color: 'red', radius: 10 }} />
   <Popup
