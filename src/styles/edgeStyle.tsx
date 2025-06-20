@@ -28,33 +28,35 @@ interface SelectedEdgeProps<ND, ED> {
   fullOverwrite?: boolean;
 }
 
+const EdgeStyleComponent = forwardRef(
+  <ND, ED>(
+    { selector, attributes }: EdgeRuleProps<ND, ED>,
+    ref?: Ref<StyleRule<ND, ED>>
+  ) => {
+    const ogma = useOgma() as OgmaLib<ND, ED>;
+    const [rule, setRule] = useState<StyleRule<ND, ED>>();
 
-const EdgeStyleComponent = forwardRef(<ND, ED>(
-  { selector, attributes }: EdgeRuleProps<ND, ED>,
-  ref?: Ref<StyleRule<ND, ED>>
-) => {
-  const ogma = useOgma() as OgmaLib<ND, ED>;
-  const [rule, setRule] = useState<StyleRule<ND, ED>>();
+    useImperativeHandle(ref, () => rule as StyleRule<ND, ED>, [rule]);
 
-  useImperativeHandle(ref, () => rule as StyleRule<ND, ED>, [rule]);
+    useEffect(() => {
+      //if (rule) rule.destroy();
+      const edgeRule = selector
+        ? ogma.styles.addEdgeRule(selector, attributes)
+        : ogma.styles.addEdgeRule(attributes);
+      setRule(edgeRule);
+      return () => {
+        edgeRule.destroy();
+        setRule(undefined);
+      };
+    }, [selector, attributes]);
+    return null;
+  }
+);
 
-  useEffect(() => {
-    //if (rule) rule.destroy();
-    const edgeRule = selector
-      ? ogma.styles.addEdgeRule(selector, attributes)
-      : ogma.styles.addEdgeRule(attributes);
-    setRule(edgeRule);
-    return () => {
-      edgeRule.destroy();
-      setRule(undefined);
-    };
-  }, [selector, attributes]);
-  return null;
-});
-
-const Hovered = <ND, ED>(
-  { attributes, fullOverwrite }: HoveredEdgeProps<ND, ED>,
-) => {
+const Hovered = <ND, ED>({
+  attributes,
+  fullOverwrite
+}: HoveredEdgeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
   useEffect(() => {
@@ -62,14 +64,15 @@ const Hovered = <ND, ED>(
 
     return () => {
       ogma.styles.setHoveredEdgeAttributes(null);
-    }
+    };
   }, [attributes, fullOverwrite]);
   return null;
-}
+};
 
-const Selected = <ND, ED>(
-  { attributes, fullOverwrite }: SelectedEdgeProps<ND, ED>,
-) => {
+const Selected = <ND, ED>({
+  attributes,
+  fullOverwrite
+}: SelectedEdgeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
   useEffect(() => {
@@ -86,6 +89,10 @@ const Selected = <ND, ED>(
  * This component wraps around Ogma [`EdgeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addEdgeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the edges.
  */
-export const EdgeStyle = Object.assign(
-  EdgeStyleComponent, { Hovered, Selected }
-);
+export const EdgeStyle = Object.assign(EdgeStyleComponent, {
+  Hovered,
+  Selected
+});
+
+// backward compatibility
+export { EdgeStyle as EdgeStyleRule };
