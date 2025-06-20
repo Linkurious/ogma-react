@@ -41,7 +41,14 @@ export const OgmaComponent = <ND, ED>(
   props: OgmaProps<ND, ED>,
   ref?: Ref<OgmaLib<ND, ED>>
 ) => {
-  const { options = defaultOptions, children, graph, onReady, theme, className = "ogma-container" } = props;
+  const {
+    options = defaultOptions,
+    children,
+    graph,
+    onReady,
+    theme,
+    className = "ogma-container"
+  } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const [ready, setReady] = useState(false);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
@@ -157,13 +164,16 @@ export const OgmaComponent = <ND, ED>(
 
   return (
     <div
+      style={{ width: "100%", height: "100%" }}
       className={className}
       ref={(containerRef) => setContainer(containerRef)}
     >
       {ogma && (
-        <OgmaContext.Provider value={{
-          ogma: ogma,
-        }}>
+        <OgmaContext.Provider
+          value={{
+            ogma: ogma
+          }}
+        >
           {ready && children}
         </OgmaContext.Provider>
       )}
