@@ -44,7 +44,7 @@ function EdgeFilterComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled]);
 
   useEffect(() => {
     transformation?.setOptions(props);
