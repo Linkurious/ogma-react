@@ -14,7 +14,7 @@ import { toggle, useTransformationCallbacks } from "./utils";
 import { TransformationProps } from "./types";
 
 export interface NodeGroupingProps<ND, ED>
-  extends NodeGroupingOptions<ND, ED>,
+  extends Exclude<NodeGroupingOptions<ND, ED>, 'enabled'>,
     TransformationProps<ND, ED, NodeGroupingOptions<ND, ED>> {}
 
 function NodeGroupingComponent<ND, ED>(

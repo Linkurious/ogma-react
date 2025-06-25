@@ -14,7 +14,7 @@ import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NeighborMergingProps<ND, ED>
-  extends NeighborMergingOptions<ND, ED>,
+  extends Exclude<NeighborMergingOptions<ND, ED>, 'enabled'>,
     TransformationProps<ND, ED, NeighborMergingOptions<ND, ED>> {}
 
 function NeighborMergingComponent<ND = any, ED = any>(

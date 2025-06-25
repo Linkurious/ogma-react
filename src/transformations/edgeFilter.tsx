@@ -14,7 +14,7 @@ import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface EdgeFilterProps<ND, ED>
-  extends EdgeFilterOptions<ND, ED>,
+  extends Exclude<EdgeFilterOptions<ND, ED>, 'enabled'>,
     TransformationProps<ND, ED, EdgeFilterOptions<ND, ED>> {}
 
 function EdgeFilterComponent<ND = any, ED = any>(
@@ -44,7 +44,7 @@ function EdgeFilterComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled]);
 
   useEffect(() => {
     transformation?.setOptions(props);

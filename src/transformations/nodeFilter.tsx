@@ -14,7 +14,7 @@ import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeFilterProps<ED, ND>
-  extends NodeFilterOptions<ED, ND>,
+  extends Exclude<NodeFilterOptions<ED, ND>, 'enabled'>,
     TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
 
 function NodeFilterComponent<ND = any, ED = any>(
@@ -45,7 +45,7 @@ function NodeFilterComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled]);
 
   useEffect(() => {
     transformation?.setOptions(props);

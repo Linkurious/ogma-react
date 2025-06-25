@@ -14,7 +14,7 @@ import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NodeCollapsingProps<ND, ED>
-  extends NodeCollapsingOptions<ND, ED>,
+  extends Exclude<NodeCollapsingOptions<ND, ED>, 'enabled'>,
     TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {}
 
 export function NodeCollapsingComponent<ND = any, ED = any>(

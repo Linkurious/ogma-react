@@ -14,7 +14,7 @@ import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface EdgeGroupingProps<ED, ND>
-  extends EdgeGroupingOptions<ED, ND>,
+  extends Exclude<EdgeGroupingOptions<ED, ND>, 'enabled'>,
     TransformationProps<ED, ND, EdgeGroupingOptions<ED, ND>> {}
 
 function EdgeGroupingComponent<ND = any, ED = any>(
