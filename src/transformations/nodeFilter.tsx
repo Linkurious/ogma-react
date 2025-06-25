@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface NodeFilterProps<ED, ND>
-  extends Exclude<NodeFilterOptions<ED, ND>, 'enabled'>,
+interface NodeFilterPropsC<ED, ND>
+  extends NodeFilterOptions<ED, ND>,
     TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
+
+export type NodeFilterProps<ND, ED> = Omit<NodeFilterPropsC<ND, ED>, "enabled">;
 
 function NodeFilterComponent<ND = any, ED = any>(
   props: NodeFilterProps<ND, ED>,

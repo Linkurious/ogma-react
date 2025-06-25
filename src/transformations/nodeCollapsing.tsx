@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface NodeCollapsingProps<ND, ED>
-  extends Exclude<NodeCollapsingOptions<ND, ED>, 'enabled'>,
-    TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {}
+interface NodeCollapsingPropsC<ND, ED>
+  extends NodeCollapsingOptions<ND, ED>,
+    TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {};
+
+export type NodeCollapsingProps<ND, ED> = Omit<NodeCollapsingPropsC<ND, ED>, "enabled">;
 
 export function NodeCollapsingComponent<ND = any, ED = any>(
   props: NodeCollapsingProps<ND, ED>,
@@ -45,7 +47,7 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled]);
+  }, [props.disabled, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);
