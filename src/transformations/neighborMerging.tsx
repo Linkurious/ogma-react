@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface NeighborMergingProps<ND, ED>
-  extends Exclude<NeighborMergingOptions<ND, ED>, 'enabled'>,
+interface NeighborMergingPropsC<ND, ED>
+  extends NeighborMergingOptions<ND, ED>,
     TransformationProps<ND, ED, NeighborMergingOptions<ND, ED>> {}
+
+export type NeighborMergingProps<ND, ED> = Omit<NeighborMergingPropsC<ND, ED>, "enabled">;
 
 function NeighborMergingComponent<ND = any, ED = any>(
   props: NeighborMergingProps<ND, ED>,
@@ -45,7 +47,7 @@ function NeighborMergingComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled]);
+  }, [props.disabled, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);
