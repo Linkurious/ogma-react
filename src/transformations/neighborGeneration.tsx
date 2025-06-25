@@ -14,7 +14,7 @@ import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
 export interface NeighborGenerationProps<ND, ED>
-  extends NeighborGenerationOptions<ND, ED>,
+  extends Exclude<NeighborGenerationOptions<ND, ED>, 'enabled'>,
     TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {}
 
 function NeighborGenerationComponent<ND = any, ED = any>(
