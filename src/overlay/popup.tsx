@@ -21,14 +21,14 @@ import {
   getCloseButton
 } from "./utils";
 import { noop } from "../utils";
-import { Placement } from "./types";
+import { Placement, PositionGetter } from "./types";
 import { createPortal } from "react-dom";
 
 interface PopupProps {
   /** Overlay content */
   content?: string | ReactElement;
   /** Overlay position */
-  position: Point | ((ogma: OgmaLib) => Point | null);
+  position: Point | PositionGetter;
   /** Overlay size */
   size?: Size;
   /** Open state, whether or not the overlay should be shown  */
