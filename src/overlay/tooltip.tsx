@@ -82,7 +82,6 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   // Set up event listeners for the tooltip layer when it changes
   useEffect(() => {
     if (! layer) return;
-    console.log("useEffect");
 
     let onEvent: (evt?: any) => void = () => null;
     let onUnevent: (evt?: any) => void = () => null;
@@ -125,6 +124,9 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     else {
       onEvent = (evt) => {
         // Check if the event name corresponds to the actual event
+        if (eventName.endsWith("RightClick") && evt.button === "left") {
+          return;
+        }
         if (eventName.startsWith("background")) {
           if (! evt.target) {
             const pos = ogma.view.screenToGraphCoordinates({x: evt.x, y: evt.y});
@@ -151,15 +153,23 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
         }
       };
       onUnevent = (evt) => {
-        // Hide the tooltip when mouse leaves the target
-        if (eventName.startsWith("node") && ! evt.target?.isNode) {
+        // Hide the tooltip when mouse clicks somewhere that's not the target
+        if (eventName.endsWith("RightClick") && evt.button === "left") {
           layer.hide();
+          return;
+        }
+        if (eventName.startsWith("node")) {
+          if (! evt.target?.isNode) {
+            layer.hide();
+          }
         } else if (eventName.startsWith("edge")) {
           if (! evt.target && evt.target.isNode) {
             layer.hide();
           }
         } else if (eventName.startsWith("background")) {
-          if (evt.target) layer.hide();
+          if (evt.target) {
+            layer.hide();
+          }
         }
       }
       ogma.events.on("click", onUnevent);
@@ -178,22 +188,22 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     }
   }, [layer]);
 
-  // useEffect(() => {
-  //   if (! layer) return;
+  useEffect(() => {
+    if (! layer) return;
 
-  //   if (position) {
-  //     // Update the position of the layer if it exists
-  //     layer.setPosition(position);
-  //   }
-  //   if (placement || popupClass) {
-  //     // Update the class of the layer based on the placement
-  //     layer.element.className = getContainerClass(popupClass, placement);
-  //   }
-  //   if (size) {
-  //     // Update the size of the layer if it exists
-  //     layer.setSize(size);
-  //   }
-  // }, [position, placement, size, popupClass]);
+    if (position) {
+      // Update the position of the layer if it exists
+      layer.setPosition(position);
+    }
+    if (placement || popupClass) {
+      // Update the class of the layer based on the placement
+      layer.element.className = getContainerClass(popupClass, placement);
+    }
+    if (size) {
+      // Update the size of the layer if it exists
+      layer.setSize(size);
+    }
+  }, [position, placement, size, popupClass]);
 
   // Render children through portal if they exist, otherwise render nothing
   if (!layer ) return null;

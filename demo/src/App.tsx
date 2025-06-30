@@ -1,7 +1,5 @@
 import OgmaLib, {
-  Edge,
   Node as OgmaNode,
-  Point,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
   NodeAttributesValue,
@@ -208,16 +206,19 @@ export default function App() {
           )}
         </Popup>
         <Tooltip
-          eventName="nodeHover"
+          eventName="nodeRightClick"
+          size={{ width: 200, height: 200 }}
           placement="top"
-          children={(node: OgmaNode) => {
-            return (
+        >
+          {
+            clickedNode ? (
               <div style={{ zIndex: 10000, backgroundColor: "pink" }}>
-                {node.getId()}
+                {clickedNode!.getId()}
               </div>
-            )
-          }}
-        />
+            ) :
+            null
+          }
+        </Tooltip>
         <GraphOutlines visible={outlines} />
 
         {/* Geo mode */}
