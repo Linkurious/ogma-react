@@ -12,16 +12,16 @@ export type Content =
 
 export type TooltipEventFunctions = {
   "backgroundClick": (target: Point) => ReactNode,
-  "backgroundDoubleClick": (target: Point) => ReactNode,
-  "backgroundRightClick": (target: Point) => ReactNode,
+  "backgroundDoubleclick": (target: Point) => ReactNode,
+  "backgroundRightclick": (target: Point) => ReactNode,
   "edgeClick": (target: Edge) => ReactNode,
-  "edgeDoubleClick": (target: Edge) => ReactNode,
+  "edgeDoubleclick": (target: Edge) => ReactNode,
   "edgeHover": (target: Edge) => ReactNode,
-  "edgeRightClick": (target: Edge) => ReactNode,
+  "edgeRightclick": (target: Edge) => ReactNode,
   "nodeClick": (target: Node) => ReactNode,
-  "nodeDoubleClick": (target: Node) => ReactNode,
+  "nodeDoubleclick": (target: Node) => ReactNode,
   "nodeHover": (target: Node) => ReactNode,
-  "nodeRightClick": (target: Node) => ReactNode
+  "nodeRightclick": (target: Node) => ReactNode
 }
 
 export type TooltipPosition = "top"|"bottom"|"left"|"right"|"cssDefined"

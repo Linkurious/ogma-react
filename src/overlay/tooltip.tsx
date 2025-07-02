@@ -32,13 +32,12 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
   size?: Size;
   /** Overlay placement relative to the position */
   placement?: Placement;
-  /** Overlay container className */
-  popupClass?: string;
+  /* The body's class */
+  bodyClass?: string;
 
   children?: ReactNode | TooltipEventFunctions[K];
 }
 
-const POPUP_CLASS = "ogma-popup";
 const offScreenPos: Point = { x: -9999, y: -9999 };
 
 const TooltipComponent = <K extends keyof TooltipEventFunctions>(
@@ -47,7 +46,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     position,
     children,
     placement = "top",
-    popupClass = POPUP_CLASS,
+    bodyClass = "",
     size,
   }: TooltipProps<K>,
   ref?: Ref<OverlayLayer>
@@ -65,13 +64,22 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     layer?.show();
   }
 
+  function hideTooltip() {
+    layer?.hide();
+    setTarget(undefined);
+  }
+
   // Initialize the tooltip layer when the component mounts
   useEffect(() => {
 
     // Create initial empty content container
     const currentLayer = ogma.layers.addOverlay({
       position: position ? position : offScreenPos,
-      element: `<div class="${getContainerClass(popupClass, placement)}"></div>`,
+      element: `
+      <div class="${getContainerClass("ogma-popup", placement)}">
+        <div class="ogma-popup--body ${bodyClass}">
+        </div>
+      </div>`,
       size: size || { width: "auto", height: "auto" },
       scaled: false
     });
@@ -83,8 +91,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   useEffect(() => {
     if (! layer) return;
 
-    let onEvent: (evt?: any) => void = () => null;
-    let onUnevent: (evt?: any) => void = () => null;
+    let onEvent: (evt: any) => void = () => null;
+    let onUnevent: (evt: any) => void = () => null;
 
     const event = getEventNameFromTooltipEvent(eventName);
     if (event === "mouseover") {
@@ -96,8 +104,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
             showTooltip(node.getPosition());
           }
         } else if (eventName.startsWith("edge")) {
-          if (evt.target && !evt.target.isNode) {
-            // Show the tooltip in the middle of the extrimities
+          if (evt.target && ! evt.target.isNode) {
+            // Show the tooltip in the middle of the extremities
             const nodes = evt.target.getExtremities();
             const middle = {
               x: (nodes.get(0).getPosition().x + nodes.get(1).getPosition().x) / 2,
@@ -109,22 +117,21 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
         }
       };
       onUnevent = (evt) => {
+        // Hide the tooltip when mouse leaves the target
         if (eventName.startsWith("node") && evt.target?.isNode) {
-          // Hide the tooltip when mouse leaves the node
-          layer.hide();
+          hideTooltip();
         } else if (eventName.startsWith("edge")) {
-          if (evt.target && !evt.target.isNode) {
-            // Hide the tooltip when mouse leaves the edge
-            layer.hide();
+          if (evt.target && ! evt.target.isNode) {
+            hideTooltip();
           }
         }
       }
       ogma.events.on("mouseout", onUnevent);
-    }
-    else {
+    } else {
+      // Click events
       onEvent = (evt) => {
         // Check if the event name corresponds to the actual event
-        if (eventName.endsWith("RightClick") && evt.button === "left") {
+        if (eventName.endsWith("Rightclick") && evt.button === "left") {
           return;
         }
         if (eventName.startsWith("background")) {
@@ -140,8 +147,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
             showTooltip(node.getPosition());
           }
         } else {
-          if (! evt.target?.isNode) {
-            // Show the tooltip in the middle of the extrimities
+          if (evt.target && ! evt.target.isNode) {
+            // Show the tooltip in the middle of the extremities
             const nodes = evt.target.getExtremities();
             const middle = {
               x: (nodes.get(0).getPosition().x + nodes.get(1).getPosition().x) / 2,
@@ -153,22 +160,18 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
         }
       };
       onUnevent = (evt) => {
-        // Hide the tooltip when mouse clicks somewhere that's not the target
-        if (eventName.endsWith("RightClick") && evt.button === "left") {
-          layer.hide();
-          return;
-        }
+        // Hide the tooltip when a click is somewhere that's not the target
         if (eventName.startsWith("node")) {
           if (! evt.target?.isNode) {
-            layer.hide();
+            hideTooltip();
           }
         } else if (eventName.startsWith("edge")) {
-          if (! evt.target && evt.target.isNode) {
-            layer.hide();
+          if (! evt.target || evt.target.isNode) {
+            hideTooltip();
           }
         } else if (eventName.startsWith("background")) {
           if (evt.target) {
-            layer.hide();
+            hideTooltip();
           }
         }
       }
@@ -189,30 +192,37 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   }, [layer]);
 
   useEffect(() => {
-    if (! layer) return;
+    if (! layer || ! layer.element) return;
 
     if (position) {
       // Update the position of the layer if it exists
       layer.setPosition(position);
     }
-    if (placement || popupClass) {
+    if (placement || bodyClass) {
       // Update the class of the layer based on the placement
-      layer.element.className = getContainerClass(popupClass, placement);
+      layer.element.firstElementChild!.className = "ogma-popup--body " + bodyClass;
     }
     if (size) {
       // Update the size of the layer if it exists
       layer.setSize(size);
     }
-  }, [position, placement, size, popupClass]);
+  }, [position, placement, size, bodyClass]);
 
   // Render children through portal if they exist, otherwise render nothing
-  if (!layer ) return null;
+  if (!layer || !layer.element) return null;
 
-  if (children instanceof Function)
+  if (children instanceof Function) {
+    if (! target) return null;
     // @ts-expect-error
-    return target ? createPortal(children(target), layer.element) : null;
-  else 
-    return children ? createPortal(children, layer.element) : null;
+    const content = children(target);
+    if (content === null) {
+      layer.hide()
+      return null;
+    }; 
+    return createPortal(content, layer.element.firstElementChild!);
+  } else {
+    return children ? createPortal(children, layer.element.firstElementChild!) : null;
+  }
 
 };
 

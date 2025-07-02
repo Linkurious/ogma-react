@@ -8,7 +8,7 @@ import {
   useImperativeHandle
 } from "react";
 
-import OgmaLib, {
+import {
   Overlay as OverlayLayer,
   Size,
   Point

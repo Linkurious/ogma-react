@@ -65,7 +65,7 @@ export function getAdjustedPlacement(
 }
 
 export function getEventNameFromTooltipEvent(eventName: keyof TooltipEventFunctions): "mouseover" | "click" | "doubleclick" {
-  if (eventName.endsWith("DoubleClick")) {
+  if (eventName.endsWith("Doubleclick")) {
     return "doubleclick";
   } else if (eventName.endsWith("Click")) {
     return "click";
