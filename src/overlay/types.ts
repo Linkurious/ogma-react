@@ -25,10 +25,3 @@ export type TooltipEventFunctions = {
 }
 
 export type TooltipPosition = "top"|"bottom"|"left"|"right"|"cssDefined"
-
-export type TooltipOptions = {
-  position?: TooltipPosition;
-  autoAdjust?: boolean;
-  delay?: number;
-  className?: string;
-}

@@ -78,10 +78,6 @@ code {
   pointer-events: none;
 }
 
-.ogma-popup--body {
-  transform: translate(-50%, -100%);
-}
-
 .ogma-tooltip--content:after,
 .ogma-popup--body:after {
   content: "";
