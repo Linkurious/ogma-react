@@ -23,5 +23,3 @@ export type TooltipEventFunctions = {
   "nodeHover": (target: Node) => ReactNode,
   "nodeRightclick": (target: Node) => ReactNode
 }
-
-export type TooltipPosition = "top"|"bottom"|"left"|"right"|"cssDefined"

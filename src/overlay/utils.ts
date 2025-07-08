@@ -67,7 +67,8 @@ export function getAdjustedPlacement(
 export function getEventNameFromTooltipEvent(eventName: keyof TooltipEventFunctions): "mouseover" | "click" | "doubleclick" {
   if (eventName.endsWith("Doubleclick")) {
     return "doubleclick";
-  } else if (eventName.endsWith("Click")) {
+  // Take into account click and rightclick events
+  } else if (eventName.toLowerCase().endsWith("click")) {
     return "click";
   } else {
     return "mouseover";

@@ -206,7 +206,7 @@ export default function App() {
           )}
         </Popup>
         <Tooltip
-          eventName="edgeClick"
+          eventName="edgeRightclick"
           size={{ width: 200, height: 200 }}
           placement="bottom"
         >
