@@ -220,13 +220,15 @@ describe("Tooltip", () => {
   });
 
   it("should support static positioning", async () => {
+    const position = { x: 100, y: 100 };
+    const ogmaRef = createRef<OgmaLib>();
     render(
-      <Ogma>
+      <Ogma ref={ogmaRef}>
         <Tooltip
           ref={ref}
           eventName="backgroundClick"
-          position={{ x: 100, y: 100 }}
-          placement="bottom"
+          position={position}
+          placement="top"
         >
           Static tooltip content
         </Tooltip>,
@@ -235,21 +237,38 @@ describe("Tooltip", () => {
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
-    // TODO : check the position of the tooltip
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
+    const ogma = ogmaRef.current!;
+    await act(
+      async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
+        );
+        await ogma.view.afterNextFrame();
+      }
+    );
+    const rect = ref.current?.element.getBoundingClientRect()!;
+
+    await act(
+      async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
+        );
+        await ogma.view.afterNextFrame();
+      }
+    );
+    const rect2 = ref.current?.element.getBoundingClientRect()!;
+    expect(rect).toEqual(rect2);
   });
 
   it("should support static positioning prop changes", async () => {
+    const position = { x: 100, y: 100 };
+    const ogmaRef = createRef<OgmaLib>();
     const { rerender } = render(
-      <Ogma>
+      <Ogma ref={ogmaRef}>
         <Tooltip
           ref={ref}
           eventName="backgroundClick"
-          position={{ x: 100, y: 100 }}
+          position={position}
           placement="bottom"
         >
           Static tooltip content
@@ -259,19 +278,36 @@ describe("Tooltip", () => {
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
-    // TODO : check the position of the tooltip
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
+    const ogma = ogmaRef.current!;
 
+    await act(
+      async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
+        );
+        await ogma.view.afterNextFrame();
+      }
+    );
+    const rect = ref.current?.element.getBoundingClientRect()!;
+
+    await act(
+      async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
+        );
+        await ogma.view.afterNextFrame();
+      }
+    );
+    const rect2 = ref.current?.element.getBoundingClientRect()!;
+    expect(rect).toEqual(rect2);
+
+    const newPosition = { x: 200, y: 200 };
     rerender(
-      <Ogma>
+      <Ogma ref={ogmaRef}>
         <Tooltip
           ref={ref}
           eventName="backgroundClick"
-          position={{ x: 200, y: 200 }}
+          position={newPosition}
           placement="bottom"
         >
           Static tooltip content
@@ -280,12 +316,26 @@ describe("Tooltip", () => {
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
-    // TODO : check the position of the tooltip
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
+    await act(
+      async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
+        );
+        await ogma.view.afterNextFrame();
+      }
+    );
+    const newRect = ref.current?.element.getBoundingClientRect()!;
+    expect(newRect).not.toEqual(newPosition);
+    await act(
+      async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
+        );
+        await ogma.view.afterNextFrame();
+      }
+    );
+    const newRect2 = ref.current?.element.getBoundingClientRect()!;
+    expect(newRect).toEqual(newRect2);
   });
 
   it("should support sizing", () => {
