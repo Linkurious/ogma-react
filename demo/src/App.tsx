@@ -3,8 +3,7 @@ import OgmaLib, {
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
   NodeAttributesValue,
-  Theme,
-  Edge
+  Theme
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback, useMemo } from "react";
@@ -207,11 +206,11 @@ export default function App() {
           )}
         </Popup>
         <Tooltip
-          eventName="edgeHover"
+          eventName="edgeClick"
           size={{ width: 200, height: 200 }}
           placement="bottom"
         >
-          {(edge: Edge) => {
+          {(edge) => {
             if (!ogmaInstanceRef.current) return null;
 
             return (
@@ -219,7 +218,7 @@ export default function App() {
                 {edge.getId()}
               </div>
             )
-          }}
+          }} 
         </Tooltip>
         <GraphOutlines visible={outlines} />
 

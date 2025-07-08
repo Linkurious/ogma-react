@@ -6,7 +6,6 @@ import { act, createRef } from "react";
 import graph from "../fixtures/simple_graph.json";
 
 describe("Tooltip", () => {
-
   let div: HTMLDivElement;
   let ref: React.RefObject<Overlay | null>;
   beforeEach(() => {
@@ -15,7 +14,6 @@ describe("Tooltip", () => {
   });
 
   it("should support ref", () => {
-
     render(
       <Ogma>
         <Tooltip
@@ -33,7 +31,6 @@ describe("Tooltip", () => {
   });
 
   it("should accept children inline", () => {
-
     const text = "Custom tooltip text";
 
     render(
@@ -54,11 +51,9 @@ describe("Tooltip", () => {
     expect(
       ref.current?.element.querySelector(".custom-child-div")!.textContent
     ).toBe(text);
-    
   });
 
   it("should accept children as a function", async () => {
-    
     const ogmaRef = createRef<OgmaLib>();
 
     render(
@@ -85,11 +80,9 @@ describe("Tooltip", () => {
     expect(
       ref.current?.element.querySelector(".custom-child-div")
     ).toBeInstanceOf(HTMLDivElement);
-    
   });
 
   it("should show the tooltip on the correct event", async () => {
-
     const ref1 = createRef<Overlay>();
     const ref2 = createRef<Overlay>();
     const ref3 = createRef<Overlay>();
@@ -188,11 +181,9 @@ describe("Tooltip", () => {
 
       expect(ref.current?.isHidden()).toBe(true);
     }
-    
   });
 
   it("should render the tooltip dynamically based on the event target", async () => {
-    
     const ogmaRef = createRef<OgmaLib>();
 
     render(
@@ -226,11 +217,9 @@ describe("Tooltip", () => {
         ref.current?.element.querySelector(".custom-child-div")!.textContent
       ).toBe(`${node.getId()}`);
     }
-    
   });
 
   it("should support static positioning", async () => {
-
     render(
       <Ogma>
         <Tooltip
@@ -247,10 +236,59 @@ describe("Tooltip", () => {
 
     await waitFor(() => expect(ref.current).toBeTruthy());
     // TODO : check the position of the tooltip
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+  });
+
+  it("should support static positioning prop changes", async () => {
+    const { rerender } = render(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          position={{ x: 100, y: 100 }}
+          placement="bottom"
+        >
+          Static tooltip content
+        </Tooltip>,
+      </Ogma>,
+      div
+    );
+
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    // TODO : check the position of the tooltip
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    rerender(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          position={{ x: 200, y: 200 }}
+          placement="bottom"
+        >
+          Static tooltip content
+        </Tooltip>
+      </Ogma>
+    );
+
+    await waitFor(() => expect(ref.current).toBeTruthy());
+    // TODO : check the position of the tooltip
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   });
 
   it("should support sizing", () => {
-
     render(
       <Ogma>
         <Tooltip
@@ -269,7 +307,6 @@ describe("Tooltip", () => {
   });
 
   it("should support sizing prop changes", async () => {
-    
     const { rerender } = render(
       <Ogma>
         <Tooltip
@@ -303,7 +340,6 @@ describe("Tooltip", () => {
   });
 
   it("should support placement", () => {
-    
     render(  
       <Ogma>
         <Tooltip

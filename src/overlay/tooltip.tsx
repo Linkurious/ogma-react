@@ -226,9 +226,15 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 
 };
 
+type TooltipComponentType = <
+  K extends keyof TooltipEventFunctions
+>(
+  props: TooltipProps<K> & React.RefAttributes<OverlayLayer>
+) => React.ReactElement | null;
+
 /**
  * A popup component.
  * Use it to display information statically on top of your visualisation
  * or to display a modal dialog.
  */
-export const Tooltip = forwardRef(TooltipComponent);
+export const Tooltip = forwardRef(TooltipComponent) as TooltipComponentType;
