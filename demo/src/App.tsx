@@ -206,13 +206,13 @@ export default function App() {
         </Popup>
         <Tooltip
           eventName="nodeRightclick"
-          size={{ width: 200, height: 200 }}
           placement="right"
+          bodyClass="ogma-tooltip"
         >
-          {(edge) => {
+          {(target) => {
             return (
-              <div style={{ backgroundColor: "pink" }}>
-                {edge.getId()}
+              <div>
+                {target.getId()}
               </div>
             )
           }} 

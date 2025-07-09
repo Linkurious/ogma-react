@@ -34,6 +34,10 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
   placement?: Placement;
   /* The body's class */
   bodyClass?: string;
+  translate?: {
+    x: number;
+    y: number;
+  }
 
   children?: ReactNode | TooltipEventFunctions[K];
 }
@@ -47,6 +51,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     children,
     placement = "top",
     bodyClass = "",
+    translate = { x: 0, y: 0 },
     size,
   }: TooltipProps<K>,
   ref?: Ref<OverlayLayer>
@@ -125,12 +130,20 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   // Initialize the tooltip layer when the component mounts
   useEffect(() => {
 
+    let transform = `translate(${translate.x}px, calc(-50% + ${translate.y}px))`;
+    if (placement === "top") {
+      transform = `translate(calc(-50% + ${translate.x}px), calc(-100% + ${translate.y}px))`;
+    } else if (placement === "bottom") {
+      transform = `translate(calc(-50% + ${translate.x}px), ${translate.y}px)`;
+    } else if (placement === "left") {
+      transform = `translate(calc(-100% + ${translate.x}px), calc(-50% + ${translate.y}px))`;
+    }
     // Create initial empty content container
     const currentLayer = ogma.layers.addOverlay({
       position: position ? position : offScreenPos,
       element: `
       <div class="${getContainerClass("ogma-popup", placement)}">
-        <div class="ogma-popup--body ${bodyClass}">
+        <div class="ogma-popup--body ${bodyClass}" style="transform: ${transform}">
         </div>
       </div>`,
       size: size || { width: "auto", height: "auto" },
@@ -281,8 +294,9 @@ type TooltipComponentType = <
 ) => React.ReactElement | null;
 
 /**
- * A popup component.
- * Use it to display information statically on top of your visualisation
- * or to display a modal dialog.
+ * Tooltip layer is a custom component to render some dynamic data on top of
+ * your visualisation. The position adapts to the target of the event (or is static)
+ * and is customisable. See in in action in our
+[example](linkurious.github.io/ogma-react/)
  */
 export const Tooltip = forwardRef(TooltipComponent) as TooltipComponentType;

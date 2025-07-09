@@ -423,30 +423,37 @@ Custom popup UI layer.
 
 ### `<Tooltip />`
 
-Tooltip component. Use it for cutom movable tooltips. It automatically adjusts the placement of the tooltip to conainer bounds.
+Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a Function Component that has the
+target of the event as argument.
 
 #### Props
 
 | Prop        | Type              | Default                | Description                   |
 | ----------- | ----------------- | ---------------------- | ----------------------------- |
-| `position`  | `Point \| (ogma: Ogma) => Point` |  | Position of the tooltip             |
-| `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | Size of the tooltip |
-| `children`  | `React.ReactNode` | `null`                 | The children of the component |
-| `visible`   | `boolean`         | `true`                 | Whether the tooltip is open   |
-| `placement` | `Placement`       | `right`                | Placement of the tooltip      |
-| `ref?`      | `React.Ref<Tooltip>` | `null`              | Reference to the tooltip      |
-| `tooltipClass` | `string`        | `'ogma-tooltip'`      | Class name to apply to the tooltip container |
+| `eventName`  | `keyof TooltipEventFunctions` |  | The name of the event to show the tooltip            |
+| `position?`  | `Point` | `null` | The position of the tooltip if static            |
+| `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | The size of the tooltip |
+| `placement?` | `Placement`       | `top`                | The placement of the tooltip      |
+| `bodyClass?` | `string`        | `''`      | The class name to add to the tooltip container |
+| `translate?` | `{ x: number, y: number }`        | `{ x: 0, y: 0 }`      | The amount of pixels to translate the tooltip container |
+| `children`  | `React.ReactNode \| (Node \| Edge \| Point)` | `null`                 | The children of the component |
+| `ref?`      | `React.Ref<Overlay>` | `null`              | Reference to the tooltip      |
 
 #### Example
 
 ```tsx
 <Ogma>
   <Tooltip
-    visible={hoveredNode}
-    position={() => (hoveredNode ? hoveredNode.getPosition() : null)}
-    size={{ width: 200, height: 200 }}
+    eventName="nodeHover"
+    className="ogma-tooltip"
   >
-    <div>Tooltip content here!</div>
+    {(target) => {
+      return (
+        <div>
+          {target.getId()}
+        </div>
+      )
+    }} 
   </Tooltip>
 </Ogma>
 ```
