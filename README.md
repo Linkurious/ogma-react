@@ -240,7 +240,7 @@ Main visualisation component. You can use `onReady` or `ref` prop to get a refer
 | `ref?`     | `React.Ref<Ogma>`      | `null`  | Reference to the Ogma instance                                                                                                                                          |
 | `children?` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
 | `theme?` | [`Ogma.Theme`](https://doc.linkurious.com/ogma/latest/api/types/theme.html) | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles |
-| `onEventName` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useEvent` hook to have a stable function identity and avoid reassigning the same handler at every render. |
+| `onEventName?` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useEvent` hook to have a stable function identity and avoid reassigning the same handler at every render. |
 | `className?`     | `string`      | `ogma-container`  | className for the ogma container                                                                      |
 
 ### `<NodeStyle />`
@@ -423,8 +423,8 @@ Custom popup UI layer.
 
 ### `<Tooltip />`
 
-Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a Function Component that has the
-target of the event as argument.
+Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a function that returns a ReactNode 
+and has the target of the event as argument.
 
 #### Props
 
@@ -436,7 +436,7 @@ target of the event as argument.
 | `placement?` | `Placement`       | `top`                | The placement of the tooltip      |
 | `bodyClass?` | `string`        | `''`      | The class name to add to the tooltip container |
 | `translate?` | `{ x: number, y: number }`        | `{ x: 0, y: 0 }`      | The amount of pixels to translate the tooltip container |
-| `children`  | `React.ReactNode \| (Node \| Edge \| Point)` | `null`                 | The children of the component |
+| `children?`  | `React.ReactNode \| (Node \| Edge \| Point) => React.ReactNode` | `null`                 | The children of the component |
 | `ref?`      | `React.Ref<Overlay>` | `null`              | Reference to the tooltip      |
 
 #### Example
