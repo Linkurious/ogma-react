@@ -57,11 +57,64 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
-  function showTooltip(point: Point) {
+  function showTooltip(target: OgmaNode | Edge | "background", point: Point) {
     // If the position is not set, use the point provided
-    if (! position) layer?.setPosition(point);
+    if (! position) {
+      const offsetAmount = getOffsetAmount(target);
+      const offset = getOffset(offsetAmount);
+      const pos = {
+        x: point.x + offset.x,
+        y: point.y + offset.y
+      };
+      layer?.setPosition(pos);
+    };
 
     layer?.show();
+  }
+
+  function getOffsetAmount(target: OgmaNode | Edge | "background") {
+    // Get the offset amount based on the target type
+
+    if (target instanceof OgmaNode) {
+      const radius = target.getAttribute("radius") as number;
+      const outerStrokeWidth = getStrokeWidth("outer", target);
+      const innerStrokeWidth = getStrokeWidth("inner", target);
+      return radius + outerStrokeWidth + innerStrokeWidth; // Offset for nodes
+    } else if (target instanceof Edge) {
+      return target.size; // Offset for edges
+    }
+    return 0; // No offset for background
+  }
+
+  function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge) {
+    // Get the stroke width based on the type and zoom level
+    // @ts-expect-error the attribute does exist
+    const strokeWidth = target.getAttribute(`${strokeType}Stroke.width`) as number;
+    // @ts-expect-error the attribute does exist
+    if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) < target.size) {
+      // @ts-expect-error the attribute does exist
+      if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) !== "fixed") {
+        return strokeWidth / ogma.view.getZoom(); // Scale the stroke width based on the zoom level
+      } else {
+        return strokeWidth; // Fixed stroke width
+      }
+    }
+    return 0; // No stroke if not visible
+  }
+
+  function getOffset(offsetAmount: number) {
+    // Get the offset of the layer based on the placement
+    const offset = { x: 0, y: 0 };
+    if (placement === "top") {
+      offset.y = -offsetAmount;
+    } else if (placement === "bottom") {
+      offset.y = offsetAmount;
+    } else if (placement === "left") {
+      offset.x = -offsetAmount;
+    } else if (placement === "right") {
+      offset.x = offsetAmount;
+    }
+    return offset;
   }
 
   function hideTooltip() {
@@ -101,18 +154,14 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
           if (evt.target?.isNode) {
             const node = evt.target;
             setTarget(node);
-            showTooltip(node.getPosition());
+            showTooltip(node, node.getPosition());
           }
         } else if (eventName.startsWith("edge")) {
           if (evt.target && ! evt.target.isNode) {
             // Show the tooltip in the middle of the extremities
-            const nodes = evt.target.getExtremities();
-            const middle = {
-              x: (nodes.get(0).getPosition().x + nodes.get(1).getPosition().x) / 2,
-              y: (nodes.get(0).getPosition().y + nodes.get(1).getPosition().y) / 2
-            }
+            const pos = ogma.view.screenToGraphCoordinates({x: evt.x, y: evt.y})
             setTarget(evt.target);
-            showTooltip(middle);
+            showTooltip(evt.target, pos);
           }
         }
       };
@@ -136,26 +185,22 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
         }
         if (eventName.startsWith("background")) {
           if (! evt.target) {
-            const pos = ogma.view.screenToGraphCoordinates({x: evt.x, y: evt.y});
+            const pos = ogma.view.screenToGraphCoordinates({ x: evt.x, y: evt.y });
             setTarget(pos);
-            showTooltip(pos);
+            showTooltip("background", pos);
           }
         } else if (eventName.startsWith("node")) {
           if (evt.target?.isNode) {
             const node = evt.target;
-            setTarget(node)
-            showTooltip(node.getPosition());
+            setTarget(node);
+            showTooltip(node, node.getPosition());
           }
         } else {
           if (evt.target && ! evt.target.isNode) {
             // Show the tooltip in the middle of the extremities
-            const nodes = evt.target.getExtremities();
-            const middle = {
-              x: (nodes.get(0).getPosition().x + nodes.get(1).getPosition().x) / 2,
-              y: (nodes.get(0).getPosition().y + nodes.get(1).getPosition().y) / 2
-            }
+            const pos = ogma.view.screenToGraphCoordinates({ x: evt.x, y: evt.y })
             setTarget(evt.target);
-            showTooltip(middle);
+            showTooltip(evt.target, pos);
           }
         }
       };
@@ -171,6 +216,9 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
           }
         } else if (eventName.startsWith("background")) {
           if (evt.target) {
+            hideTooltip();
+          } else if (eventName.endsWith("Rightclick") && evt.button === "left"
+                  || eventName.endsWith("Click") && evt.button === "right") {
             hideTooltip();
           }
         }

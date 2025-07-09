@@ -118,7 +118,6 @@ export default function App() {
   }, []);
 
   const styleClassNodeAttributes = useMemo<NodeAttributesValue<ND, ED>>(() => {
-    console.log("Creating styleClassNodeAttributes");
     return {
       shape: "diamond",
       color: (node) => {
@@ -206,13 +205,11 @@ export default function App() {
           )}
         </Popup>
         <Tooltip
-          eventName="edgeRightclick"
+          eventName="nodeRightclick"
           size={{ width: 200, height: 200 }}
-          placement="bottom"
+          placement="right"
         >
           {(edge) => {
-            if (!ogmaInstanceRef.current) return null;
-
             return (
               <div style={{ backgroundColor: "pink" }}>
                 {edge.getId()}
