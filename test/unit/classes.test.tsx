@@ -1,7 +1,7 @@
 import { render, act } from "@testing-library/react";
 import { describe, it, beforeEach, vi, expect } from "vitest";
-import { StyleClass } from "../src/styles/classStyle";
-import { Ogma } from "../src";
+import { StyleClass } from "../../src/styles/classStyle";
+import { Ogma } from "../../src";
 import graph from "./fixtures/simple_graph.json";
 
 // Mock Ogma and its API

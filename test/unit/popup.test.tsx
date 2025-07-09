@@ -1,7 +1,7 @@
 import { createRef } from "react";
 import { render } from "./utils";
 
-import { Ogma, Popup } from "../src";
+import { Ogma, Popup } from "../../src";
 import { Overlay, Point } from "@linkurious/ogma";
 import graph from "./fixtures/simple_graph.json";
 
