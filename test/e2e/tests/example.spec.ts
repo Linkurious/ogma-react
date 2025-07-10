@@ -28,6 +28,31 @@ test('mouse hover', async ({ page }) => {
   });
 });
 
+test('tooltip', async ({ page }) => {
+  const pos = await page.evaluate(() => {
+    const ogma = window.ogma;
+    const position = ogma.getNodes().get(0).getPosition();
+    return ogma.view.graphToScreenCoordinates(position);
+  });
+  await page.mouse.move(pos.x, pos.y);
+
+  // Wait for the hover effect to take place
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // and then open the tooltip
+  await page.mouse.click(pos.x, pos.y, {
+    button: 'right'
+  });
+  await expect(page).toHaveScreenshot('tooltip-opened.png');
+
+  await page.mouse.click(0, 0); // Click outside to close the tooltip
+  // Wait for the selected effect to disappear
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  await expect(page).toHaveScreenshot('tooltip-closed.png', {
+    timeout: 5000
+  });
+});
+
 test('add node', async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Add node").click();
