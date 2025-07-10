@@ -1,4 +1,4 @@
-import OgmaLib, { Point, Overlay, Node } from "@linkurious/ogma";
+import OgmaLib, { Overlay } from "@linkurious/ogma";
 import { render, waitFor, getMiddlePoint } from "../utils";
 import { Tooltip } from "../../../src/overlay/tooltip";
 import { Ogma } from "../../../src";
@@ -59,7 +59,7 @@ describe("Tooltip", () => {
     render(
       <Ogma ref={ogmaRef}>
         <Tooltip eventName="backgroundClick" ref={ref}>
-          {(pos: Point) => <div className="custom-child-div">x: {pos.x}, y: {pos.y}</div>}
+          {(pos) => <div className="custom-child-div">x: {pos.x}, y: {pos.y}</div>}
         </Tooltip>,
       </Ogma>,
       div
@@ -189,7 +189,7 @@ describe("Tooltip", () => {
     render(
       <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip eventName="nodeClick" ref={ref}>
-          {(node: Node) => <div className="custom-child-div">{node.getId()}</div>}
+          {(node) => <div className="custom-child-div">{node.getId()}</div>}
         </Tooltip>,
       </Ogma>,
       div
@@ -406,6 +406,42 @@ describe("Tooltip", () => {
     expect(
       (ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--top")
     ).toBe(true);
+  });
+
+  it("should support bodyClass", () => {
+    render(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          bodyClass="custom-tooltip"
+        >
+          Tooltip content
+        </Tooltip>
+      </Ogma>
+    );
+    expect(
+      ref.current?.element.querySelector(".custom-tooltip")
+    ).toBeDefined();
+  });
+
+  it("should support translate", async () => {
+    render(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          translate={{ x: 50, y: 100 }}
+          bodyClass="custom-tooltip"
+        >
+          content
+        </Tooltip>
+      </Ogma>
+    )
+    const container = ref.current?.element.querySelector(".custom-tooltip") as HTMLElement;
+    expect(container).toBeDefined();
+    expect(container!.style.transform).toContain("50px");
+    expect(container!.style.transform).toContain("100px");
   });
 
 });
