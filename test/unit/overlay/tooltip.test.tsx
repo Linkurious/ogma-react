@@ -1,7 +1,7 @@
 import OgmaLib, { Point, Overlay, Node } from "@linkurious/ogma";
 import { render, waitFor, getMiddlePoint } from "../utils";
-import { Tooltip } from "../../src/overlay/tooltip";
-import { Ogma } from "../../src";
+import { Tooltip } from "../../../src/overlay/tooltip";
+import { Ogma } from "../../../src";
 import { act, createRef } from "react";
 import graph from "../fixtures/simple_graph.json";
 
