@@ -1,7 +1,7 @@
 import { ReactNode, ReactElement } from "react";
 import { renderToString } from "react-dom/server";
 import OgmaLib, { Point, Size } from "@linkurious/ogma";
-import { Content, PositionGetter, Placement } from "./types";
+import { Content, PositionGetter, Placement, TooltipEventFunctions } from "./types";
 
 export function getContent(
   ogma: OgmaLib,
@@ -62,4 +62,15 @@ export function getAdjustedPlacement(
   }
 
   return res;
+}
+
+export function getEventNameFromTooltipEvent(eventName: keyof TooltipEventFunctions): "mouseover" | "click" | "doubleclick" {
+  if (eventName.endsWith("Doubleclick")) {
+    return "doubleclick";
+  // Take into account click and rightclick events
+  } else if (eventName.toLowerCase().endsWith("click")) {
+    return "click";
+  } else {
+    return "mouseover";
+  }
 }

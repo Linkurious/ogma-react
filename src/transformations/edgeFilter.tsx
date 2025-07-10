@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface EdgeFilterProps<ND, ED>
+interface EdgeFilterPropsC<ND, ED>
   extends EdgeFilterOptions<ND, ED>,
-    TransformationProps<ND, ED, EdgeFilterOptions<ND, ED>> {}
+    TransformationProps<ND, ED, EdgeFilterOptions<ND, ED>> {};
+
+export type EdgeFilterProps<ND, ED> = Omit<EdgeFilterPropsC<ND, ED>, "enabled">;
 
 function EdgeFilterComponent<ND = any, ED = any>(
   props: EdgeFilterProps<ND, ED>,
@@ -44,7 +46,7 @@ function EdgeFilterComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled]);
 
   useEffect(() => {
     transformation?.setOptions(props);

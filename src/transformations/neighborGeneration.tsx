@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface NeighborGenerationProps<ND, ED>
+interface NeighborGenerationPropsC<ND, ED>
   extends NeighborGenerationOptions<ND, ED>,
-    TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {}
+    TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {};
+
+export type NeighborGenerationProps<ND, ED> = Omit<NeighborGenerationPropsC<ND, ED>, "enabled">;
 
 function NeighborGenerationComponent<ND = any, ED = any>(
   props: NeighborGenerationProps<ND, ED>,
@@ -45,7 +47,7 @@ function NeighborGenerationComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled]);
+  }, [props.disabled, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);

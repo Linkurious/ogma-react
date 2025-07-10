@@ -1,7 +1,5 @@
 import OgmaLib, {
-  Edge,
   Node as OgmaNode,
-  Point,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
   NodeAttributesValue,
@@ -18,12 +16,12 @@ import {
   NodeStyle,
   EdgeStyle,
   StyleClass,
-  Tooltip,
   NodeGrouping,
   Popup,
   Geo,
   NodeGroupingProps,
-  useEvent
+  useEvent,
+  Tooltip
 } from "../../src";
 
 // custom components:
@@ -76,15 +74,6 @@ export default function App() {
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
-  const [tooltipPositon, setTooltipPosition] = useState<Point>({
-    x: 0,
-    y: 0
-  });
-  const [target, setTarget] = useState<OgmaNode | Edge | null>();
-
-  const requestSetTooltipPosition = useCallback((pos: Point) => {
-    requestAnimationFrame(() => setTooltipPosition(pos));
-  }, []);
 
   const popupPosition = useCallback(
     () => (clickedNode ? clickedNode.getPosition() : null),
@@ -110,18 +99,6 @@ export default function App() {
     }
   });
 
-  const onMousemove = useEvent("mousemove", () => {
-    if (!ogmaInstanceRef.current) return;
-    const ptr = ogmaInstanceRef.current.getPointerInformation();
-    requestSetTooltipPosition(
-      ogmaInstanceRef.current.view.screenToGraphCoordinates({
-        x: ptr.x,
-        y: ptr.y
-      })
-    );
-    setTarget(ptr.target);
-  });
-
   const onAddNodes = useEvent("addNodes", () => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
@@ -141,7 +118,6 @@ export default function App() {
   }, []);
 
   const styleClassNodeAttributes = useMemo<NodeAttributesValue<ND, ED>>(() => {
-    console.log("Creating styleClassNodeAttributes");
     return {
       shape: "diamond",
       color: (node) => {
@@ -165,7 +141,6 @@ export default function App() {
         ref={ogmaInstanceRef}
         graph={graph}
         onClick={onClick}
-        onMousemove={onMousemove}
         onAddNodes={onAddNodes}
         onReady={onReady}
         theme={morningBreeze as Theme<ND, ED>}
@@ -230,15 +205,17 @@ export default function App() {
           )}
         </Popup>
         <Tooltip
-          visible={!!target && !popupOpen}
+          eventName="nodeRightclick"
           placement="right"
-          position={tooltipPositon}
+          bodyClass="ogma-tooltip"
         >
-          <div className="x">
-            {target
-              ? `${target.isNode ? "Node" : "Edge"} #${target.getId()}`
-              : "nothing"}
-          </div>
+          {(target) => {
+            return (
+              <div>
+                {target.getId()}
+              </div>
+            )
+          }} 
         </Tooltip>
         <GraphOutlines visible={outlines} />
 

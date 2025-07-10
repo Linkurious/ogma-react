@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { toggle, useTransformationCallbacks } from "./utils";
 import { TransformationProps } from "./types";
 
-export interface NodeGroupingProps<ND, ED>
+interface NodeGroupingPropsC<ND, ED>
   extends NodeGroupingOptions<ND, ED>,
     TransformationProps<ND, ED, NodeGroupingOptions<ND, ED>> {}
+
+export type NodeGroupingProps<ND, ED> = Omit<NodeGroupingPropsC<ND, ED>, "enabled">;
 
 function NodeGroupingComponent<ND, ED>(
   props: NodeGroupingProps<ND, ED>,
@@ -43,7 +45,7 @@ function NodeGroupingComponent<ND, ED>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled]);
+  }, [props.disabled, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);

@@ -13,9 +13,11 @@ import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks } from "./utils";
 
-export interface EdgeGroupingProps<ED, ND>
+interface EdgeGroupingPropsC<ED, ND>
   extends EdgeGroupingOptions<ED, ND>,
-    TransformationProps<ED, ND, EdgeGroupingOptions<ED, ND>> {}
+    TransformationProps<ED, ND, EdgeGroupingOptions<ED, ND>> {};
+
+export type EdgeGroupingProps<ND, ED> = Omit<EdgeGroupingPropsC<ND, ED>, "enabled">;
 
 function EdgeGroupingComponent<ND = any, ED = any>(
   props: EdgeGroupingProps<ED, ND>,
@@ -45,7 +47,7 @@ function EdgeGroupingComponent<ND = any, ED = any>(
     if (transformation) {
       toggle(transformation, !!props.disabled, props.duration);
     }
-  }, [props.disabled]);
+  }, [props.disabled, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);
