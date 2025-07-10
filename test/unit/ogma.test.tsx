@@ -87,7 +87,7 @@ describe("Ogma", () => {
       ]
     } as RawGraph;
 
-    const mockOnNodesAdded = vi.fn(() => console.log("onNodesAdded"));
+    const mockOnNodesAdded = vi.fn(() => {});
     let ready = false;
 
     const ref = React.createRef<OgmaLib>();
