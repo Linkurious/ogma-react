@@ -17,7 +17,6 @@ import {
   EdgeStyle,
   StyleClass,
   NodeGrouping,
-  Popup,
   Geo,
   NodeGroupingProps,
   useEvent,
@@ -45,10 +44,6 @@ export default function App() {
   const [graph, setGraph] = useState<RawGraph>();
   const [loading, setLoading] = useState(true);
 
-  // UI states
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [clickedNode, setClickedNode] = useState<OgmaNode>();
-
   // ogma instance and grouping references
   const ogmaInstanceRef = createRef<OgmaLib>();
   const groupingRef = createRef<NodeGroupingTransformation<ND, ED>>();
@@ -75,12 +70,6 @@ export default function App() {
   // UI layers
   const [outlines, setOutlines] = useState(false);
 
-  const popupPosition = useCallback(
-    () => (clickedNode ? clickedNode.getPosition() : null),
-    [clickedNode]
-  );
-  const onPopupClose = useCallback(() => setPopupOpen(false), []);
-
   // load the graph
   useEffect(() => {
     setLoading(true);
@@ -91,13 +80,6 @@ export default function App() {
         setLoading(false);
       });
   }, []);
-
-  const onClick = useEvent("click", ({ target }) => {
-    if (target && target.isNode) {
-      setClickedNode(target);
-      setPopupOpen(true);
-    }
-  });
 
   const onAddNodes = useEvent("addNodes", () => {
     if (!ogmaInstanceRef.current) return;
@@ -140,7 +122,6 @@ export default function App() {
       <Ogma
         ref={ogmaInstanceRef}
         graph={graph}
-        onClick={onClick}
         onAddNodes={onAddNodes}
         onReady={onReady}
         theme={morningBreeze as Theme<ND, ED>}
@@ -194,16 +175,6 @@ export default function App() {
           nodeGenerator={groupingOptions.nodeGenerator}
         />
 
-        {/* context-aware UI */}
-        <Popup
-          position={popupPosition}
-          onClose={onPopupClose}
-          isOpen={!!clickedNode && popupOpen}
-        >
-          {!!clickedNode && (
-            <div className="content">{`Node ${clickedNode.getId()}:`}</div>
-          )}
-        </Popup>
         <Tooltip
           eventName="nodeRightclick"
           placement="right"
