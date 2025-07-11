@@ -3,6 +3,9 @@ import { test, expect } from '@playwright/test';
 test.beforeEach(async ({ page }) => {
   // Navigate to the page before each test
   await page.goto('localhost:5173/ogma-react/');
+
+  // Wait for the Ogma instance to be initialized
+  // then wait for the layout to finish
   await page.locator('.App');
   await page.evaluate(() => {
     const ogma = window.ogma;
@@ -11,9 +14,7 @@ test.beforeEach(async ({ page }) => {
     });
   });
 
-  await expect(page).toHaveScreenshot('initial-state.png', {
-    timeout: 5000
-  });
+  await expect(page).toHaveScreenshot('initial-state.png');
 });
 
 test('mouse hover', async ({ page }) => {
@@ -22,8 +23,17 @@ test('mouse hover', async ({ page }) => {
     const position = ogma.getNodes().get(0).getPosition();
     return ogma.view.graphToScreenCoordinates(position);
   });
+  // Hover over the first node
   await page.mouse.move(pos.x, pos.y);
   await expect(page).toHaveScreenshot('node-hovered.png', {
+    timeout: 5000
+  });
+
+  // Reset hover state by moving the mouse away
+  await page.mouse.move(0, 0, { steps: 10 });
+  await expect(page).toHaveScreenshot('initial-state.png', {
+    // Only the position is different compared to the initial screenshot
+    maxDiffPixels: 44,
     timeout: 5000
   });
 });
@@ -34,21 +44,20 @@ test('tooltip', async ({ page }) => {
     const position = ogma.getNodes().get(0).getPosition();
     return ogma.view.graphToScreenCoordinates(position);
   });
+
+  // Wait for the hover effect to take place and then open the tooltip
   await page.mouse.move(pos.x, pos.y);
-
-  // Wait for the hover effect to take place
   await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // and then open the tooltip
   await page.mouse.click(pos.x, pos.y, {
     button: 'right'
   });
   await expect(page).toHaveScreenshot('tooltip-opened.png');
 
-  await page.mouse.click(0, 0); // Click outside to close the tooltip
-  // Wait for the selected effect to disappear
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  await expect(page).toHaveScreenshot('tooltip-closed.png', {
+  // Click outside to close the tooltip
+  await page.mouse.click(0, 0);
+  await expect(page).toHaveScreenshot('initial-state.png', {
+    // Only the position is different compared to the initial screenshot
+    maxDiffPixels: 36,
     timeout: 5000
   });
 });
@@ -63,6 +72,8 @@ test('add node', async ({ page }) => {
 test('add node with class', async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Use class").click();
+  
+  // The class is only applied every 2 added nodes
   await page.getByText("Add node").click();
   await page.getByText("Add node").click();
   await page.mouse.click(50, 50);
@@ -70,11 +81,13 @@ test('add node with class', async ({ page }) => {
 });
 
 test('node grouping', async ({ page }) => {
+  // Enable node grouping
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot('node-grouping-disabled.png');
   
+  // Disable node grouping
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
@@ -82,11 +95,13 @@ test('node grouping', async ({ page }) => {
 });
 
 test('geo mode', async ({ page }) => {
+  // Enable geo mode
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot('geo-mode-enabled.png');
 
+  // Disable geo mode
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
