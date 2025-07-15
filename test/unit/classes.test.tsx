@@ -24,7 +24,7 @@ const mockOgma = {
   }
 };
 
-vi.mock("../src/context", async (importOriginal) => {
+vi.mock("../../src/context", async (importOriginal) => {
   const actual = (await importOriginal()) as {};
   return {
     ...actual,
