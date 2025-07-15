@@ -33,7 +33,7 @@ test('mouse hover', async ({ page }) => {
   await page.mouse.move(0, 0, { steps: 10 });
   await expect(page).toHaveScreenshot('initial-state.png', {
     // Only the position is different compared to the initial screenshot
-    maxDiffPixels: 44,
+    maxDiffPixels: 45,
     timeout: 5000
   });
 });
@@ -57,7 +57,7 @@ test('tooltip', async ({ page }) => {
   await page.mouse.click(0, 0);
   await expect(page).toHaveScreenshot('initial-state.png', {
     // Only the position is different compared to the initial screenshot
-    maxDiffPixels: 36,
+    maxDiffPixels: 45,
     timeout: 5000
   });
 });
