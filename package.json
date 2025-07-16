@@ -33,6 +33,7 @@
     "access": "public"
   },
   "scripts": {
+    "pree2e:tests": "npx playwright install chromium",
     "tsc": "tsc",
     "start": "vite dev demo",
     "build": "npm ls @linkurious/ogma && npm run build:lib && npm run build:ts",
