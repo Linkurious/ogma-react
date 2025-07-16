@@ -34,11 +34,12 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
   placement?: Placement;
   /* The body's class */
   bodyClass?: string;
+  /** The offset of the tooltip */
   translate?: {
     x: number;
     y: number;
   }
-
+  /** The content of the tooltip, can be a function that returns a ReactNode */
   children?: ReactNode | TooltipEventFunctions[K];
 }
 
