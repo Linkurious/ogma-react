@@ -21,15 +21,8 @@ test.beforeEach(async ({ page }) => {
   await page.locator(".App");
   // For Firefox, we need to wait a bit longer Ogma to initialize
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  await page.evaluate(() => {
-    const ogma = window.ogma;
-    return new Promise((resolve) => {
-      ogma.events.once("layoutEnd", resolve);
-    });
-  });
-
   await expect(page).toHaveScreenshot("initial-state.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
 
@@ -69,7 +62,7 @@ test("tooltip", async ({ page }) => {
     button: "right"
   });
   await expect(page).toHaveScreenshot("tooltip-opened.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 
   // Click outside to close the tooltip
@@ -86,7 +79,7 @@ test("add node", async ({ page }) => {
   await page.getByText("Add node").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot("node-added.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
 
@@ -101,9 +94,8 @@ test("add node with class", async ({ page }) => {
   // Wait for the force layout to finish
   await new Promise((resolve) => setTimeout(resolve, 1000));
   await expect(page).toHaveScreenshot("node-added-with-class.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
-  }
-  );
+    maxDiffPixels: TOLERATED_DIFFERENCE
+  });
 });
 
 test("node grouping", async ({ page }) => {
@@ -112,7 +104,7 @@ test("node grouping", async ({ page }) => {
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot("node-grouping-disabled.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 
   // Disable node grouping
@@ -120,7 +112,7 @@ test("node grouping", async ({ page }) => {
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot("node-grouping-reenabled.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
 
@@ -130,7 +122,7 @@ test("geo mode", async ({ page }) => {
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot("geo-mode-enabled.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 
   // Disable geo mode
@@ -138,6 +130,6 @@ test("geo mode", async ({ page }) => {
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
   await expect(page).toHaveScreenshot("geo-mode-disabled.png", {
-    maxDiffPixels: TOLERATED_DIFFERENCE,
+    maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
