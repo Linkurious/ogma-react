@@ -62,7 +62,7 @@ const onClick = useEvent('click', ({ target }) => {
 
 <Ogma
   options={...}
-  onMousemove={onMouseMove}
+  onMousemove={onMousemove}
   onClick={onClick}
   ref={ogmaRef}
   onReady={(ogma) => console.log('ogma instance initialized')}
