@@ -44,7 +44,7 @@ yarn i <YOUR_LINK_WITH_API_KEY>
 yarn add @linkurious/ogma-react
 ```
 
-You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
+You will need the CSS or Styled Components (see [`demo/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
 
 ```tsx
 import { Ogma, NodeStyle, Popup, useEvent } from '@linkurious/ogma-react';
@@ -52,7 +52,7 @@ import OgmaLib, { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
 ...
 const [clickedNode, setClickedNode] = useState<OgmaNode|null>(null);
 const ogmaRef = useRef<OgmaLib>();
-const onMouseMove = useEvent('mousemove', ({ target }) => {
+const onMousemove = useEvent('mousemove', ({ target }) => {
   if (target && target.isNode) console.log(target.getId());
 });
 
@@ -62,7 +62,7 @@ const onClick = useEvent('click', ({ target }) => {
 
 <Ogma
   options={...}
-  onMouseMove={onMouseMove}
+  onMousemove={onMouseMove}
   onClick={onClick}
   ref={ogmaRef}
   onReady={(ogma) => console.log('ogma instance initialized')}
@@ -79,7 +79,7 @@ const onClick = useEvent('click', ({ target }) => {
 
 ## Usage
 
-See the [`web/src/App.tsx`](https://github.com/Linkurious/ogma-react/blob/develop/web/src/App.tsx) file for a complete example.
+See the [`demo/src/App.tsx`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/App.tsx) file for a complete example.
 
 ```tsx
 const graph: Ogma.RawGraph = ...;
@@ -434,7 +434,7 @@ and has the target of the event as argument.
 | `position?`  | `Point` | `null` | The position of the tooltip if static            |
 | `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | The size of the tooltip |
 | `placement?` | `Placement`       | `top`                | The placement of the tooltip      |
-| `bodyClass?` | `string`        | `''`      | The class name to add to the tooltip container |
+| `bodyClass?` | `string`        | `'ogma-popup--body'`      | The class name to add to the tooltip container |
 | `translate?` | `{ x: number, y: number }`        | `{ x: 0, y: 0 }`      | The amount of pixels to translate the tooltip container |
 | `children?`  | `React.ReactNode \| (Node \| Edge \| Point) => React.ReactNode` | `null`                 | The children of the component |
 | `ref?`      | `React.Ref<Overlay>` | `null`              | Reference to the tooltip      |
