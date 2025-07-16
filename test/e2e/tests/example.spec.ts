@@ -21,11 +21,12 @@ test.beforeEach(async ({ page }) => {
   await page.locator(".App");
   // For Firefox, we need to wait a bit longer Ogma to initialize
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  await page.screenshot({ path: "reports/e2e/snapshots/initial-state.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/initial-state.png"
+  });
   await expect(page).toHaveScreenshot("initial-state.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 });
 
 test("mouse hover", async ({ page }) => {
@@ -36,12 +37,13 @@ test("mouse hover", async ({ page }) => {
   });
   // Hover over the first node
   await page.mouse.move(pos.x, pos.y);
-  await page.screenshot({ path: "reports/e2e/snapshots/node-hovered.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/node-hovered.png"
+  });
   await expect(page).toHaveScreenshot("node-hovered.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE,
     timeout: 5000
   });
-  
 
   // Reset hover state by moving the mouse away
   await page.mouse.move(0, 0, { steps: 10 });
@@ -65,11 +67,12 @@ test("tooltip", async ({ page }) => {
   await page.mouse.click(pos.x, pos.y, {
     button: "right"
   });
-  await page.screenshot({ path: "reports/e2e/snapshots/tooltip-opened.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/tooltip-opened.png"
+  });
   await expect(page).toHaveScreenshot("tooltip-opened.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 
   // Click outside to close the tooltip
   await page.mouse.click(0, 0);
@@ -84,11 +87,10 @@ test("add node", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Add node").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({ path: "reports/e2e/snapshots/node-added.png" })
+  await page.screenshot({ path: "reports/html/e2e/snapshots/node-added.png" });
   await expect(page).toHaveScreenshot("node-added.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 });
 
 test("add node with class", async ({ page }) => {
@@ -101,11 +103,12 @@ test("add node with class", async ({ page }) => {
   await page.mouse.click(50, 50);
   // Wait for the force layout to finish
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  await page.screenshot({ path: "reports/e2e/snapshots/node-added-with-class.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/node-added-with-class.png"
+  });
   await expect(page).toHaveScreenshot("node-added-with-class.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 });
 
 test("node grouping", async ({ page }) => {
@@ -113,21 +116,23 @@ test("node grouping", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({ path: "reports/e2e/snapshots/node-grouping-disabled.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/node-grouping-disabled.png"
+  });
   await expect(page).toHaveScreenshot("node-grouping-disabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 
   // Disable node grouping
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({ path: "reports/e2e/snapshots/node-grouping-reenabled.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/node-grouping-reenabled.png"
+  });
   await expect(page).toHaveScreenshot("node-grouping-reenabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 });
 
 test("geo mode", async ({ page }) => {
@@ -135,17 +140,20 @@ test("geo mode", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({ path: "reports/e2e/snapshots/geo-mode-enabled.png" })
+  await page.screenshot({
+    path: "reports/html/e2e/snapshots/geo-mode-enabled.png"
+  });
   await expect(page).toHaveScreenshot("geo-mode-enabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
-  
 
   // Disable geo mode
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({ path: "reports/e2e/snapshots/geo-mode-disabled.png" })
+  await page.screenshot({
+    path: "reports/e2e/snapshots/geo-mode-disabled.png"
+  });
   await expect(page).toHaveScreenshot("geo-mode-disabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
