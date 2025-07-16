@@ -152,7 +152,7 @@ test("geo mode", async ({ page }) => {
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
   await page.screenshot({
-    path: "reports/e2e/snapshots/geo-mode-disabled.png"
+    path: "reports/html/e2e/snapshots/geo-mode-disabled.png"
   });
   await expect(page).toHaveScreenshot("geo-mode-disabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE

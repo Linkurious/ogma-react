@@ -25,8 +25,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ["junit", { outputFile: "reports/html/e2e/report.xml" }],
-    ["html", { outputFile: "reports/html/e2e/report.html" }]
+    // ["junit", { outputFile: "reports/html/e2e/report.xml" }],
+    ["html", { outputFolder: "reports/html/e2e/" }]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
