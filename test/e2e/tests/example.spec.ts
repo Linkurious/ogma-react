@@ -24,6 +24,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page).toHaveScreenshot("initial-state.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/initial-state.png" })
 });
 
 test("mouse hover", async ({ page }) => {
@@ -38,6 +39,7 @@ test("mouse hover", async ({ page }) => {
     maxDiffPixels: TOLERATED_DIFFERENCE,
     timeout: 5000
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/node-hovered.png" })
 
   // Reset hover state by moving the mouse away
   await page.mouse.move(0, 0, { steps: 10 });
@@ -64,6 +66,7 @@ test("tooltip", async ({ page }) => {
   await expect(page).toHaveScreenshot("tooltip-opened.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/tooltip-opened.png" })
 
   // Click outside to close the tooltip
   await page.mouse.click(0, 0);
@@ -81,6 +84,7 @@ test("add node", async ({ page }) => {
   await expect(page).toHaveScreenshot("node-added.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/node-added.png" })
 });
 
 test("add node with class", async ({ page }) => {
@@ -96,6 +100,7 @@ test("add node with class", async ({ page }) => {
   await expect(page).toHaveScreenshot("node-added-with-class.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/node-added-with-class.png" })
 });
 
 test("node grouping", async ({ page }) => {
@@ -106,6 +111,7 @@ test("node grouping", async ({ page }) => {
   await expect(page).toHaveScreenshot("node-grouping-disabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/node-grouping-disabled.png" })
 
   // Disable node grouping
   await page.getByTitle("Show controls").click();
@@ -114,6 +120,7 @@ test("node grouping", async ({ page }) => {
   await expect(page).toHaveScreenshot("node-grouping-reenabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/node-grouping-reenabled.png" })
 });
 
 test("geo mode", async ({ page }) => {
@@ -124,6 +131,7 @@ test("geo mode", async ({ page }) => {
   await expect(page).toHaveScreenshot("geo-mode-enabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/geo-mode-enabled.png" })
 
   // Disable geo mode
   await page.getByTitle("Show controls").click();
@@ -132,4 +140,5 @@ test("geo mode", async ({ page }) => {
   await expect(page).toHaveScreenshot("geo-mode-disabled.png", {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+  await page.screenshot({ path: "reports/e2e/snapshots/geo-mode-disabled.png" })
 });
