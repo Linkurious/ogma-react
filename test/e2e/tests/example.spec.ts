@@ -11,6 +11,7 @@ declare global {
 // This is used to account for minor differences
 // in rendering across different environments
 const TOLERATED_DIFFERENCE = 50;
+const initialState = "initial-state.png";
 
 test.beforeEach(async ({ page }) => {
   // Navigate to the page before each test
@@ -21,33 +22,30 @@ test.beforeEach(async ({ page }) => {
   await page.locator(".App");
   // For Firefox, we need to wait a bit longer Ogma to initialize
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/initial-state.png"
-  });
-  await expect(page).toHaveScreenshot("initial-state.png", {
+  await expect(page).toHaveScreenshot(initialState, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
 
 test("mouse hover", async ({ page }) => {
+  // Get the position of the first node
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
     const position = ogma.getNodes().get(0).getPosition();
     return ogma.view.graphToScreenCoordinates(position);
   });
-  // Hover over the first node
+  // Hover over it
   await page.mouse.move(pos.x, pos.y);
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/node-hovered.png"
-  });
-  await expect(page).toHaveScreenshot("node-hovered.png", {
+
+  const fileName = "node-hovered.png";
+  await expect(page).toHaveScreenshot(fileName, {
     maxDiffPixels: TOLERATED_DIFFERENCE,
     timeout: 5000
   });
 
   // Reset hover state by moving the mouse away
   await page.mouse.move(0, 0, { steps: 10 });
-  await expect(page).toHaveScreenshot("initial-state.png", {
+  await expect(page).toHaveScreenshot(initialState, {
     // Only the position is different compared to the initial screenshot
     maxDiffPixels: 45 + TOLERATED_DIFFERENCE,
     timeout: 5000
@@ -55,6 +53,7 @@ test("mouse hover", async ({ page }) => {
 });
 
 test("tooltip", async ({ page }) => {
+  // Get the position of the first node
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
     const position = ogma.getNodes().get(0).getPosition();
@@ -67,16 +66,15 @@ test("tooltip", async ({ page }) => {
   await page.mouse.click(pos.x, pos.y, {
     button: "right"
   });
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/tooltip-opened.png"
-  });
-  await expect(page).toHaveScreenshot("tooltip-opened.png", {
+
+  const fileName = "tooltip-opened.png";
+  await expect(page).toHaveScreenshot(fileName, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 
   // Click outside to close the tooltip
   await page.mouse.click(0, 0);
-  await expect(page).toHaveScreenshot("initial-state.png", {
+  await expect(page).toHaveScreenshot(initialState, {
     // Only the position is different compared to the initial screenshot
     maxDiffPixels: 45 + TOLERATED_DIFFERENCE,
     timeout: 5000
@@ -84,16 +82,19 @@ test("tooltip", async ({ page }) => {
 });
 
 test("add node", async ({ page }) => {
+  // Open the panel and add a node
   await page.getByTitle("Show controls").click();
   await page.getByText("Add node").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({ path: "reports/html/e2e/snapshots/node-added.png" });
-  await expect(page).toHaveScreenshot("node-added.png", {
+
+  const fileName = "node-added.png";
+  await expect(page).toHaveScreenshot(fileName, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
 
 test("add node with class", async ({ page }) => {
+  // Open the panel and toggle the class
   await page.getByTitle("Show controls").click();
   await page.getByText("Use class").click();
 
@@ -101,12 +102,12 @@ test("add node with class", async ({ page }) => {
   await page.getByText("Add node").click();
   await page.getByText("Add node").click();
   await page.mouse.click(50, 50);
+
   // Wait for the force layout to finish
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/node-added-with-class.png"
-  });
-  await expect(page).toHaveScreenshot("node-added-with-class.png", {
+
+  const fileName = "node-added-with-class.png";
+  await expect(page).toHaveScreenshot(fileName, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
@@ -116,10 +117,9 @@ test("node grouping", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/node-grouping-disabled.png"
-  });
-  await expect(page).toHaveScreenshot("node-grouping-disabled.png", {
+
+  const fileName = "node-grouping-disabled.png";
+  await expect(page).toHaveScreenshot(fileName, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 
@@ -127,10 +127,9 @@ test("node grouping", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/node-grouping-reenabled.png"
-  });
-  await expect(page).toHaveScreenshot("node-grouping-reenabled.png", {
+
+  const fileName2 = "node-grouping-reenabled.png";
+  await expect(page).toHaveScreenshot(fileName2, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
@@ -140,10 +139,9 @@ test("geo mode", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/geo-mode-enabled.png"
-  });
-  await expect(page).toHaveScreenshot("geo-mode-enabled.png", {
+
+  const fileName = "geo-mode-enabled.png";
+  await expect(page).toHaveScreenshot(fileName, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 
@@ -151,10 +149,9 @@ test("geo mode", async ({ page }) => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
-  await page.screenshot({
-    path: "reports/html/e2e/snapshots/geo-mode-disabled.png"
-  });
-  await expect(page).toHaveScreenshot("geo-mode-disabled.png", {
+
+  const fileName2 = "geo-mode-disabled.png";
+  await expect(page).toHaveScreenshot(fileName2, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
 });
