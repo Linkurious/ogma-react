@@ -1,6 +1,6 @@
 import { ReactNode, ReactElement } from "react";
 import { renderToString } from "react-dom/server";
-import OgmaLib, { Point } from "@linkurious/ogma";
+import OgmaLib, { Node as OgmaNode, Edge, Point } from "@linkurious/ogma";
 import { Content, PositionGetter, Placement, TooltipEventFunctions } from "./types";
 
 export function getContent(
