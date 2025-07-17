@@ -19,7 +19,7 @@ import {
   NeighborMergingProps,
   NodeCollapsing,
   NodeCollapsingProps
-} from "../../src";
+} from "../../../src";
 import { createRef, forwardRef, useState } from "react";
 
 export const ref = createRef<OgmaLib>();

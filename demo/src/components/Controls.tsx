@@ -3,6 +3,7 @@ import { Drawer } from "./Drawer";
 import { Toggle } from "./Toggle";
 import { Slider } from "./Slider";
 import { Menu as MenuIcon } from "react-feather";
+import "./Controls.css";
 
 interface ControlsProps {
   toggleNodeGrouping: (value: boolean) => void;
