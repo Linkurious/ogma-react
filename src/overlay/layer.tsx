@@ -44,7 +44,7 @@ export const Layer = forwardRef(
     useEffect(() => {
       if (layer) {
         if (className) layer.element.className = className;
-        if (index && isFinite(index)) layer.moveTo(index);
+        if (index !== undefined && isFinite(index)) layer.moveTo(index);
       }
     }, [className, index]);
 
