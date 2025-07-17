@@ -460,6 +460,9 @@ describe("Tooltip", () => {
   });
 
   it("should support translation", () => {
+    const ref2 = createRef<Overlay>();
+    const ref3 = createRef<Overlay>();
+    const ref4 = createRef<Overlay>();
     const translate = { x: 10, y: 20 };
     render(
       <Ogma>
@@ -471,13 +474,46 @@ describe("Tooltip", () => {
         >
           Translated tooltip content
         </Tooltip>
+        <Tooltip
+          ref={ref2}
+          eventName="backgroundClick"
+          placement="bottom"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref3}
+          eventName="backgroundClick"
+          placement="left"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref4}
+          eventName="backgroundClick"
+          placement="right"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
       </Ogma>,
       div
     );
 
     expect(
       (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe("translate(calc(-50% + 10px), calc(-100% + 20px))");
+    ).toBe(`translate(calc(-50% + ${translate.x}px), calc(-100% + ${translate.y}px))`);
+    expect(
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-50% + ${translate.x}px), ${translate.y}px)`);
+    expect(
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-100% + ${translate.x}px), calc(-50% + ${translate.y}px))`);
+    expect(
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(${translate.x}px, calc(-50% + ${translate.y}px))`);
   });
 
   it("should support bodyClass", () => {
@@ -495,25 +531,6 @@ describe("Tooltip", () => {
     expect(
       ref.current?.element.querySelector(".custom-tooltip")
     ).toBeDefined();
-  });
-
-  it("should support translate", async () => {
-    render(
-      <Ogma>
-        <Tooltip
-          ref={ref}
-          eventName="backgroundClick"
-          translate={{ x: 50, y: 100 }}
-          bodyClass="custom-tooltip"
-        >
-          content
-        </Tooltip>
-      </Ogma>
-    )
-    const container = ref.current?.element.querySelector(".custom-tooltip") as HTMLElement;
-    expect(container).toBeDefined();
-    expect(container!.style.transform).toContain("50px");
-    expect(container!.style.transform).toContain("100px");
   });
 
 });

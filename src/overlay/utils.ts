@@ -82,14 +82,19 @@ export function getOffset(target: OgmaNode | Edge | "background", zoom: number, 
   // Get the offset of the layer based on the placement
   const offsetAmount = getOffsetAmount(target, zoom);
   const offset = { x: 0, y: 0 };
-  if (placement === "top") {
-    offset.y = -offsetAmount;
-  } else if (placement === "bottom") {
-    offset.y = offsetAmount;
-  } else if (placement === "left") {
-    offset.x = -offsetAmount;
-  } else if (placement === "right") {
-    offset.x = offsetAmount;
+  switch (placement) {
+    case "top":
+      offset.y = -offsetAmount;
+      break;
+    case "bottom":
+      offset.y = offsetAmount;
+      break;
+    case "left":
+      offset.x = -offsetAmount;
+      break;
+    case "right":
+      offset.x = offsetAmount;
+      break;
   }
   return offset;
 }
