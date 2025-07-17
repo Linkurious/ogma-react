@@ -88,6 +88,7 @@ export default function App() {
 
   const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
     ogmaInstanceRef.current = instance;
+    window.ogma = instance;
   }, []);
 
   const addNode = useCallback(() => {

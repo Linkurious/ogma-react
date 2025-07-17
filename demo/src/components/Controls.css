@@ -1,0 +1,31 @@
+.control-buttons > button {
+  position: absolute;
+  z-index: 1000;
+  top: 15px;
+  right: 15px;
+  padding: 3px 7px 0px 7px;
+}
+
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: calc(100% - 40px);
+  justify-content: space-between;
+}
+
+.link-button {
+  width: fit-content;
+  text-align: left;
+  color: #38f;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+h3 {
+  margin-top: 0;
+}

@@ -2,3 +2,9 @@ node_modules
 dist
 reports
 web/index-bundle.*
+
+# Playwright
+/test-results/
+playwright-report
+blob-report/
+playwright/.cache/

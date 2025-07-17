@@ -14,10 +14,6 @@
   transform: translateX(0);
 }
 
-.drawer-content {
-  padding: 20px;
-}
-
 .close-button {
   position: absolute;
   top: 10px;

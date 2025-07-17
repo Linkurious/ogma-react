@@ -33,6 +33,7 @@
     "access": "public"
   },
   "scripts": {
+    "pree2e:tests": "npx playwright install chromium",
     "tsc": "tsc",
     "start": "vite dev demo",
     "build": "npm ls @linkurious/ogma && npm run build:lib && npm run build:ts",
@@ -43,6 +44,7 @@
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
+    "e2e:tests": "playwright test",
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
@@ -63,6 +65,7 @@
     "@linkurious/eslint-config-ogma": "^1.0.5",
     "@linkurious/ogma-styles": "^0.0.4",
     "@next/bundle-analyzer": "^14.0.0",
+    "@playwright/test": "^1.53.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.4.3",
