@@ -44,7 +44,7 @@
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
-    "e2e:tests": "playwright test --project=chromium",
+    "e2e:tests": "playwright test",
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
     "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "postversion": "sync_versions",
