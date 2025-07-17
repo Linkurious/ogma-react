@@ -21,6 +21,9 @@ interface OverlayProps {
   position: Point | ((ogma: OgmaLib) => Point | null);
   /** Overlay size */
   size?: Size;
+  /** Overlay index */
+  index?: number;
+  /** Overlay children */
   children?: ReactNode;
   /** Overlay container className */
   className?: string;
@@ -33,7 +36,7 @@ const offScreenPos: Point = { x: -9999, y: -9999 };
 // TODO: use props for these classes
 export const Overlay = forwardRef(
   (
-    { position, children, className = "", size, scaled }: OverlayProps,
+    { position, children, className = "", size, scaled, index }: OverlayProps,
     ref?: Ref<OverlayLayer>
   ) => {
     const ogma = useOgma();
@@ -48,12 +51,15 @@ export const Overlay = forwardRef(
       newElement.className = className;
       //  html = getContent(ogma, pos, undefined, children);
 
-      const overlay = ogma.layers.addOverlay({
-        position: pos || offScreenPos,
-        element: newElement,
-        size: size || ({ width: "auto", height: "auto" } as any as Size),
-        scaled
-      });
+      const overlay = ogma.layers.addOverlay(
+        {
+          position: pos || offScreenPos,
+          element: newElement,
+          size: size || ({ width: "auto", height: "auto" } as any as Size),
+          scaled
+        },
+        index
+      );
 
       setLayer(overlay);
 
@@ -70,9 +76,10 @@ export const Overlay = forwardRef(
       if (layer) {
         const pos = getPosition(position, ogma) || offScreenPos;
         if (className) layer.element.className = className;
+        if (index && isFinite(index)) layer.moveTo(index);
         layer.setPosition(pos);
       }
-    }, [position, className]);
+    }, [position, className, index]);
 
     if (!layer) return null;
 

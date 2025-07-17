@@ -54,7 +54,7 @@ const CanvasLayerComponent = (
 
   useEffect(() => {
     if (layer) {
-      if (index !== undefined && isFinite(index)) layer.moveTo(index);
+      if (index && isFinite(index)) layer.moveTo(index);
       if (visible) layer.show();
       else layer.hide();
     }
