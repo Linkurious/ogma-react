@@ -43,11 +43,11 @@ describe("Tooltip", () => {
     );
 
     expect(
-      ref.current?.element.querySelector(".ogma-popup--body")
-    ).toBeInstanceOf(HTMLElement);
+      ref.current?.element
+    ).toBeInstanceOf(HTMLDivElement);
     expect(
       ref.current?.element.querySelector(".custom-child-div")
-    ).toBeInstanceOf(HTMLElement);
+    ).toBeInstanceOf(HTMLDivElement);
     expect(
       ref.current?.element.querySelector(".custom-child-div")!.textContent
     ).toBe(text);
@@ -408,6 +408,9 @@ describe("Tooltip", () => {
   });
 
   it("should support placement", () => {
+    const ref2 = createRef<Overlay>();
+    const ref3 = createRef<Overlay>();
+    const ref4 = createRef<Overlay>();
     render(  
       <Ogma>
         <Tooltip
@@ -417,13 +420,64 @@ describe("Tooltip", () => {
         >
           Tooltip content
         </Tooltip>
+        <Tooltip
+          ref={ref2}
+          eventName="backgroundClick"
+          placement="right"
+        >
+          Tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref3}
+          eventName="backgroundClick"
+          placement="bottom"
+        >
+          Tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref4}
+          eventName="backgroundClick"
+          placement="left"
+        >
+          Tooltip content
+        </Tooltip>
       </Ogma>,
       div
     );
 
     expect(
-      (ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--top")
-    ).toBe(true);
+      (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-50% + 0px), calc(-100% + 0px))");
+    expect(
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(0px, calc(-50% + 0px))");
+    expect(
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-50% + 0px), 0px)");
+    expect(
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-100% + 0px), calc(-50% + 0px))");
+  });
+
+  it("should support translation", () => {
+    const translate = { x: 10, y: 20 };
+    render(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          placement="top"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+      </Ogma>,
+      div
+    );
+
+    expect(
+      (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-50% + 10px), calc(-100% + 20px))");
   });
 
   it("should support bodyClass", () => {

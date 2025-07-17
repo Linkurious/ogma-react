@@ -17,8 +17,8 @@ import {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
-  getContainerClass,
-  getEventNameFromTooltipEvent
+  getEventNameFromTooltipEvent,
+  getOffset
 } from "./utils";
 import { Placement, TooltipEventFunctions } from "./types";
 import { createPortal } from "react-dom";
@@ -34,11 +34,12 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
   placement?: Placement;
   /* The body's class */
   bodyClass?: string;
+  /** The offset of the tooltip */
   translate?: {
     x: number;
     y: number;
   }
-
+  /** The content of the tooltip, can be a function that returns a ReactNode */
   children?: ReactNode | TooltipEventFunctions[K];
 }
 
@@ -50,7 +51,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     position,
     children,
     placement = "top",
-    bodyClass = "",
+    bodyClass = "ogma-tooltip--body",
     translate = { x: 0, y: 0 },
     size,
   }: TooltipProps<K>,
@@ -65,8 +66,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   function showTooltip(target: OgmaNode | Edge | "background", point: Point) {
     // If the position is not set, use the point provided
     if (! position) {
-      const offsetAmount = getOffsetAmount(target);
-      const offset = getOffset(offsetAmount);
+      const offset = getOffset(target, ogma.view.getZoom(), placement);
       const pos = {
         x: point.x + offset.x,
         y: point.y + offset.y
@@ -75,51 +75,6 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     };
 
     layer?.show();
-  }
-
-  function getOffsetAmount(target: OgmaNode | Edge | "background") {
-    // Get the offset amount based on the target type
-
-    if (target instanceof OgmaNode) {
-      const radius = target.getAttribute("radius") as number;
-      const outerStrokeWidth = getStrokeWidth("outer", target);
-      const innerStrokeWidth = getStrokeWidth("inner", target);
-      return radius + outerStrokeWidth + innerStrokeWidth; // Offset for nodes
-    } else if (target instanceof Edge) {
-      return target.size; // Offset for edges
-    }
-    return 0; // No offset for background
-  }
-
-  function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge) {
-    // Get the stroke width based on the type and zoom level
-    // @ts-expect-error the attribute does exist
-    const strokeWidth = target.getAttribute(`${strokeType}Stroke.width`) as number;
-    // @ts-expect-error the attribute does exist
-    if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) < target.size) {
-      // @ts-expect-error the attribute does exist
-      if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) !== "fixed") {
-        return strokeWidth / ogma.view.getZoom(); // Scale the stroke width based on the zoom level
-      } else {
-        return strokeWidth; // Fixed stroke width
-      }
-    }
-    return 0; // No stroke if not visible
-  }
-
-  function getOffset(offsetAmount: number) {
-    // Get the offset of the layer based on the placement
-    const offset = { x: 0, y: 0 };
-    if (placement === "top") {
-      offset.y = -offsetAmount;
-    } else if (placement === "bottom") {
-      offset.y = offsetAmount;
-    } else if (placement === "left") {
-      offset.x = -offsetAmount;
-    } else if (placement === "right") {
-      offset.x = offsetAmount;
-    }
-    return offset;
   }
 
   function hideTooltip() {
@@ -142,8 +97,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     const currentLayer = ogma.layers.addOverlay({
       position: position ? position : offScreenPos,
       element: `
-      <div class="${getContainerClass("ogma-popup", placement)}">
-        <div class="ogma-popup--body ${bodyClass}" style="transform: ${transform}">
+      <div>
+        <div class="${bodyClass}" style="transform: ${transform}">
         </div>
       </div>`,
       size: size || { width: "auto", height: "auto" },
@@ -171,7 +126,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
           }
         } else if (eventName.startsWith("edge")) {
           if (evt.target && ! evt.target.isNode) {
-            // Show the tooltip in the middle of the extremities
+            // Show the tooltip where the mouse is currently at
             const pos = ogma.view.screenToGraphCoordinates({x: evt.x, y: evt.y})
             setTarget(evt.target);
             showTooltip(evt.target, pos);
@@ -210,7 +165,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
           }
         } else {
           if (evt.target && ! evt.target.isNode) {
-            // Show the tooltip in the middle of the extremities
+            // Show the tooltip where the mouse is currently at
             const pos = ogma.view.screenToGraphCoordinates({ x: evt.x, y: evt.y })
             setTarget(evt.target);
             showTooltip(evt.target, pos);
@@ -274,7 +229,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 
   if (children instanceof Function) {
     if (! target) return null;
-    // @ts-expect-error
+    // @ts-expect-error the target is always correct (only the type is not)
     const content = children(target);
     if (content === null) {
       layer.hide()

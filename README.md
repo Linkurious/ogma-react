@@ -44,7 +44,7 @@ yarn i <YOUR_LINK_WITH_API_KEY>
 yarn add @linkurious/ogma-react
 ```
 
-You will need the CSS or Styled Components (see [`web/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
+You will need the CSS or Styled Components (see [`demo/src/index.css`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/index.css) for an example). No CSS is included by default.
 
 ```tsx
 import { Ogma, NodeStyle, Popup, useEvent } from '@linkurious/ogma-react';
@@ -52,7 +52,7 @@ import OgmaLib, { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
 ...
 const [clickedNode, setClickedNode] = useState<OgmaNode|null>(null);
 const ogmaRef = useRef<OgmaLib>();
-const onMouseMove = useEvent('mousemove', ({ target }) => {
+const onMousemove = useEvent('mousemove', ({ target }) => {
   if (target && target.isNode) console.log(target.getId());
 });
 
@@ -62,7 +62,7 @@ const onClick = useEvent('click', ({ target }) => {
 
 <Ogma
   options={...}
-  onMouseMove={onMouseMove}
+  onMousemove={onMousemove}
   onClick={onClick}
   ref={ogmaRef}
   onReady={(ogma) => console.log('ogma instance initialized')}
@@ -79,7 +79,7 @@ const onClick = useEvent('click', ({ target }) => {
 
 ## Usage
 
-See the [`web/src/App.tsx`](https://github.com/Linkurious/ogma-react/blob/develop/web/src/App.tsx) file for a complete example.
+See the [`demo/src/App.tsx`](https://github.com/Linkurious/ogma-react/blob/develop/demo/src/App.tsx) file for a complete example.
 
 ```tsx
 const graph: Ogma.RawGraph = ...;
@@ -234,14 +234,14 @@ Main visualisation component. You can use `onReady` or `ref` prop to get a refer
 
 | Prop       | Type                   | Default | Description |
 | ---------- | ---------------------- | ------- | ----------- |
-| `options?` | [`Ogma.Options`](https://doc.linkurio.us/ogma/latest/api.html#Options)         | `{}`    | Ogma options                                                                                                                                                            |
-| `graph?`   | `Ogma.RawGraph`        | `null`  | The graph to render                                                                                                                                                     |
-| `onReady?` | `(ogma: Ogma) => void` | `null`  | Callback when the Ogma instance is ready                                                                                                                                |
-| `ref?`     | `React.Ref<Ogma>`      | `null`  | Reference to the Ogma instance                                                                                                                                          |
-| `children?` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
-| `theme?` | [`Ogma.Theme`](https://doc.linkurious.com/ogma/latest/api/types/theme.html) | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles |
-| `onEventName?` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useEvent` hook to have a stable function identity and avoid reassigning the same handler at every render. |
 | `className?`     | `string`      | `ogma-container`  | className for the ogma container                                                                      |
+| `graph?`   | `Ogma.RawGraph`        | `null`  | The graph to render                                                                                                                                                     |
+| `onEventName?` | `(event: EventTypes<ND, ED>[K]) => void`      | `null`  | The handler for an [event](https://doc.linkurious.com/ogma/latest/api/events.html). The passed in function should always be the result of the `useEvent` hook to have a stable function identity and avoid reassigning the same handler at every render. |
+| `onReady?` | `(ogma: Ogma) => void` | `null`  | Callback when the Ogma instance is ready                                                                                                                                |
+| `options?` | [`Ogma.Options`](https://doc.linkurio.us/ogma/latest/api.html#Options)         | `{}`    | Ogma options                                                                                                                                                            |
+| `theme?` | [`Ogma.Theme`](https://doc.linkurious.com/ogma/latest/api/types/theme.html) | `null`  | The theme of the graph. Keep in mind that adding `<NodeStyle>` and `<EdgeStyle>` components will overwrite the theme's styles |
+| `children?` | `React.ReactNode`      | `null`  | The children of the component, such as `<Popup>` or `<Tooltip>` or your custom component. Ogma instance is avalable to the children components through `useOgma()` hook |
+| `ref?`     | `React.Ref<Ogma>`      | `null`  | Reference to the Ogma instance                                                                                                                                          |
 
 ### `<NodeStyle />`
 
@@ -367,8 +367,8 @@ Wrapper to the Ogma `StyleClass` class. It allows you to apply styles to nodes a
 | Prop         | Type                           | Default | Description                                  |
 | ------------ | ------------------------------ | ------- | -------------------------------------------- |
 | **`name`**  | `string`                       |   | The class name to apply the styles to        |
-| `nodeAttributes` | [`Ogma.NodeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/nodeattributesvalue.html) | `{}`    | Attributes to apply to the nodes or edges    |
-| `edgeAttributes` | [`Ogma.EdgeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/edgeattributesvalue.html) | `{}`    | Attributes to apply to the edges             |
+| `edgeAttributes?` | [`Ogma.EdgeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/edgeattributesvalue.html) | `{}`    | Attributes to apply to the edges             |
+| `nodeAttributes?` | [`Ogma.NodeAttributesValue`](https://doc.linkurious.com/ogma/latest/api/types/nodeattributesvalue.html) | `{}`    | Attributes to apply to the nodes or edges    |
 
 
 ### Example
@@ -395,18 +395,19 @@ Custom popup UI layer.
 
 | Prop               | Type               | Default                 | Description                                                  |
 | ------------------ | ------------------ | ----------------------- | ----------------------------------------------------------- |
+| `closeOnEsc?`      | `boolean`          | `true`                  | Whether to close the popup when the user presses the ESC key |
+| `closePopupClass?` | `string`           | `'ogma-popup--close'`   | Class name to apply to the close button                      |
+| `contentClass?`    | `string`           | `'ogma-popup--content'` | Class name to apply to the popup content                     |
+| `isOpen?`           | `boolean`          | `true`                  | Whether the popup is open                                    |
+| `onClose?`          | `() => void`       | `null`                  | Callback when the popup is closed                            |
+| `placement?`        | `'top' \| 'bottom' \| 'right'\| 'left'` | Placement of the popup |
+| `popupBodyClass?`  | `string`           | `'ogma-popup--body'`    | Class name to apply to the popup body                        |
+| `popupClass?`      | `string`           | `'ogma-popup'`          | Class name to apply to the popup container                   |
 | `position`         | `Point \| (ogma: Ogma) => Point`  | `null`                                                       | Position of the popup               |
 | `size?`            | `{ width: number \| 'auto'; height: number \| 'auto'; }`                                                   | `{ width: 'auto', height: 'auto' }` | Size of the popup      |
-| `children`         | `React.ReactNode`  | `null`                  | The children of the component                                |
-| `isOpen`           | `boolean`          | `true`                  | Whether the popup is open                                    |
-| `onClose`          | `() => void`       | `null`                  | Callback when the popup is closed                            |
-| `placement`        | `'top' \| 'bottom' \| 'right'\| 'left'` | Placement of the popup |
+| `children?`         | `React.ReactNode`  | `null`                  | The children of the component                                |
 | `ref?`             | `React.Ref<Popup>` | `null`                  | Reference to the popup                                       |
-| `closeOnEsc?`      | `boolean`          | `true`                  | Whether to close the popup when the user presses the ESC key |
-| `popupClass?`      | `string`           | `'ogma-popup'`          | Class name to apply to the popup container                   |
-| `contentClass?`    | `string`           | `'ogma-popup--content'` | Class name to apply to the popup content                     |
-| `popupBodyClass?`  | `string`           | `'ogma-popup--body'`    | Class name to apply to the popup body                        |
-| `closePopupClass?` | `string`           | `'ogma-popup--close'`   | Class name to apply to the close button                      |
+
 
 #### Example
 
@@ -430,11 +431,11 @@ and has the target of the event as argument.
 
 | Prop        | Type              | Default                | Description                   |
 | ----------- | ----------------- | ---------------------- | ----------------------------- |
+| `bodyClass?` | `string`        | `'ogma-popup--body'`      | The class name to add to the tooltip container |
 | `eventName`  | `keyof TooltipEventFunctions` |  | The name of the event to show the tooltip            |
+| `placement?` | `Placement`       | `top`                | The placement of the tooltip      |
 | `position?`  | `Point` | `null` | The position of the tooltip if static            |
 | `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | The size of the tooltip |
-| `placement?` | `Placement`       | `top`                | The placement of the tooltip      |
-| `bodyClass?` | `string`        | `''`      | The class name to add to the tooltip container |
 | `translate?` | `{ x: number, y: number }`        | `{ x: 0, y: 0 }`      | The amount of pixels to translate the tooltip container |
 | `children?`  | `React.ReactNode \| (Node \| Edge \| Point) => React.ReactNode` | `null`                 | The children of the component |
 | `ref?`      | `React.Ref<Overlay>` | `null`              | Reference to the tooltip      |
@@ -466,11 +467,12 @@ Custom canvas layer.
 
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `ref` | `React.Ref<CanvasLayer>` | `null` | Reference to the canvas layer |
-| `render` | `(ctx: CanvasRenderingContext2D) => void` | `null` | Callback to render the canvas layer |
-| `index?` | `number` | `1` | Index of the layer |
+| `index?` | `number` | `1` | The index of the layer |
 | `isStatic?` | `boolean` | `false` | Whether the layer is static |
 | `noClear?` | `boolean` | `false` | Whether to clear the canvas before rendering |
+| `render` | `(ctx: CanvasRenderingContext2D) => void` | `null` | Callback to render the canvas layer |
+| `visible?` | `boolean` | `true` | The visibility of the canvas |
+| `ref?` | `React.Ref<CanvasLayer>` | `null` | Reference to the canvas layer |
 
 #### Example
 
@@ -493,7 +495,11 @@ Generic DOM layer, see [`ogma.layers.addLayer`](https://doc.linkurious.com/ogma/
 
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `children`         | `React.ReactNode`  | `null`| The children of the layer |
+| `className?`         | `string`  | `""`| The class name of the layer |
+| `index?`         | `number`  | `null`| The index of the layer |
+| `children?`         | `React.ReactNode`  | `null`| The children of the layer |
+| `ref?`         | `React.Ref<Layer>`  | `null`| The reference to the layer |
+
 #### Example
 
 ```tsx
@@ -512,11 +518,13 @@ Generic Overlay layer, see [`ogma.layers.addOverlay`](https://doc.linkurious.com
 
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `children`         | `React.ReactNode`  | `null`| The children of the layer |
-| `className`         | `string`  | `null`| Classname for the Overlay |
-| `scaled`         | `boolean`  | `true`| Wether the Overlay is scaled on zoom or not |
-| `position`  | `Point \| (ogma: Ogma) => Point` |  | Position of the Overlay             |
-| `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | Size of the Overlay |
+| `children?`         | `React.ReactNode`  | `null`| The children of the layer |
+| `className?`         | `string`  | `null`| The classname for the Overlay |
+| `position`  | `Point \| (ogma: Ogma) => Point` |  | The position of the Overlay             |
+| `scaled?`         | `boolean`  | `true`| Whether the Overlay is scaled on zoom or not |
+| `size?`     | `{ width: number  \| 'auto'; height: number \| 'auto'; }` | `{ width: 'auto', height: 'auto' }` | The size of the Overlay |
+| `ref?`         | `React.Ref<Overlay>`  | `null`| The reference to the overlay |
+
 
 #### Example
 
@@ -548,8 +556,8 @@ Node grouping transformation. See [`ogma.transformations.addNodeGrouping()`](htt
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `selector`   | `(node: Ogma.Node) => boolean` | `null`  | Selector to apply the attributes to the node |
-| `groupIdFunction` | `(node: Ogma.Node) => string \| undefined`      |     | Grouping function              |
+| `selector?`   | `(node: Ogma.Node) => boolean` | `null`  | Selector to apply the attributes to the node |
+| `groupIdFunction?` | `(node: Ogma.Node) => string \| undefined`      |     | Grouping function              |
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addNodeGrouping()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeGrouping) properties | | Node grouping transformation properties |
 
@@ -573,8 +581,8 @@ Edge grouping transformation. See [`ogma.transformations.addEdgeGrouping()`](htt
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `selector`   | `(edge: Ogma.Edge) => boolean` | `null`  | Selector for the edges |
-| `groupIdFunction` | `(edge: Ogma.Edge) => string \| undefined`      |     | Grouping function              |
+| `selector?`   | `(edge: Ogma.Edge) => boolean` | `null`  | Selector for the edges |
+| `groupIdFunction?` | `(edge: Ogma.Edge) => string \| undefined`      |     | Grouping function              |
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addEdgeGrouping()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeGrouping) properties | | Edge grouping transformation properties |
 
@@ -641,7 +649,7 @@ Neighbor merging transformation. See [`ogma.transformations.addNeighborMerging()
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `selector`   | `(node: Ogma.Node) => boolean` | `null`  | Selector |
+| `selector?`   | `(node: Ogma.Node) => boolean` | `null`  | Selector |
 | `dataFunction` | `(node: Ogma.Node) => object | undefined;`      |     | Neighbor data function              |
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addNeighborMerging()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNeighborMerging) properties | | Neighbor merging transformation properties |
@@ -669,7 +677,7 @@ Neighbor generation transformation. See [`ogma.transformations.addNeighborGenera
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `selector`   | `(node: Ogma.Node) => boolean` | `null`  | Selector |
+| `selector?`   | `(node: Ogma.Node) => boolean` | `null`  | Selector |
 | `neighborIdFunction` | `(node: Ogma.Node) => string|Array<string>|null;`      |     | Neighbor data function              |
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addNeighborMerging()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNeighborGeneration) properties | | Transformation properties |
@@ -694,7 +702,7 @@ Node collapsing transformation. See [`ogma.transformations.addNodeCollapsing()`]
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `selector`   | `(node: Ogma.Node) => boolean` | `null`  | Selector |
+| `selector?`   | `(node: Ogma.Node) => boolean` | `null`  | Selector |
 | `edgeGenerator?` | `(hiddenNode: Ogma.Node, node1: Ogma.Node, node2: Ogma.Node, edges1: Ogma.EdgeList, edges2: Ogma.EdgeList): RawEdge|null)` |     | Edge generator function              |
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addNodeCollapsing()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeCollapsing) properties | | Transformation properties |
