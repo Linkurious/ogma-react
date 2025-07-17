@@ -76,7 +76,7 @@ export const Overlay = forwardRef(
       if (layer) {
         const pos = getPosition(position, ogma) || offScreenPos;
         if (className) layer.element.className = className;
-        if (index && isFinite(index)) layer.moveTo(index);
+        if (index !== undefined && isFinite(index)) layer.moveTo(index);
         layer.setPosition(pos);
       }
     }, [position, className, index]);
