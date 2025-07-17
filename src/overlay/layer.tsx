@@ -11,8 +11,9 @@ import { Layer as OgmaLayer } from "@linkurious/ogma";
 import { useOgma } from "../context";
 
 export interface LayerProps {
+  /** Layer children */
   children?: ReactNode;
-  /** Overlay container className */
+  /** Layer container className */
   className?: string;
   /** Layer index */
   index?: number;
@@ -41,8 +42,11 @@ export const Layer = forwardRef(
     }, []);
 
     useEffect(() => {
-      if (layer) layer.element.className = className;
-    }, [className]);
+      if (layer) {
+        if (className) layer.element.className = className;
+        if (index !== undefined && isFinite(index)) layer.moveTo(index);
+      }
+    }, [className, index]);
 
     if (!layer) return null;
 

@@ -1,9 +1,10 @@
-import { createRef } from "react";
-import { render } from "../utils";
+import { act, createRef } from "react";
+import { render, screen } from "../utils";
 
 import { Ogma, Popup } from "../../../src";
 import { Overlay, Point } from "@linkurious/ogma";
 import graph from "../fixtures/simple_graph.json";
+import { PopupComponent, ref as popupRef } from "./popupTestComponent";
 
 describe("Popup", () => {
   let div: HTMLDivElement;
@@ -30,6 +31,7 @@ describe("Popup", () => {
     expect(ref.current).toBeDefined();
     expect(ref.current!.hide).toBeDefined();
   });
+
   it("should add popup", () => {
     const text = "Custom popup text";
     const ref = createRef<Overlay>();
@@ -54,6 +56,35 @@ describe("Popup", () => {
     expect(
       ref.current?.element.querySelector(".custom-child-div")!.textContent
     ).toBe(text);
+  });
+
+  it("should support content prop", () => {
+    const text = "content";
+    const ref = createRef<Overlay>();
+
+    render(
+      <Ogma graph={graph}>
+        <Popup position={{ x: 0, y: 0 }} ref={ref} isOpen contentClass="content" content={text} />
+      </Ogma>,
+      div
+    );
+    expect(
+      ref.current?.element.querySelector(".content")
+    ).toBeInstanceOf(HTMLDivElement);
+    expect(
+      ref.current?.element.querySelector(".content")!.textContent
+    ).toBe(text);
+  });
+
+  it("should close the popup on close button click", async () => {
+    render(
+      <PopupComponent />
+    );
+    expect(popupRef.current?.isHidden()).toEqual(false);
+    await act(async () => {
+      screen.getByText("X").click();
+    });
+    expect(popupRef.current).toBeNull();
   });
 
   it("should support positioning", () => {
