@@ -87,6 +87,7 @@ describe("Tooltip", () => {
     const ref2 = createRef<Overlay>();
     const ref3 = createRef<Overlay>();
     const ref4 = createRef<Overlay>();
+    const ref5 = createRef<Overlay>();
     const ogmaRef = createRef<OgmaLib>();
 
     render(
@@ -94,13 +95,16 @@ describe("Tooltip", () => {
         <Tooltip eventName="nodeHover" ref={ref1}>
           content
         </Tooltip>
-        <Tooltip eventName="backgroundClick" ref={ref2}>
+        <Tooltip eventName="edgeHover" ref={ref2}>
           content
         </Tooltip>
-        <Tooltip eventName="nodeDoubleclick" ref={ref3}>
+        <Tooltip eventName="backgroundClick" ref={ref3}>
           content
         </Tooltip>
-        <Tooltip eventName="edgeRightclick" ref={ref4}>
+        <Tooltip eventName="nodeDoubleclick" ref={ref4}>
+          content
+        </Tooltip>
+        <Tooltip eventName="edgeRightclick" ref={ref5}>
           content
         </Tooltip>
       </Ogma>,
@@ -132,6 +136,20 @@ describe("Tooltip", () => {
       {
         ref: ref2,
         showTooltip: async () => {
+          await ogma.mouse.move(
+            ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+          );
+          await ogma.view.afterNextFrame();
+        },
+        hideTooltip: async () => {
+          await ogma.mouse.move({ x: -10000, y: -10000 });
+          await ogma.view.afterNextFrame();
+          await ogma.view.afterNextFrame();
+        }
+      },
+      {
+        ref: ref3,
+        showTooltip: async () => {
           await ogma.mouse.click({ x: 10000, y: 10000 });
           await ogma.view.afterNextFrame();
         },
@@ -143,7 +161,7 @@ describe("Tooltip", () => {
         }
       },
       {
-        ref: ref3,
+        ref: ref4,
         showTooltip: async () => {
           await ogma.mouse.doubleclick(
             ogma.view.graphToScreenCoordinates(node.getPosition())
@@ -156,7 +174,7 @@ describe("Tooltip", () => {
         }
       },
       {
-        ref: ref4,
+        ref: ref5,
         showTooltip: async () => {
           await ogma.mouse.rightClick(
             ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
