@@ -126,7 +126,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
           }
         } else if (eventName.startsWith("edge")) {
           if (evt.target && ! evt.target.isNode) {
-            // Show the tooltip in the middle of the extremities
+            // Show the tooltip where the mouse is currently at
             const pos = ogma.view.screenToGraphCoordinates({x: evt.x, y: evt.y})
             setTarget(evt.target);
             showTooltip(evt.target, pos);
@@ -165,7 +165,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
           }
         } else {
           if (evt.target && ! evt.target.isNode) {
-            // Show the tooltip in the middle of the extremities
+            // Show the tooltip where the mouse is currently at
             const pos = ogma.view.screenToGraphCoordinates({ x: evt.x, y: evt.y })
             setTarget(evt.target);
             showTooltip(evt.target, pos);
@@ -229,7 +229,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 
   if (children instanceof Function) {
     if (! target) return null;
-    // @ts-expect-error
+    // @ts-expect-error the target is always correct (only the type is not)
     const content = children(target);
     if (content === null) {
       layer.hide()
