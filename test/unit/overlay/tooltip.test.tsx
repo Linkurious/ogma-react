@@ -87,6 +87,7 @@ describe("Tooltip", () => {
     const ref2 = createRef<Overlay>();
     const ref3 = createRef<Overlay>();
     const ref4 = createRef<Overlay>();
+    const ref5 = createRef<Overlay>();
     const ogmaRef = createRef<OgmaLib>();
 
     render(
@@ -94,13 +95,16 @@ describe("Tooltip", () => {
         <Tooltip eventName="nodeHover" ref={ref1}>
           content
         </Tooltip>
-        <Tooltip eventName="backgroundClick" ref={ref2}>
+        <Tooltip eventName="edgeHover" ref={ref2}>
           content
         </Tooltip>
-        <Tooltip eventName="nodeDoubleclick" ref={ref3}>
+        <Tooltip eventName="backgroundClick" ref={ref3}>
           content
         </Tooltip>
-        <Tooltip eventName="edgeRightclick" ref={ref4}>
+        <Tooltip eventName="nodeDoubleclick" ref={ref4}>
+          content
+        </Tooltip>
+        <Tooltip eventName="edgeRightclick" ref={ref5}>
           content
         </Tooltip>
       </Ogma>,
@@ -132,6 +136,20 @@ describe("Tooltip", () => {
       {
         ref: ref2,
         showTooltip: async () => {
+          await ogma.mouse.move(
+            ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+          );
+          await ogma.view.afterNextFrame();
+        },
+        hideTooltip: async () => {
+          await ogma.mouse.move({ x: -10000, y: -10000 });
+          await ogma.view.afterNextFrame();
+          await ogma.view.afterNextFrame();
+        }
+      },
+      {
+        ref: ref3,
+        showTooltip: async () => {
           await ogma.mouse.click({ x: 10000, y: 10000 });
           await ogma.view.afterNextFrame();
         },
@@ -143,7 +161,7 @@ describe("Tooltip", () => {
         }
       },
       {
-        ref: ref3,
+        ref: ref4,
         showTooltip: async () => {
           await ogma.mouse.doubleclick(
             ogma.view.graphToScreenCoordinates(node.getPosition())
@@ -156,7 +174,7 @@ describe("Tooltip", () => {
         }
       },
       {
-        ref: ref4,
+        ref: ref5,
         showTooltip: async () => {
           await ogma.mouse.rightClick(
             ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
@@ -442,6 +460,9 @@ describe("Tooltip", () => {
   });
 
   it("should support translation", () => {
+    const ref2 = createRef<Overlay>();
+    const ref3 = createRef<Overlay>();
+    const ref4 = createRef<Overlay>();
     const translate = { x: 10, y: 20 };
     render(
       <Ogma>
@@ -453,13 +474,46 @@ describe("Tooltip", () => {
         >
           Translated tooltip content
         </Tooltip>
+        <Tooltip
+          ref={ref2}
+          eventName="backgroundClick"
+          placement="bottom"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref3}
+          eventName="backgroundClick"
+          placement="left"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref4}
+          eventName="backgroundClick"
+          placement="right"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
       </Ogma>,
       div
     );
 
     expect(
       (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe("translate(calc(-50% + 10px), calc(-100% + 20px))");
+    ).toBe(`translate(calc(-50% + ${translate.x}px), calc(-100% + ${translate.y}px))`);
+    expect(
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-50% + ${translate.x}px), ${translate.y}px)`);
+    expect(
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-100% + ${translate.x}px), calc(-50% + ${translate.y}px))`);
+    expect(
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(${translate.x}px, calc(-50% + ${translate.y}px))`);
   });
 
   it("should support bodyClass", () => {
@@ -477,25 +531,6 @@ describe("Tooltip", () => {
     expect(
       ref.current?.element.querySelector(".custom-tooltip")
     ).toBeDefined();
-  });
-
-  it("should support translate", async () => {
-    render(
-      <Ogma>
-        <Tooltip
-          ref={ref}
-          eventName="backgroundClick"
-          translate={{ x: 50, y: 100 }}
-          bodyClass="custom-tooltip"
-        >
-          content
-        </Tooltip>
-      </Ogma>
-    )
-    const container = ref.current?.element.querySelector(".custom-tooltip") as HTMLElement;
-    expect(container).toBeDefined();
-    expect(container!.style.transform).toContain("50px");
-    expect(container!.style.transform).toContain("100px");
   });
 
 });
