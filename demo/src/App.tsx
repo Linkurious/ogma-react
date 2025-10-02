@@ -177,8 +177,7 @@ export default function App() {
         />
 
         <Tooltip
-          eventName="nodeRightclick"
-          placement="right"
+          eventName="nodeHover"
           bodyClass="ogma-tooltip"
         >
           {(target) => {
