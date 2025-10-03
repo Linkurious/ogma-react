@@ -179,6 +179,7 @@ export default function App() {
         <Tooltip
           eventName="nodeRightclick"
           bodyClass="ogma-tooltip"
+          placement="right"
         >
           {(target) => {
             return (
