@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitFor } from "./utils";
 
 import OgmaLib, { RawGraph, Theme } from "@linkurious/ogma";
-import { Ogma, useOgma } from "../src";
+import { Ogma, useOgma } from "../../src";
 import { afternoonNap, morningBreeze } from '@linkurious/ogma-styles';
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
@@ -22,18 +22,18 @@ describe("Ogma", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));
 
-  it("Ogma container renders without crashing", () => {
+  it("renders without crashing", () => {
     render(<Ogma graph={graph} />, div);
   });
 
-  it("Supports ref interface", () => {
+  it("supports ref interface", () => {
     const ref = React.createRef<OgmaLib>();
     render(<Ogma ref={ref} graph={graph} />, div);
     expect(ref.current).toBeDefined();
     expect(ref.current).toBeInstanceOf(OgmaLib);
   });
 
-  it("Ogma container renders with onReady callback", () => {
+  it("renders with onReady callback", () => {
     return new Promise((resolve) => {
       render(<Ogma graph={graph} onReady={(ogma) => resolve(ogma)} />, div);
     }).then((ogma) => {
@@ -41,7 +41,7 @@ describe("Ogma", () => {
     });
   });
 
-  it("Ogma container renders and takes options", () => {
+  it("renders and takes options", () => {
     const backgroundColor = "red";
     const minimumWidth = 500;
     return new Promise((resolve) => {
@@ -62,7 +62,23 @@ describe("Ogma", () => {
     });
   });
 
-  it("Ogma container passes the ogma instance to children", () => {
+  it("supports options changes", () => {
+    const backgroundColor = "red";
+    const ref = React.createRef<OgmaLib>();
+    const { rerender } = render(
+      <Ogma ref={ref} graph={graph} options={{ backgroundColor }} />,
+      div
+    );
+
+    expect(ref.current?.getOptions().backgroundColor).toBe(backgroundColor);
+
+    const newBackgroundColor = "blue";
+    rerender(<Ogma ref={ref} graph={graph} options={{ backgroundColor: newBackgroundColor }} />);
+    
+    expect(ref.current?.getOptions().backgroundColor).toBe(newBackgroundColor);
+  });
+
+  it("passes the ogma instance to children", () => {
     return new Promise((resolve) => {
       const Component = () => {
         const ogma = useOgma();

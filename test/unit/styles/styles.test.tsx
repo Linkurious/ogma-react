@@ -1,9 +1,9 @@
 import React, { act, createRef } from "react";
 import { Root, createRoot } from "react-dom/client";
-import { userEvent, waitFor } from "./utils";
+import { userEvent, waitFor } from "../utils";
 import OgmaLib, { Edge } from "@linkurious/ogma";
-import { Ogma, NodeStyle, EdgeStyle } from "../src";
-import graph from "./fixtures/simple_graph.json";
+import { Ogma, NodeStyle, EdgeStyle } from "../../../src";
+import graph from "../fixtures/simple_graph.json";
 
 describe("styles", async () => {
   let div: Root;

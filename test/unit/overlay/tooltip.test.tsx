@@ -1,7 +1,7 @@
-import OgmaLib, { Point, Overlay, Node } from "@linkurious/ogma";
+import OgmaLib, { Overlay } from "@linkurious/ogma";
 import { render, waitFor, getMiddlePoint } from "../utils";
-import { Tooltip } from "../../src/overlay/tooltip";
-import { Ogma } from "../../src";
+import { Tooltip } from "../../../src/overlay/tooltip";
+import { Ogma } from "../../../src";
 import { act, createRef } from "react";
 import graph from "../fixtures/simple_graph.json";
 
@@ -43,11 +43,11 @@ describe("Tooltip", () => {
     );
 
     expect(
-      ref.current?.element.querySelector(".ogma-popup--body")
-    ).toBeInstanceOf(HTMLElement);
+      ref.current?.element
+    ).toBeInstanceOf(HTMLDivElement);
     expect(
       ref.current?.element.querySelector(".custom-child-div")
-    ).toBeInstanceOf(HTMLElement);
+    ).toBeInstanceOf(HTMLDivElement);
     expect(
       ref.current?.element.querySelector(".custom-child-div")!.textContent
     ).toBe(text);
@@ -59,7 +59,7 @@ describe("Tooltip", () => {
     render(
       <Ogma ref={ogmaRef}>
         <Tooltip eventName="backgroundClick" ref={ref}>
-          {(pos: Point) => <div className="custom-child-div">x: {pos.x}, y: {pos.y}</div>}
+          {(pos) => <div className="custom-child-div">x: {pos.x}, y: {pos.y}</div>}
         </Tooltip>,
       </Ogma>,
       div
@@ -87,6 +87,7 @@ describe("Tooltip", () => {
     const ref2 = createRef<Overlay>();
     const ref3 = createRef<Overlay>();
     const ref4 = createRef<Overlay>();
+    const ref5 = createRef<Overlay>();
     const ogmaRef = createRef<OgmaLib>();
 
     render(
@@ -94,13 +95,16 @@ describe("Tooltip", () => {
         <Tooltip eventName="nodeHover" ref={ref1}>
           content
         </Tooltip>
-        <Tooltip eventName="backgroundClick" ref={ref2}>
+        <Tooltip eventName="edgeHover" ref={ref2}>
           content
         </Tooltip>
-        <Tooltip eventName="nodeDoubleclick" ref={ref3}>
+        <Tooltip eventName="backgroundClick" ref={ref3}>
           content
         </Tooltip>
-        <Tooltip eventName="edgeRightclick" ref={ref4}>
+        <Tooltip eventName="nodeDoubleclick" ref={ref4}>
+          content
+        </Tooltip>
+        <Tooltip eventName="edgeRightclick" ref={ref5}>
           content
         </Tooltip>
       </Ogma>,
@@ -132,6 +136,20 @@ describe("Tooltip", () => {
       {
         ref: ref2,
         showTooltip: async () => {
+          await ogma.mouse.move(
+            ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+          );
+          await ogma.view.afterNextFrame();
+        },
+        hideTooltip: async () => {
+          await ogma.mouse.move({ x: -10000, y: -10000 });
+          await ogma.view.afterNextFrame();
+          await ogma.view.afterNextFrame();
+        }
+      },
+      {
+        ref: ref3,
+        showTooltip: async () => {
           await ogma.mouse.click({ x: 10000, y: 10000 });
           await ogma.view.afterNextFrame();
         },
@@ -143,7 +161,7 @@ describe("Tooltip", () => {
         }
       },
       {
-        ref: ref3,
+        ref: ref4,
         showTooltip: async () => {
           await ogma.mouse.doubleclick(
             ogma.view.graphToScreenCoordinates(node.getPosition())
@@ -156,7 +174,7 @@ describe("Tooltip", () => {
         }
       },
       {
-        ref: ref4,
+        ref: ref5,
         showTooltip: async () => {
           await ogma.mouse.rightClick(
             ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
@@ -189,7 +207,7 @@ describe("Tooltip", () => {
     render(
       <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip eventName="nodeClick" ref={ref}>
-          {(node: Node) => <div className="custom-child-div">{node.getId()}</div>}
+          {(node) => <div className="custom-child-div">{node.getId()}</div>}
         </Tooltip>,
       </Ogma>,
       div
@@ -390,6 +408,9 @@ describe("Tooltip", () => {
   });
 
   it("should support placement", () => {
+    const ref2 = createRef<Overlay>();
+    const ref3 = createRef<Overlay>();
+    const ref4 = createRef<Overlay>();
     render(  
       <Ogma>
         <Tooltip
@@ -399,13 +420,117 @@ describe("Tooltip", () => {
         >
           Tooltip content
         </Tooltip>
+        <Tooltip
+          ref={ref2}
+          eventName="backgroundClick"
+          placement="right"
+        >
+          Tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref3}
+          eventName="backgroundClick"
+          placement="bottom"
+        >
+          Tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref4}
+          eventName="backgroundClick"
+          placement="left"
+        >
+          Tooltip content
+        </Tooltip>
       </Ogma>,
       div
     );
 
     expect(
-      (ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--top")
-    ).toBe(true);
+      (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-50% + 0px), calc(-100% + 0px))");
+    expect(
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(0px, calc(-50% + 0px))");
+    expect(
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-50% + 0px), 0px)");
+    expect(
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe("translate(calc(-100% + 0px), calc(-50% + 0px))");
+  });
+
+  it("should support translation", () => {
+    const ref2 = createRef<Overlay>();
+    const ref3 = createRef<Overlay>();
+    const ref4 = createRef<Overlay>();
+    const translate = { x: 10, y: 20 };
+    render(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          placement="top"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref2}
+          eventName="backgroundClick"
+          placement="bottom"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref3}
+          eventName="backgroundClick"
+          placement="left"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+        <Tooltip
+          ref={ref4}
+          eventName="backgroundClick"
+          placement="right"
+          translate={translate}
+        >
+          Translated tooltip content
+        </Tooltip>
+      </Ogma>,
+      div
+    );
+
+    expect(
+      (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-50% + ${translate.x}px), calc(-100% + ${translate.y}px))`);
+    expect(
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-50% + ${translate.x}px), ${translate.y}px)`);
+    expect(
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(calc(-100% + ${translate.x}px), calc(-50% + ${translate.y}px))`);
+    expect(
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+    ).toBe(`translate(${translate.x}px, calc(-50% + ${translate.y}px))`);
+  });
+
+  it("should support bodyClass", () => {
+    render(
+      <Ogma>
+        <Tooltip
+          ref={ref}
+          eventName="backgroundClick"
+          bodyClass="custom-tooltip"
+        >
+          Tooltip content
+        </Tooltip>
+      </Ogma>
+    );
+    expect(
+      ref.current?.element.querySelector(".custom-tooltip")
+    ).toBeDefined();
   });
 
 });

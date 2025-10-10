@@ -48,7 +48,14 @@ code {
   left: 15px;
   z-index: 401;
   display: flex;
+  gap: 5px;
+  align-items: center;
   backdrop-filter: blur(5px);
+}
+
+.gh-link > div {
+  display: flex;
+  align-items: center;
 }
 
 .ogma-tooltip {

@@ -1,8 +1,8 @@
 import { render, act } from "@testing-library/react";
 import { describe, it, beforeEach, vi, expect } from "vitest";
-import { StyleClass } from "../src/styles/classStyle";
-import { Ogma } from "../src";
-import graph from "./fixtures/simple_graph.json";
+import { StyleClass } from "../../../src/styles/classStyle";
+import { Ogma } from "../../../src";
+import graph from "../fixtures/simple_graph.json";
 
 // Mock Ogma and its API
 const mockDestroy = vi.fn();
@@ -24,7 +24,7 @@ const mockOgma = {
   }
 };
 
-vi.mock("../src/context", async (importOriginal) => {
+vi.mock("../../../src/context", async (importOriginal) => {
   const actual = (await importOriginal()) as {};
   return {
     ...actual,
