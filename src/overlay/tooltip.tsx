@@ -97,8 +97,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
     const currentLayer = ogma.layers.addOverlay({
       position: position ? position : offScreenPos,
       element: `
-      <div>
-        <div class="${bodyClass}" style="transform: ${transform}">
+      <div style="pointer-events: none">
+        <div class="${bodyClass}" style="transform: ${transform}; pointer-events: auto">
         </div>
       </div>`,
       size: size || { width: "auto", height: "auto" },
