@@ -18,7 +18,9 @@ import {
 import { useOgma } from "../context";
 import {
   getEventNameFromTooltipEvent,
-  getOffset
+  getOffset,
+  getTranslate,
+  isOverflowing
 } from "./utils";
 import { Placement, TooltipEventFunctions } from "./types";
 import { createPortal } from "react-dom";
@@ -59,6 +61,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 ) => {
   const ogma = useOgma();
   const [target, setTarget] = useState<OgmaNode | Edge | Point>();
+  const [point, setPoint] = useState<Point>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
@@ -66,15 +69,21 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   function showTooltip(target: OgmaNode | Edge | "background", point: Point) {
     // If the position is not set, use the point provided
     if (! position) {
-      const offset = getOffset(target, ogma.view.getZoom(), placement);
+      const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
+      const offset = getOffset(target, zoom, placement);
       const pos = {
         x: point.x + offset.x,
         y: point.y + offset.y
       };
+      setPoint(point);
       layer?.setPosition(pos);
-    };
+    }
 
-    layer?.show();
+    const transform = getTranslate(null, placement, translate);
+    const element = layer!.element.children[0] as HTMLElement;
+    element.style.transform = transform;
+
+    // Wait for the next tick to make it visible to avoid flickering
   }
 
   function hideTooltip() {
@@ -85,20 +94,12 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   // Initialize the tooltip layer when the component mounts
   useEffect(() => {
 
-    let transform = `translate(${translate.x}px, calc(-50% + ${translate.y}px))`;
-    if (placement === "top") {
-      transform = `translate(calc(-50% + ${translate.x}px), calc(-100% + ${translate.y}px))`;
-    } else if (placement === "bottom") {
-      transform = `translate(calc(-50% + ${translate.x}px), ${translate.y}px)`;
-    } else if (placement === "left") {
-      transform = `translate(calc(-100% + ${translate.x}px), calc(-50% + ${translate.y}px))`;
-    }
     // Create initial empty content container
     const currentLayer = ogma.layers.addOverlay({
       position: position ? position : offScreenPos,
       element: `
       <div style="pointer-events: none">
-        <div class="${bodyClass}" style="transform: ${transform}; pointer-events: auto">
+        <div class="${bodyClass}" style="pointer-events: auto">
         </div>
       </div>`,
       size: size || { width: "auto", height: "auto" },
@@ -223,6 +224,36 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
       layer.setSize(size);
     }
   }, [position, placement, size, bodyClass]);
+
+  useEffect(() => {
+    if (!layer || !layer.element || !target) return;
+
+    const element = layer.element as HTMLElement;
+    const bb = element.children[0].getBoundingClientRect();
+    const window = element.ownerDocument.defaultView!;
+
+    // Check if the tooltip is overflowing and adjust the placement if needed
+    const newPlacement = isOverflowing(bb, window.innerWidth, window.innerHeight);
+    if (newPlacement) {
+      // Recalculate the offset with the new placement
+      const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
+      const t = target instanceof OgmaNode || target instanceof Edge ? target : "background";
+      const offset = getOffset(t, zoom, newPlacement);
+
+      layer?.setPosition({
+        x: point!.x + offset.x,
+        y: point!.y + offset.y
+      });
+
+      // Update the transform of the element to reflect the new placement
+      const transform = getTranslate(newPlacement, placement, translate);
+      (element.children[0] as HTMLElement).style.transform = transform;
+    }
+
+    // Make the element visible after re-positioning to avoid flickering
+    layer.show();
+    
+  }, [point])
 
   // Render children through portal if they exist, otherwise render nothing
   if (!layer || !layer.element) return null;
