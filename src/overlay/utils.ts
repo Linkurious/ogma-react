@@ -67,7 +67,7 @@ function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge, 
   // @ts-expect-error the attribute does exist
   const strokeWidth = target.getAttribute(`${strokeType}Stroke.width`) as number;
   // @ts-expect-error the attribute does exist
-  if (! target.getAttribute(`${strokeType}Stroke.minVisibleSize`) < target.size) return 0;
+  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) > target.size) return 0;
 
   // @ts-expect-error the attribute does exist
   if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) === "fixed") {

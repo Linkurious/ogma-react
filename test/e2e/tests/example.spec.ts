@@ -69,7 +69,7 @@ test("tooltip", async () => {
 
   // Wait for the hover effect to take place and then open the tooltip
   await page.mouse.move(pos.x, pos.y);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await page.waitForTimeout(1000);
   await page.mouse.click(pos.x, pos.y, {
     button: "right"
   });
@@ -99,8 +99,7 @@ test("tooltip repositioning", async () => {
 
   // Wait for the hover effect to take place and then open the tooltip
   await page.mouse.move(pos.x, pos.y);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  
+  await page.waitForTimeout(1000);
   await page.mouse.click(pos.x, pos.y, {
     button: "right"
   });

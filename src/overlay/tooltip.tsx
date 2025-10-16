@@ -77,6 +77,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
       };
       setPoint(point);
       layer?.setPosition(pos);
+    } else {
+      layer?.show();
     }
 
     const transform = getTranslate(null, placement, translate);
