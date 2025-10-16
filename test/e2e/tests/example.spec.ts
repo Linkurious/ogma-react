@@ -1,5 +1,5 @@
 import Ogma from "@linkurious/ogma";
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 
 declare global {
   interface Window {
@@ -13,21 +13,28 @@ declare global {
 const TOLERATED_DIFFERENCE = 50;
 const initialState = "initial-state.png";
 
-test.beforeEach(async ({ page }) => {
+let page: Page;
+
+test.beforeAll(async ({ browser }) => {
+  page = await browser.newPage();
+});
+
+test.beforeEach(async () => {
   // Navigate to the page before each test
   await page.goto("localhost:5173/ogma-react/");
 
   // Wait for the Ogma instance to be initialized
   // then wait for the layout to finish
   await page.locator(".App");
-  // For Firefox, we need to wait a bit longer Ogma to initialize
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await page.waitForTimeout(1000);
+
   await expect(page).toHaveScreenshot(initialState, {
-    maxDiffPixels: TOLERATED_DIFFERENCE
+    maxDiffPixels: TOLERATED_DIFFERENCE,
+    timeout: 3000
   });
 });
 
-test("mouse hover", async ({ page }) => {
+test("mouse hover", async () => {
   // Get the position of the first node
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
@@ -52,7 +59,7 @@ test("mouse hover", async ({ page }) => {
   });
 });
 
-test("tooltip", async ({ page }) => {
+test("tooltip", async () => {
   // Get the position of the first node
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
@@ -62,7 +69,7 @@ test("tooltip", async ({ page }) => {
 
   // Wait for the hover effect to take place and then open the tooltip
   await page.mouse.move(pos.x, pos.y);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await page.waitForTimeout(1000);
   await page.mouse.click(pos.x, pos.y, {
     button: "right"
   });
@@ -81,7 +88,29 @@ test("tooltip", async ({ page }) => {
   });
 });
 
-test("add node", async ({ page }) => {
+test("tooltip repositioning", async () => {
+  // Get the position of the first node
+  const pos = await page.evaluate(() => {
+    const ogma = window.ogma;
+    const coords = ogma.view.screenToGraphCoordinates({ x: window.innerWidth - 10, y: window.innerHeight / 2 })
+    ogma.getNodes().get(0).setAttributes(coords)
+    return { x: window.innerWidth - 10, y: window.innerHeight / 2 };
+  });
+
+  // Wait for the hover effect to take place and then open the tooltip
+  await page.mouse.move(pos.x, pos.y);
+  await page.waitForTimeout(1000);
+  await page.mouse.click(pos.x, pos.y, {
+    button: "right"
+  });
+
+  const fileName = "tooltip-repositioned.png";
+  await expect(page).toHaveScreenshot(fileName, {
+    maxDiffPixels: TOLERATED_DIFFERENCE
+  });
+});
+
+test("add node", async () => {
   // Open the panel and add a node
   await page.getByTitle("Show controls").click();
   await page.getByText("Add node").click();
@@ -93,7 +122,7 @@ test("add node", async ({ page }) => {
   });
 });
 
-test("add node with class", async ({ page }) => {
+test("add node with class", async () => {
   // Open the panel and toggle the class
   await page.getByTitle("Show controls").click();
   await page.getByText("Use class").click();
@@ -112,7 +141,7 @@ test("add node with class", async ({ page }) => {
   });
 });
 
-test("node grouping", async ({ page }) => {
+test("node grouping", async () => {
   // Enable node grouping
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
@@ -134,7 +163,7 @@ test("node grouping", async ({ page }) => {
   });
 });
 
-test("geo mode", async ({ page }) => {
+test("geo mode", async () => {
   // Enable geo mode
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
@@ -154,4 +183,8 @@ test("geo mode", async ({ page }) => {
   await expect(page).toHaveScreenshot(fileName2, {
     maxDiffPixels: TOLERATED_DIFFERENCE
   });
+});
+
+test.afterAll(async () => {
+  await page.close();
 });
