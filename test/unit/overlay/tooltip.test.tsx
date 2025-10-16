@@ -407,42 +407,55 @@ describe("Tooltip", () => {
     expect(ref.current?.element.style.height).toBe("300px");
   });
 
-  it("should support placement", () => {
+  it("should support placement", async () => {
+    const ogmaRef = createRef<OgmaLib>();
     const ref2 = createRef<Overlay>();
     const ref3 = createRef<Overlay>();
     const ref4 = createRef<Overlay>();
-    render(  
-      <Ogma>
+    render(
+      <Ogma ref={ogmaRef}>
         <Tooltip
           ref={ref}
           eventName="backgroundClick"
           placement="top"
         >
-          Tooltip content
+          a
         </Tooltip>
         <Tooltip
           ref={ref2}
           eventName="backgroundClick"
           placement="right"
         >
-          Tooltip content
+          a
         </Tooltip>
         <Tooltip
           ref={ref3}
           eventName="backgroundClick"
           placement="bottom"
         >
-          Tooltip content
+          a
         </Tooltip>
         <Tooltip
           ref={ref4}
           eventName="backgroundClick"
           placement="left"
         >
-          Tooltip content
+          a
         </Tooltip>
       </Ogma>,
       div
+    );
+
+    await waitFor(() => expect(ref.current).toBeTruthy());
+
+    const ogma = ogmaRef.current!;
+
+    // Simulate clicking the background to open the tooltip
+    await act(
+      async () => {
+        await ogma.mouse.click({ x: 150, y: 150 });
+        await ogma.view.afterNextFrame();
+      }
     );
 
     expect(
@@ -459,20 +472,21 @@ describe("Tooltip", () => {
     ).toBe("translate(calc(-100% + 0px), calc(-50% + 0px))");
   });
 
-  it("should support translation", () => {
+  it("should support translation", async () => {
+    const ogmaRef = createRef<OgmaLib>();
     const ref2 = createRef<Overlay>();
     const ref3 = createRef<Overlay>();
     const ref4 = createRef<Overlay>();
     const translate = { x: 10, y: 20 };
     render(
-      <Ogma>
+      <Ogma ref={ogmaRef}>
         <Tooltip
           ref={ref}
           eventName="backgroundClick"
           placement="top"
           translate={translate}
         >
-          Translated tooltip content
+          a
         </Tooltip>
         <Tooltip
           ref={ref2}
@@ -480,7 +494,7 @@ describe("Tooltip", () => {
           placement="bottom"
           translate={translate}
         >
-          Translated tooltip content
+          a
         </Tooltip>
         <Tooltip
           ref={ref3}
@@ -488,7 +502,7 @@ describe("Tooltip", () => {
           placement="left"
           translate={translate}
         >
-          Translated tooltip content
+          a
         </Tooltip>
         <Tooltip
           ref={ref4}
@@ -496,10 +510,22 @@ describe("Tooltip", () => {
           placement="right"
           translate={translate}
         >
-          Translated tooltip content
+          a
         </Tooltip>
       </Ogma>,
       div
+    );
+
+    await waitFor(() => expect(ref.current).toBeTruthy());
+
+    const ogma = ogmaRef.current!;
+
+    // Simulate clicking the background to open the tooltip
+    await act(
+      async () => {
+        await ogma.mouse.click({ x: 150, y: 150 });
+        await ogma.view.afterNextFrame();
+      }
     );
 
     expect(
