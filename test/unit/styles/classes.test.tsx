@@ -73,8 +73,7 @@ describe("StyleClass", () => {
         <Ogma graph={graph}>
           <StyleClass
             name="test"
-            // @ts-expect-error: Testing prop change
-            edgeAttributes={{ a: 2 }}
+            edgeAttributes={{ color: "blue" }}
             edgeOutput={{}}
             nodeAttributes={{}}
             nodeOutput={{}}
@@ -83,7 +82,7 @@ describe("StyleClass", () => {
       );
     });
     expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({ edgeAttributes: { a: 2 } })
+      expect.objectContaining({ edgeAttributes: { color: "blue" } })
     );
   });
 

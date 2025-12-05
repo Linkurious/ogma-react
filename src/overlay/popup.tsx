@@ -20,7 +20,6 @@ import {
   getContainerClass,
   getCloseButton
 } from "./utils";
-import { noop } from "../utils";
 import { Placement, PositionGetter } from "./types";
 import { createPortal } from "react-dom";
 
@@ -69,7 +68,7 @@ const PopupComponent = (
     children,
     isOpen = true,
     closeButton,
-    onClose = noop,
+    onClose = () => {},
     placement = "top",
     popupClass = POPUP_CLASS,
     closeButtonClass = POPUP_CLOSE_BUTTON_CLASS,
