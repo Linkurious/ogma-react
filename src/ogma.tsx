@@ -10,7 +10,6 @@ import {
   memo,
   useMemo
 } from "react";
-import ReactDOMServer from "react-dom/server";
 import OgmaLib, {
   Options as OgmaOptions,
   RawGraph,
@@ -65,7 +64,6 @@ export const OgmaComponent = <ND, ED>(
   useEffect(() => {
     if (!containerRef.current || ogma) return;
 
-    console.log("Creating Ogma instance");
     const instance = new OgmaLib<ND, ED>({
       container: containerRef.current,
       graph,
@@ -98,12 +96,10 @@ export const OgmaComponent = <ND, ED>(
     if (!ogma) return;
 
     if (graph && isContentEqual(graph, graphData) === false) {
-      console.log("Updating graph data");
       setGraphData(graph);
       ogma.setGraph(graph);
     }
     if (options && isContentEqual(options, ogmaOptions) === false) {
-      console.log("Updating options");
       setOgmaOptions(options);
       ogma.setOptions(options);
     }
@@ -113,7 +109,6 @@ export const OgmaComponent = <ND, ED>(
     if (!ogma) return;
 
     if (theme && isContentEqual(theme, graphTheme) === false) {
-      console.log("Updating theme");
       setGraphTheme(theme);
       ogma.styles.setTheme(theme);
     }
@@ -123,7 +118,6 @@ export const OgmaComponent = <ND, ED>(
   useEffect(() => {
     if (!ogma) return;
 
-    console.log("Updating event handlers");
     handleEventProps(ogma, props, eventHandlersRef.current);
   }, [props]);
 
@@ -146,49 +140,4 @@ export const OgmaComponent = <ND, ED>(
   );
 };
 
-export const Ogma = memo(forwardRef(OgmaComponent), (prevProps, nextProps) => {
-  return Object.keys(prevProps)
-    // Check if any prop has changed, if not, skip re-render
-    .some((key) => {
-      if (key === 'ref') return false; // skip ref comparison
-      try {
-        console.log('Comparing prop:', key);
-        // Special handling for children prop
-        if (key === 'children') {
-          const prevChildren = prevProps[key];
-          const nextChildren = nextProps[key];
-          
-          // If both are null/undefined, they're the same
-          if (prevChildren == null && nextChildren == null) {
-            return false;
-          }
-          
-          // If one is null/undefined and the other isn't, they're different
-          if (prevChildren == null || nextChildren == null) {
-            return true;
-          }
-          
-          try {
-            // Try to compare using static markup rendering
-            const prevMarkup = ReactDOMServer.renderToStaticMarkup(prevChildren);
-            const nextMarkup = ReactDOMServer.renderToStaticMarkup(nextChildren);
-            const isDifferent = prevMarkup !== nextMarkup;
-            console.log('Children comparison result:', isDifferent);
-            return isDifferent;
-          } catch (e) {
-            // If rendering fails (e.g., due to hooks or context), fall back to reference comparison
-            console.log('Children comparison fallback to reference:', prevChildren !== nextChildren);
-            return prevChildren !== nextChildren;
-          }
-        }
-        
-        // @ts-expect-error
-        const comparison = JSON.stringify(prevProps[key]) !== JSON.stringify(nextProps[key]);
-        console.log('result:', comparison);
-        return comparison;
-      } catch (e) {
-        console.log('error comparing prop:', key, e);
-        return true;
-      }
-    }) === false;
-});
+export const Ogma = memo(forwardRef(OgmaComponent));
