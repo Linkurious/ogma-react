@@ -81,7 +81,6 @@ describe("StyleClass", () => {
         </Ogma>
       );
     });
-    await setTimeout(() => Promise.resolve(), 1000); // Wait for async updates
     expect(mockUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ edgeAttributes: { color: "blue" } })
     );

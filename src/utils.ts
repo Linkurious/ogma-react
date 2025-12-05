@@ -64,5 +64,9 @@ export function isContentEqual(obj1: any, obj2: any): boolean {
     return true;
   }
 
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
+  try {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  } catch {
+    return false;
+  }
 }

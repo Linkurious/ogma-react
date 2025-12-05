@@ -67,7 +67,6 @@ const styleClassComponent = <ND, ED>(
 
   useEffect(() => {
     if (!styleClass) return;
-    console.log("Updating style class", name);
     styleClass.update({
       edgeAttributes,
       edgeDependencies,
