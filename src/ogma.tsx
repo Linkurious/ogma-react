@@ -7,8 +7,7 @@ import {
   useImperativeHandle,
   ReactNode,
   Ref,
-  memo,
-  useMemo
+  memo
 } from "react";
 import OgmaLib, {
   Options as OgmaOptions,
@@ -51,7 +50,6 @@ export const OgmaComponent = <ND, ED>(
   } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const memoizedChildren = useMemo(() => children, [children]);
   const [ogma, setOgma] = useState<OgmaLib | undefined>();
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
@@ -133,7 +131,7 @@ export const OgmaComponent = <ND, ED>(
             ogma: ogma
           }}
         >
-          {memoizedChildren}
+          {children}
         </OgmaContext.Provider>
       )}
     </div>
