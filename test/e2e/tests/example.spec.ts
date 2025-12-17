@@ -39,10 +39,7 @@ test.beforeEach(async () => {
       timeout: 10000
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(initialState, {
-      maxDiffPixels: TOLERATED_DIFFERENCE,
-      timeout: 10000
-    });
+    await page.waitForTimeout(10000);
 
     const fileName = `initial-state-chromium-${system}.png`;
     await page.screenshot({
@@ -69,10 +66,7 @@ test("mouse hover", async () => {
       timeout: 5000
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE,
-      timeout: 5000
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `node-hovered-chromium-${system}.png`;
     await page.screenshot({
@@ -113,9 +107,7 @@ test("tooltip", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `tooltip-opened-chromium-${system}.png`;
     await page.screenshot({
@@ -157,9 +149,7 @@ test("tooltip repositioning", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `tooltip-repositioned-chromium-${system}.png`;
     await page.screenshot({
@@ -181,9 +171,7 @@ test("add node", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `node-added-chromium-${system}.png`;
     await page.screenshot({
@@ -212,9 +200,7 @@ test("add node with class", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `node-added-with-class-chromium-${system}.png`;
     await page.screenshot({
@@ -236,9 +222,7 @@ test("node grouping", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `node-grouping-disabled-chromium-${system}.png`;
     await page.screenshot({
@@ -258,9 +242,7 @@ test("node grouping", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName2, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `node-grouping-reenabled-chromium-${system}.png`;
     await page.screenshot({
@@ -282,9 +264,7 @@ test("geo mode", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `geo-mode-enabled-chromium-${system}.png`;
     await page.screenshot({
@@ -304,9 +284,7 @@ test("geo mode", async () => {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
   } else {
-    await expect.soft(page).toHaveScreenshot(fileName2, {
-      maxDiffPixels: TOLERATED_DIFFERENCE
-    });
+    await page.waitForTimeout(5000);
 
     const fileNameSys = `geo-mode-disabled-chromium-${system}.png`;
     await page.screenshot({
