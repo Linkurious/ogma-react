@@ -16,7 +16,7 @@ interface StyleProps<ND, ED> extends StyleClassDefinition<ND, ED> {
   name: string;
 }
 
-const styleClassComponent = <ND, ED>(
+const styleClassComponent = forwardRef(<ND = any, ED = any>(
   {
     name,
     edgeAttributes,
@@ -85,7 +85,7 @@ const styleClassComponent = <ND, ED>(
   ]);
 
   return null;
-};
+});
 
 const arePropsEqual = <ND, ED>(
   prev: StyleProps<ND, ED>,
@@ -102,8 +102,12 @@ const arePropsEqual = <ND, ED>(
   );
 };
 
+type StyleClassComponentType = <ND, ED>(
+  props: StyleProps<ND, ED> & { ref?: Ref<OgmaStyleClass<ND, ED>> }
+) => React.ReactElement | null;
+
 /**
  * This component wraps around Ogma [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle) API. It allows you to add a class style to the
  * Ogma instance to calculate the visual appearance attributes of the nodes and edges.
  */
-export const StyleClass = memo(forwardRef(styleClassComponent), arePropsEqual);
+export const StyleClass = memo(styleClassComponent, arePropsEqual) as StyleClassComponentType;

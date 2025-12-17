@@ -56,4 +56,8 @@ export function NodeCollapsingComponent<ND = any, ED = any>(
   return null;
 }
 
-export const NodeCollapsing = forwardRef(NodeCollapsingComponent);
+type NodeCollapsingType = <ND, ED>(
+  props: NodeCollapsingProps<ND, ED> & { ref?: Ref<NodeCollapsingTransformation<ND, ED>> }
+) => React.ReactElement | null;
+
+export const NodeCollapsing = forwardRef(NodeCollapsingComponent) as NodeCollapsingType;

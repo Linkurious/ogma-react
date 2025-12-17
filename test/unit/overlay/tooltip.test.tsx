@@ -460,16 +460,16 @@ describe("Tooltip", () => {
 
     expect(
       (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe("translate(calc(-50% + 0px), calc(-100% + 0px))");
+    ).toBe("translate(calc(-50% + 0px),calc(-100% + 0px))");
     expect(
       (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe("translate(0px, calc(-50% + 0px))");
+    ).toBe("translate(0px,calc(-50% + 0px))");
     expect(
       (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe("translate(calc(-50% + 0px), 0px)");
+    ).toBe("translate(calc(-50% + 0px),0px)");
     expect(
       (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe("translate(calc(-100% + 0px), calc(-50% + 0px))");
+    ).toBe("translate(calc(-100% + 0px),calc(-50% + 0px))");
   });
 
   it("should support translation", async () => {
@@ -530,16 +530,16 @@ describe("Tooltip", () => {
 
     expect(
       (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe(`translate(calc(-50% + ${translate.x}px), calc(-100% + ${translate.y}px))`);
+    ).toBe(`translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`);
     expect(
       (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe(`translate(calc(-50% + ${translate.x}px), ${translate.y}px)`);
+    ).toBe(`translate(calc(-50% + ${translate.x}px),${translate.y}px)`);
     expect(
       (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe(`translate(calc(-100% + ${translate.x}px), calc(-50% + ${translate.y}px))`);
+    ).toBe(`translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`);
     expect(
       (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe(`translate(${translate.x}px, calc(-50% + ${translate.y}px))`);
+    ).toBe(`translate(${translate.x}px,calc(-50% + ${translate.y}px))`);
   });
 
   it("should support bodyClass", () => {

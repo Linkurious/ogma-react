@@ -56,4 +56,8 @@ function NeighborMergingComponent<ND = any, ED = any>(
   return null;
 }
 
-export const NeighborMerging = forwardRef(NeighborMergingComponent);
+type NeighborMergingType = <ND, ED>(
+  props: NeighborMergingProps<ND, ED> & { ref?: Ref<NeighborMergingTransformation<ND, ED>> }
+) => React.ReactElement | null;
+
+export const NeighborMerging = forwardRef(NeighborMergingComponent) as NeighborMergingType;

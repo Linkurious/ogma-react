@@ -24,7 +24,7 @@ import { isContentEqual, handleEventProps } from "./utils";
 
 export interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
   options?: Partial<OgmaOptions>;
-  onReady?: (ogma: OgmaLib) => void;
+  onReady?: (ogma: OgmaLib<ND, ED>) => void;
   graph?: RawGraph<ND, ED>;
   children?: ReactNode;
   theme?: Theme<ND, ED>;
@@ -50,7 +50,7 @@ export const OgmaComponent = <ND, ED>(
   } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [ogma, setOgma] = useState<OgmaLib | undefined>();
+  const [ogma, setOgma] = useState<OgmaLib<ND, ED> | undefined>();
   const [graphData, setGraphData] = useState<RawGraph<ND, ED>>();
   const [ogmaOptions, setOgmaOptions] = useState<OgmaOptions>(defaultOptions);
   const [graphTheme, setGraphTheme] = useState<Theme<ND, ED>>();
@@ -138,4 +138,8 @@ export const OgmaComponent = <ND, ED>(
   );
 };
 
-export const Ogma = memo(forwardRef(OgmaComponent));
+type OgmaComponentType = <ND, ED>(
+  props: OgmaProps<ND, ED> & { ref?: Ref<OgmaLib<ND, ED>> }
+) => React.ReactElement | null;
+
+export const Ogma = memo(forwardRef(OgmaComponent)) as OgmaComponentType;

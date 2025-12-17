@@ -21,7 +21,7 @@ interface CanvasLayerProps {
   visible?: boolean;
 }
 
-const CanvasLayerComponent = (
+const CanvasLayerComponent = <ND = any, ED = any>(
   {
     noClear = false,
     isStatic = false,
@@ -31,7 +31,7 @@ const CanvasLayerComponent = (
   }: CanvasLayerProps,
   ref?: Ref<OgmaCanvasLayer>
 ) => {
-  const ogma = useOgma();
+  const ogma = useOgma<ND, ED>();
   const [layer, setLayer] = useState<OgmaCanvasLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OgmaCanvasLayer, [layer]);
@@ -63,6 +63,11 @@ const CanvasLayerComponent = (
   return null;
 };
 
+// @ts-expect-error types are used for useOgma
+type CanvasLayerType = <ND, ED>(
+  props: CanvasLayerProps & { ref?: Ref<OgmaCanvasLayer> }
+) => React.ReactElement | null;
+
 /**
  * A canvas layer that can be added to the Ogma instance. See the [Ogma documentation](https://doc.linkurio.us/ogma/latest/api.html#Ogma-layers-addCanvasLayer) for more information.
  *
@@ -72,4 +77,4 @@ const CanvasLayerComponent = (
  * coordinates to draw shapes and text in it. See our "Layers" examples for
  * the code snippets.
  */
-export const CanvasLayer = forwardRef(CanvasLayerComponent);
+export const CanvasLayer = forwardRef(CanvasLayerComponent) as CanvasLayerType;

@@ -19,7 +19,7 @@ interface NodeGroupingPropsC<ND, ED>
 
 export type NodeGroupingProps<ND, ED> = Omit<NodeGroupingPropsC<ND, ED>, "enabled">;
 
-function NodeGroupingComponent<ND, ED>(
+function NodeGroupingComponent<ND = any, ED = any>(
   props: NodeGroupingProps<ND, ED>,
   ref?: Ref<NodeGroupingTransformation<ND, ED>>
 ) {
@@ -64,4 +64,8 @@ function NodeGroupingComponent<ND, ED>(
   return null;
 }
 
-export const NodeGrouping = forwardRef(NodeGroupingComponent);
+type NodeGroupingType = <ND, ED>(
+  props: NodeGroupingProps<ND, ED> & { ref?: Ref<NodeGroupingTransformation<ND, ED>> }
+) => React.ReactElement | null;
+
+export const NodeGrouping = forwardRef(NodeGroupingComponent) as NodeGroupingType;

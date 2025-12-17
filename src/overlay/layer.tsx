@@ -19,9 +19,9 @@ export interface LayerProps {
   index?: number;
 }
 
-export const Layer = forwardRef(
-  ({ children, className = "", index }: LayerProps, ref?: Ref<OgmaLayer>) => {
-    const ogma = useOgma();
+const LayerComponent = forwardRef(
+  <ND = any, ED = any>({ children, className = "", index }: LayerProps, ref?: Ref<OgmaLayer>) => {
+    const ogma = useOgma<ND, ED>();
     const [layer, setLayer] = useState<OgmaLayer | null>(null);
 
     useImperativeHandle(ref, () => layer as OgmaLayer, [layer]);
@@ -53,3 +53,10 @@ export const Layer = forwardRef(
     return createPortal(children, layer.element);
   }
 );
+
+// @ts-expect-error types are used for useOgma
+type LayerType = <ND, ED>(
+  props: LayerProps & { ref?: Ref<OgmaLayer> }
+) => React.ReactElement | null;
+
+export const Layer = LayerComponent as LayerType ;
