@@ -15,7 +15,7 @@ const TOLERATED_DIFFERENCE = 50;
 const initialState = "initial-state.png";
 
 const REPLACE = process.env.CI_COMMIT === 'true';
-const folder = './tests/e2e/examples/example.spec.ts-snapshots';
+const folder = './test/e2e/tests/example.spec.ts-snapshots';
 const system = os.platform();
 
 let page: Page;
