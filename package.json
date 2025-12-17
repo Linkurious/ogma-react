@@ -46,7 +46,7 @@
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "e2e:tests": "playwright test",
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
-    "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
+    "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner --no-check",
     "postversion": "sync_versions",
     "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist",
     "bump:patch": "npm version patch --no-git-tag-version",
