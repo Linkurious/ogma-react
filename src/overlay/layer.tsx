@@ -59,4 +59,4 @@ type LayerType = <ND, ED>(
   props: LayerProps & { ref?: Ref<OgmaLayer> }
 ) => React.ReactElement | null;
 
-export const Layer = LayerComponent as LayerType ;
+export const Layer = LayerComponent as LayerType;
