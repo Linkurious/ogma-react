@@ -20,7 +20,7 @@ export interface LayerProps {
 }
 
 const LayerComponent = forwardRef(
-  <ND = any, ED = any>({ children, className = "", index }: LayerProps, ref?: Ref<OgmaLayer>) => {
+  <ND = unknown, ED = unknown>({ children, className = "", index }: LayerProps, ref?: Ref<OgmaLayer>) => {
     const ogma = useOgma<ND, ED>();
     const [layer, setLayer] = useState<OgmaLayer | null>(null);
 

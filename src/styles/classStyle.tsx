@@ -16,7 +16,7 @@ interface StyleProps<ND, ED> extends StyleClassDefinition<ND, ED> {
   name: string;
 }
 
-const styleClassComponent = forwardRef(<ND = any, ED = any>(
+const styleClassComponent = forwardRef(<ND = unknown, ED = unknown>(
   {
     name,
     edgeAttributes,

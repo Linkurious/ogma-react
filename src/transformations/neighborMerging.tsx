@@ -19,7 +19,7 @@ interface NeighborMergingPropsC<ND, ED>
 
 export type NeighborMergingProps<ND, ED> = Omit<NeighborMergingPropsC<ND, ED>, "enabled">;
 
-function NeighborMergingComponent<ND = any, ED = any>(
+function NeighborMergingComponent<ND = unknown, ED = unknown>(
   props: NeighborMergingProps<ND, ED>,
   ref: Ref<NeighborMergingTransformation<ND, ED>>
 ) {

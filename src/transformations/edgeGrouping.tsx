@@ -19,7 +19,7 @@ interface EdgeGroupingPropsC<ED, ND>
 
 export type EdgeGroupingProps<ND, ED> = Omit<EdgeGroupingPropsC<ND, ED>, "enabled">;
 
-function EdgeGroupingComponent<ND = any, ED = any>(
+function EdgeGroupingComponent<ND = unknown, ED = unknown>(
   props: EdgeGroupingProps<ED, ND>,
   ref?: Ref<EdgeGroupingTransformation<ED, ND>>
 ) {

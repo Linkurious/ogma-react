@@ -61,7 +61,7 @@ const POPUP_CLOSE_BUTTON_CLASS = "ogma-popup--close";
 const POPUP_BODY_CLASS = "ogma-popup--body";
 const POPUP_CLASS = "ogma-popup";
 
-const PopupComponent = <ND = any, ED = any>(
+const PopupComponent = <ND = unknown, ED = unknown>(
   {
     content,
     position,

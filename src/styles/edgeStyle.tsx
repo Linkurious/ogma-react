@@ -29,7 +29,7 @@ interface SelectedEdgeProps<ND, ED> {
 }
 
 const EdgeStyleComponent = forwardRef(
-  <ND = any, ED = any>(
+  <ND = unknown, ED = unknown>(
     { selector, attributes }: EdgeRuleProps<ND, ED>,
     ref?: Ref<StyleRule<ND, ED>>
   ) => {
@@ -53,7 +53,7 @@ const EdgeStyleComponent = forwardRef(
   }
 );
 
-const Hovered = <ND = any, ED = any>({
+const Hovered = <ND = unknown, ED = unknown>({
   attributes,
   fullOverwrite
 }: HoveredEdgeProps<ND, ED>) => {
@@ -69,7 +69,7 @@ const Hovered = <ND = any, ED = any>({
   return null;
 };
 
-const Selected = <ND = any, ED = any>({
+const Selected = <ND = unknown, ED = unknown>({
   attributes,
   fullOverwrite
 }: SelectedEdgeProps<ND, ED>) => {

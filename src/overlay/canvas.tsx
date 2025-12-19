@@ -21,7 +21,7 @@ interface CanvasLayerProps {
   visible?: boolean;
 }
 
-const CanvasLayerComponent = <ND = any, ED = any>(
+const CanvasLayerComponent = <ND = unknown, ED = unknown>(
   {
     noClear = false,
     isStatic = false,

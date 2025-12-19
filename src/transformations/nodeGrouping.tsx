@@ -19,7 +19,7 @@ interface NodeGroupingPropsC<ND, ED>
 
 export type NodeGroupingProps<ND, ED> = Omit<NodeGroupingPropsC<ND, ED>, "enabled">;
 
-function NodeGroupingComponent<ND = any, ED = any>(
+function NodeGroupingComponent<ND = unknown, ED = unknown>(
   props: NodeGroupingProps<ND, ED>,
   ref?: Ref<NodeGroupingTransformation<ND, ED>>
 ) {

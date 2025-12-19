@@ -19,7 +19,7 @@ interface NeighborGenerationPropsC<ND, ED>
 
 export type NeighborGenerationProps<ND, ED> = Omit<NeighborGenerationPropsC<ND, ED>, "enabled">;
 
-function NeighborGenerationComponent<ND = any, ED = any>(
+function NeighborGenerationComponent<ND = unknown, ED = unknown>(
   props: NeighborGenerationProps<ND, ED>,
   ref: Ref<NeighborGenerationTransformation<ND, ED>>
 ) {

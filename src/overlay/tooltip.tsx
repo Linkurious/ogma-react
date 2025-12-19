@@ -47,7 +47,7 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
 
 const offScreenPos: Point = { x: -9999, y: -9999 };
 
-const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = any, ED = any>(
+const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, ED = unknown>(
   {
     eventName,
     position,

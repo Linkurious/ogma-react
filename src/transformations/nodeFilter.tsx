@@ -19,7 +19,7 @@ interface NodeFilterPropsC<ED, ND>
 
 export type NodeFilterProps<ND, ED> = Omit<NodeFilterPropsC<ND, ED>, "enabled">;
 
-function NodeFilterComponent<ND = any, ED = any>(
+function NodeFilterComponent<ND = unknown, ED = unknown>(
   props: NodeFilterProps<ND, ED>,
   ref?: Ref<NodeFilterTransformation<ND, ED>>
 ) {

@@ -19,7 +19,7 @@ interface NodeCollapsingPropsC<ND, ED>
 
 export type NodeCollapsingProps<ND, ED> = Omit<NodeCollapsingPropsC<ND, ED>, "enabled">;
 
-export function NodeCollapsingComponent<ND = any, ED = any>(
+export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
   props: NodeCollapsingProps<ND, ED>,
   ref: Ref<NodeCollapsingTransformation<ND, ED>>
 ) {

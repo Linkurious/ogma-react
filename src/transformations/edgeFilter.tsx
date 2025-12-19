@@ -19,7 +19,7 @@ interface EdgeFilterPropsC<ND, ED>
 
 export type EdgeFilterProps<ND, ED> = Omit<EdgeFilterPropsC<ND, ED>, "enabled">;
 
-function EdgeFilterComponent<ND = any, ED = any>(
+function EdgeFilterComponent<ND = unknown, ED = unknown>(
   props: EdgeFilterProps<ND, ED>,
   ref?: Ref<EdgeFilterTransformation<ND, ED>>
 ) {
