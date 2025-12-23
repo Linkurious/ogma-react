@@ -47,7 +47,7 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
 
 const offScreenPos: Point = { x: -9999, y: -9999 };
 
-const TooltipComponent = <K extends keyof TooltipEventFunctions>(
+const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, ED = unknown>(
   {
     eventName,
     position,
@@ -59,14 +59,14 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
   }: TooltipProps<K>,
   ref?: Ref<OverlayLayer>
 ) => {
-  const ogma = useOgma();
-  const [target, setTarget] = useState<OgmaNode | Edge | Point>();
+  const ogma = useOgma<ND, ED>();
+  const [target, setTarget] = useState<OgmaNode<ND, ED> | Edge<ED, ND> | Point>();
   const [point, setPoint] = useState<Point>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
-  function showTooltip(target: OgmaNode | Edge | "background", point: Point) {
+  function showTooltip(target: OgmaNode<ND, ED> | Edge<ED, ND> | "background", point: Point) {
     // If the position is not set, use the point provided
     if (! position) {
       const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
@@ -120,7 +120,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 
     const event = getEventNameFromTooltipEvent(eventName);
     if (event === "mouseover") {
-      onEvent = (evt: MouseOverEvent<unknown, unknown>) => {
+      onEvent = (evt: MouseOverEvent<ND, ED>) => {
         if (eventName.startsWith("node")) {
           if (evt.target?.isNode) {
             const node = evt.target;
@@ -276,7 +276,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions>(
 };
 
 type TooltipComponentType = <
-  K extends keyof TooltipEventFunctions
+  // @ts-expect-error used for useOgma
+  ND, ED, K extends keyof TooltipEventFunctions
 >(
   props: TooltipProps<K> & React.RefAttributes<OverlayLayer>
 ) => React.ReactElement | null;

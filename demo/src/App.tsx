@@ -81,7 +81,7 @@ export default function App() {
       });
   }, []);
 
-  const onAddNodes = useEvent("addNodes", () => {
+  const onAddNodes = useEvent<ND, ED, 'addNodes'>('addNodes', () => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
   });
@@ -120,7 +120,7 @@ export default function App() {
   return (
     <div className="App">
       <Logo />
-      <Ogma
+      <Ogma<ND, ED>
         ref={ogmaInstanceRef}
         graph={graph}
         onAddNodes={onAddNodes}
@@ -129,7 +129,7 @@ export default function App() {
       >
         {/* Styling */}
 
-        <NodeStyle
+        <NodeStyle<ND, ED>
           attributes={{
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
             text: {
@@ -140,7 +140,7 @@ export default function App() {
           }}
         />
 
-        <NodeStyle.Hovered
+        <NodeStyle.Hovered<ND, ED>
           attributes={{
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize * 1.5,
             color: "#FF0000",
@@ -152,12 +152,12 @@ export default function App() {
           fullOverwrite={false}
         />
 
-        <EdgeStyle attributes={{ width: edgeWidth }} />
+        <EdgeStyle<ND, ED> attributes={{ width: edgeWidth }} />
         {useClass && (
-          <StyleClass name="class" nodeAttributes={styleClassNodeAttributes} />
+          <StyleClass<ND, ED> name="class" nodeAttributes={styleClassNodeAttributes} />
         )}
 
-        <EdgeStyle.Hovered
+        <EdgeStyle.Hovered<ND, ED>
           attributes={{
             width: (e) => e.getData("weight") * edgeWidth,
             color: "#FF0000"
@@ -169,14 +169,14 @@ export default function App() {
         <LayoutService />
 
         {/* Grouping */}
-        <NodeGrouping
+        <NodeGrouping<ND, ED>
           ref={groupingRef}
           disabled={!nodeGrouping && !geoEnabled}
           groupIdFunction={groupingOptions.groupIdFunction}
           nodeGenerator={groupingOptions.nodeGenerator}
         />
 
-        <Tooltip
+        <Tooltip<ND, ED, 'nodeRightclick'>
           eventName="nodeRightclick"
           bodyClass="ogma-tooltip"
           placement="right"

@@ -19,7 +19,7 @@ interface NodeFilterPropsC<ED, ND>
 
 export type NodeFilterProps<ND, ED> = Omit<NodeFilterPropsC<ND, ED>, "enabled">;
 
-function NodeFilterComponent<ND = any, ED = any>(
+function NodeFilterComponent<ND = unknown, ED = unknown>(
   props: NodeFilterProps<ND, ED>,
   ref?: Ref<NodeFilterTransformation<ND, ED>>
 ) {
@@ -56,7 +56,11 @@ function NodeFilterComponent<ND = any, ED = any>(
   return null;
 }
 
+type NodeFilterType = <ND, ED>(
+  props: NodeFilterProps<ND, ED> & { ref?: Ref<NodeFilterTransformation<ND, ED>> }
+) => React.ReactElement | null;
+
 /**
  * Edge Filter transformation component. It wraps around Ogma [`NodeFilter` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeFilter).
  */
-export const NodeFilter = forwardRef(NodeFilterComponent);
+export const NodeFilter = forwardRef(NodeFilterComponent) as NodeFilterType;

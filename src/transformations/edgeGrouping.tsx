@@ -19,7 +19,7 @@ interface EdgeGroupingPropsC<ED, ND>
 
 export type EdgeGroupingProps<ND, ED> = Omit<EdgeGroupingPropsC<ND, ED>, "enabled">;
 
-function EdgeGroupingComponent<ND = any, ED = any>(
+function EdgeGroupingComponent<ND = unknown, ED = unknown>(
   props: EdgeGroupingProps<ED, ND>,
   ref?: Ref<EdgeGroupingTransformation<ED, ND>>
 ) {
@@ -61,7 +61,11 @@ function EdgeGroupingComponent<ND = any, ED = any>(
   return null;
 }
 
+type EdgeGroupingType = <ND, ED>(
+  props: EdgeGroupingProps<ND, ED> & { ref?: Ref<EdgeGroupingTransformation<ND, ED>> }
+) => React.ReactElement | null;
+
 /**
  * Edge grouping transformation component. It wraps around Ogma [`EdgeGrouping` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeGrouping).
  */
-export const EdgeGrouping = forwardRef(EdgeGroupingComponent);
+export const EdgeGrouping = forwardRef(EdgeGroupingComponent) as EdgeGroupingType;

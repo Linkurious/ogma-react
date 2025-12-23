@@ -19,7 +19,7 @@ interface NeighborMergingPropsC<ND, ED>
 
 export type NeighborMergingProps<ND, ED> = Omit<NeighborMergingPropsC<ND, ED>, "enabled">;
 
-function NeighborMergingComponent<ND = any, ED = any>(
+function NeighborMergingComponent<ND = unknown, ED = unknown>(
   props: NeighborMergingProps<ND, ED>,
   ref: Ref<NeighborMergingTransformation<ND, ED>>
 ) {
@@ -56,4 +56,8 @@ function NeighborMergingComponent<ND = any, ED = any>(
   return null;
 }
 
-export const NeighborMerging = forwardRef(NeighborMergingComponent);
+type NeighborMergingType = <ND, ED>(
+  props: NeighborMergingProps<ND, ED> & { ref?: Ref<NeighborMergingTransformation<ND, ED>> }
+) => React.ReactElement | null;
+
+export const NeighborMerging = forwardRef(NeighborMergingComponent) as NeighborMergingType;

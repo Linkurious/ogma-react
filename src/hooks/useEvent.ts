@@ -3,11 +3,15 @@ import { useCallback } from "react";
 import { EventNames } from "../types";
 
 export function useEvent<
-  ND = unknown,
-  ED = unknown,
-  K extends EventNames<ND, ED> = EventNames<ND, ED>
+  ND,
+  ED,
+  K extends EventNames<ND, ED>
+>(
   // @ts-expect-error evtName is used to infer the type of the event
->(eventName: K, handler: (event: EventTypes<ND, ED>[K]) => void, dependencies?: any[]) {
+  eventName: K,
+  handler: (event: EventTypes<ND, ED>[K]) => void,
+  dependencies?: any[]
+): (event: EventTypes<ND, ED>[K]) => void {
   const dep = dependencies ? dependencies : [];
   const callback = useCallback(handler, dep);
 
