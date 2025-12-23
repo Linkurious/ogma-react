@@ -29,7 +29,7 @@ interface SelectedNodeProps<ND, ED> {
 }
 
 const NodeStyleComponent = forwardRef(
-  <ND, ED>(
+  <ND = unknown, ED = unknown>(
     { selector, attributes }: NodeRuleProps<ND, ED>,
     ref?: Ref<StyleRule<ND, ED>>
   ) => {
@@ -52,7 +52,7 @@ const NodeStyleComponent = forwardRef(
   }
 );
 
-const Hovered = <ND, ED>({
+const Hovered = <ND = unknown, ED = unknown>({
   attributes,
   fullOverwrite
 }: HoveredNodeProps<ND, ED>) => {
@@ -68,7 +68,7 @@ const Hovered = <ND, ED>({
   return null;
 };
 
-const Selected = <ND, ED>({
+const Selected = <ND = unknown, ED = unknown>({
   attributes,
   fullOverwrite
 }: SelectedNodeProps<ND, ED>) => {
@@ -84,11 +84,15 @@ const Selected = <ND, ED>({
   return null;
 };
 
+type NodeStyleComponentType = <ND, ED>(
+  props: NodeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> }
+) => React.ReactElement | null;
+
 /**
  * This component wraps around Ogma [`NodeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addNodeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the nodes.
  */
-export const NodeStyle = Object.assign(NodeStyleComponent, {
+export const NodeStyle = Object.assign(NodeStyleComponent as NodeStyleComponentType, {
   Hovered,
   Selected
 });

@@ -29,7 +29,7 @@ interface SelectedEdgeProps<ND, ED> {
 }
 
 const EdgeStyleComponent = forwardRef(
-  <ND, ED>(
+  <ND = unknown, ED = unknown>(
     { selector, attributes }: EdgeRuleProps<ND, ED>,
     ref?: Ref<StyleRule<ND, ED>>
   ) => {
@@ -53,7 +53,7 @@ const EdgeStyleComponent = forwardRef(
   }
 );
 
-const Hovered = <ND, ED>({
+const Hovered = <ND = unknown, ED = unknown>({
   attributes,
   fullOverwrite
 }: HoveredEdgeProps<ND, ED>) => {
@@ -69,7 +69,7 @@ const Hovered = <ND, ED>({
   return null;
 };
 
-const Selected = <ND, ED>({
+const Selected = <ND = unknown, ED = unknown>({
   attributes,
   fullOverwrite
 }: SelectedEdgeProps<ND, ED>) => {
@@ -85,11 +85,15 @@ const Selected = <ND, ED>({
   return null;
 };
 
+type EdgeStyleComponentType = <ND, ED>(
+  props: EdgeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> }
+) => React.ReactElement | null;
+
 /**
  * This component wraps around Ogma [`EdgeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addEdgeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the edges.
  */
-export const EdgeStyle = Object.assign(EdgeStyleComponent, {
+export const EdgeStyle = Object.assign(EdgeStyleComponent as EdgeStyleComponentType, {
   Hovered,
   Selected
 });

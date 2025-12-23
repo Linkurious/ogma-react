@@ -20,7 +20,6 @@ import {
   getContainerClass,
   getCloseButton
 } from "./utils";
-import { noop } from "../utils";
 import { Placement, PositionGetter } from "./types";
 import { createPortal } from "react-dom";
 
@@ -62,14 +61,14 @@ const POPUP_CLOSE_BUTTON_CLASS = "ogma-popup--close";
 const POPUP_BODY_CLASS = "ogma-popup--body";
 const POPUP_CLASS = "ogma-popup";
 
-const PopupComponent = (
+const PopupComponent = <ND = unknown, ED = unknown>(
   {
     content,
     position,
     children,
     isOpen = true,
     closeButton,
-    onClose = noop,
+    onClose = () => {},
     placement = "top",
     popupClass = POPUP_CLASS,
     closeButtonClass = POPUP_CLOSE_BUTTON_CLASS,
@@ -80,7 +79,7 @@ const PopupComponent = (
   }: PopupProps,
   ref?: Ref<OverlayLayer>
 ) => {
-  const ogma = useOgma();
+  const ogma = useOgma<ND, ED>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
@@ -176,9 +175,14 @@ const PopupComponent = (
   return children ? createPortal(children, contentElement) : null;
 };
 
+// @ts-expect-error types are used for useOgma
+type PopupType = <ND, ED>(
+  props: PopupProps & { ref?: Ref<OverlayLayer> }
+) => React.ReactElement | null;
+
 /**
  * A popup component.
  * Use it to display information statically on top of your visualisation
  * or to display a modal dialog.
  */
-export const Popup = forwardRef(PopupComponent);
+export const Popup = forwardRef(PopupComponent) as PopupType;

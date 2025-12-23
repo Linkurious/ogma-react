@@ -8,3 +8,7 @@ web/index-bundle.*
 playwright-report
 blob-report/
 playwright/.cache/
+
+coverage-unit/
+coverage-full/
+coverage-sources.zip

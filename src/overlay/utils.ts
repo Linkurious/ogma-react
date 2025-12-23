@@ -67,15 +67,14 @@ function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge, 
   // @ts-expect-error the attribute does exist
   const strokeWidth = target.getAttribute(`${strokeType}Stroke.width`) as number;
   // @ts-expect-error the attribute does exist
-  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) < target.size) {
-    // @ts-expect-error the attribute does exist
-    if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) !== "fixed") {
-      return strokeWidth / zoom; // Scale the stroke width based on the zoom level
-    } else {
-      return strokeWidth; // Fixed stroke width
-    }
+  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) > target.size) return 0;
+
+  // @ts-expect-error the attribute does exist
+  if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) === "fixed") {
+    return strokeWidth; // Fixed stroke width
+  } else {
+    return strokeWidth / zoom; // Scale the stroke width based on the zoom level
   }
-  return 0; // No stroke if not visible
 }
 
 export function getOffset(target: OgmaNode | Edge | "background", zoom: number, placement: Placement): Point {
@@ -97,4 +96,33 @@ export function getOffset(target: OgmaNode | Edge | "background", zoom: number, 
       break;
   }
   return offset;
+}
+
+export function isOverflowing(bb: DOMRect, clientWidth: number, clientHeight: number) {
+  if (bb.left < 0) {
+    return "right";
+  }
+  if (bb.right > clientWidth) {
+    return "left";
+  }
+  if (bb.top < 0) {
+    return "bottom";
+  }
+  if (bb.bottom > clientHeight) {
+    return "top";
+  }
+  return null;
+}
+
+export function getTranslate(newPlacement: Placement | null, placement: Placement, translate: {x: number, y: number}) {
+  switch (newPlacement || placement) {
+    case "top":
+      return `translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`;
+    case "bottom":
+      return `translate(calc(-50% + ${translate.x}px),${translate.y}px)`;
+    case "left":
+      return `translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`;
+    default:
+      return `translate(${translate.x}px,calc(-50% + ${translate.y}px))`;
+  }
 }
