@@ -1,7 +1,7 @@
 import { NodeCollapsingTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
 import { act } from "react";
-import OgmaLib from "@linkurious/ogma";
+import { Ogma as OgmaLib } from "@linkurious/ogma";
 describe("Node Collapsing", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));

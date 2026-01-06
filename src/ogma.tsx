@@ -9,20 +9,20 @@ import {
   Ref,
   memo
 } from "react";
-import OgmaLib, {
+import {
+  Ogma as OgmaLib,
   Options as OgmaOptions,
   RawGraph,
   EventTypes
 } from "@linkurious/ogma";
 import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
-import {
-  EventHandlerProps,
-  EventHandlers
-} from "./types";
+import { EventHandlerProps, EventHandlers } from "./types";
 import { isContentEqual, handleEventProps } from "./utils";
 
-export interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
+export interface OgmaProps<ND, ED> extends EventHandlerProps<
+  EventTypes<ND, ED>
+> {
   options?: Partial<OgmaOptions>;
   onReady?: (ogma: OgmaLib<ND, ED>) => void;
   graph?: RawGraph<ND, ED>;

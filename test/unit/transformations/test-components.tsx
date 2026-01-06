@@ -1,7 +1,7 @@
 import graph from "../fixtures/simple_graph.json";
 import graphCurved from "../fixtures/simple_graph_curved.json";
 
-import OgmaLib from "@linkurious/ogma";
+import { Ogma as OgmaLib } from "@linkurious/ogma";
 
 import {
   Ogma,

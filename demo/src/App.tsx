@@ -1,4 +1,5 @@
-import OgmaLib, {
+import {
+  Ogma as OgmaLib,
   Node as OgmaNode,
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
@@ -81,7 +82,7 @@ export default function App() {
       });
   }, []);
 
-  const onAddNodes = useEvent<ND, ED, 'addNodes'>('addNodes', () => {
+  const onAddNodes = useEvent<ND, ED, "addNodes">("addNodes", () => {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
   });
@@ -154,7 +155,10 @@ export default function App() {
 
         <EdgeStyle<ND, ED> attributes={{ width: edgeWidth }} />
         {useClass && (
-          <StyleClass<ND, ED> name="class" nodeAttributes={styleClassNodeAttributes} />
+          <StyleClass<ND, ED>
+            name="class"
+            nodeAttributes={styleClassNodeAttributes}
+          />
         )}
 
         <EdgeStyle.Hovered<ND, ED>
@@ -176,18 +180,14 @@ export default function App() {
           nodeGenerator={groupingOptions.nodeGenerator}
         />
 
-        <Tooltip<ND, ED, 'nodeRightclick'>
+        <Tooltip<ND, ED, "nodeRightclick">
           eventName="nodeRightclick"
           bodyClass="ogma-tooltip"
           placement="right"
         >
           {(target) => {
-            return (
-              <div>
-                {target.getId()}
-              </div>
-            )
-          }} 
+            return <div>{target.getId()}</div>;
+          }}
         </Tooltip>
         <GraphOutlines visible={outlines} />
 

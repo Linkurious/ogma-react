@@ -1,4 +1,4 @@
-import OgmaLib, { Overlay } from "@linkurious/ogma";
+import { Ogma as OgmaLib, Overlay } from "@linkurious/ogma";
 import { render, waitFor, getMiddlePoint } from "../utils";
 import { Tooltip } from "../../../src/overlay/tooltip";
 import { Ogma } from "../../../src";
@@ -9,17 +9,14 @@ describe("Tooltip", () => {
   let div: HTMLDivElement;
   let ref: React.RefObject<Overlay | null>;
   beforeEach(() => {
-    div = document.createElement("div")
+    div = document.createElement("div");
     ref = createRef<Overlay>();
   });
 
   it("should support ref", () => {
     render(
       <Ogma>
-        <Tooltip
-          ref={ref}
-          eventName="edgeHover"
-        >
+        <Tooltip ref={ref} eventName="edgeHover">
           content
         </Tooltip>
       </Ogma>,
@@ -37,14 +34,12 @@ describe("Tooltip", () => {
       <Ogma>
         <Tooltip eventName="backgroundClick" ref={ref}>
           <div className="custom-child-div">{text}</div>
-        </Tooltip>,
+        </Tooltip>
       </Ogma>,
       div
     );
 
-    expect(
-      ref.current?.element
-    ).toBeInstanceOf(HTMLDivElement);
+    expect(ref.current?.element).toBeInstanceOf(HTMLDivElement);
     expect(
       ref.current?.element.querySelector(".custom-child-div")
     ).toBeInstanceOf(HTMLDivElement);
@@ -59,8 +54,13 @@ describe("Tooltip", () => {
     render(
       <Ogma ref={ogmaRef}>
         <Tooltip eventName="backgroundClick" ref={ref}>
-          {(pos) => <div className="custom-child-div">x: {pos.x}, y: {pos.y}</div>}
-        </Tooltip>,
+          {(pos) => (
+            <div className="custom-child-div">
+              x: {pos.x}, y: {pos.y}
+            </div>
+          )}
+        </Tooltip>
+        ,
       </Ogma>,
       div
     );
@@ -68,13 +68,11 @@ describe("Tooltip", () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
 
     // Open the tooltip by clicking on the background
-    await act(
-      async () => {
-        await ogmaRef.current!.mouse.click({ x: 0, y: 0 })
-        await ogmaRef.current!.view.afterNextFrame();
-        await ogmaRef.current!.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogmaRef.current!.mouse.click({ x: 0, y: 0 });
+      await ogmaRef.current!.view.afterNextFrame();
+      await ogmaRef.current!.view.afterNextFrame();
+    });
 
     // The children do not exist until the tooltip is opened
     expect(
@@ -208,7 +206,7 @@ describe("Tooltip", () => {
       <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip eventName="nodeClick" ref={ref}>
           {(node) => <div className="custom-child-div">{node.getId()}</div>}
-        </Tooltip>,
+        </Tooltip>
       </Ogma>,
       div
     );
@@ -222,15 +220,13 @@ describe("Tooltip", () => {
     // Simulate clicking the nodes of the graph then check the tooltip content
     for (let i = 0; i < nodes.size; i++) {
       const node = nodes.get(i);
-      await act(
-        async () => {
-          await ogma.mouse.click(
-            ogma.view.graphToScreenCoordinates(node.getPosition())
-          );
-          await ogma.view.afterNextFrame();
-        }
-      );
-  
+      await act(async () => {
+        await ogma.mouse.click(
+          ogma.view.graphToScreenCoordinates(node.getPosition())
+        );
+        await ogma.view.afterNextFrame();
+      });
+
       expect(
         ref.current?.element.querySelector(".custom-child-div")!.textContent
       ).toBe(`${node.getId()}`);
@@ -249,31 +245,27 @@ describe("Tooltip", () => {
           placement="top"
         >
           Static tooltip content
-        </Tooltip>,
+        </Tooltip>
       </Ogma>,
       div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ogmaRef.current!;
-    await act(
-      async () => {
-        await ogma.mouse.click(
-          ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
-        );
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click(
+        ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
+      );
+      await ogma.view.afterNextFrame();
+    });
     const rect = ref.current?.element.getBoundingClientRect()!;
 
-    await act(
-      async () => {
-        await ogma.mouse.click(
-          ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
-        );
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click(
+        ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
+      );
+      await ogma.view.afterNextFrame();
+    });
     const rect2 = ref.current?.element.getBoundingClientRect()!;
     expect(rect).toEqual(rect2);
   });
@@ -290,7 +282,7 @@ describe("Tooltip", () => {
           placement="bottom"
         >
           Static tooltip content
-        </Tooltip>,
+        </Tooltip>
       </Ogma>,
       div
     );
@@ -298,24 +290,20 @@ describe("Tooltip", () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ogmaRef.current!;
 
-    await act(
-      async () => {
-        await ogma.mouse.click(
-          ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
-        );
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click(
+        ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
+      );
+      await ogma.view.afterNextFrame();
+    });
     const rect = ref.current?.element.getBoundingClientRect()!;
 
-    await act(
-      async () => {
-        await ogma.mouse.click(
-          ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
-        );
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click(
+        ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
+      );
+      await ogma.view.afterNextFrame();
+    });
     const rect2 = ref.current?.element.getBoundingClientRect()!;
     expect(rect).toEqual(rect2);
 
@@ -334,24 +322,20 @@ describe("Tooltip", () => {
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
-    await act(
-      async () => {
-        await ogma.mouse.click(
-          ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
-        );
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click(
+        ogma.view.graphToScreenCoordinates({ x: 999, y: 999 })
+      );
+      await ogma.view.afterNextFrame();
+    });
     const newRect = ref.current?.element.getBoundingClientRect()!;
     expect(newRect).not.toEqual(newPosition);
-    await act(
-      async () => {
-        await ogma.mouse.click(
-          ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
-        );
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click(
+        ogma.view.graphToScreenCoordinates({ x: -999, y: -999 })
+      );
+      await ogma.view.afterNextFrame();
+    });
     const newRect2 = ref.current?.element.getBoundingClientRect()!;
     expect(newRect).toEqual(newRect2);
   });
@@ -365,7 +349,7 @@ describe("Tooltip", () => {
           size={{ width: 300, height: 200 }}
         >
           Sized tooltip content
-        </Tooltip>,
+        </Tooltip>
       </Ogma>,
       div
     );
@@ -383,7 +367,7 @@ describe("Tooltip", () => {
           size={{ width: 300, height: 200 }}
         >
           Sized tooltip content
-        </Tooltip>,
+        </Tooltip>
       </Ogma>,
       div
     );
@@ -414,32 +398,16 @@ describe("Tooltip", () => {
     const ref4 = createRef<Overlay>();
     render(
       <Ogma ref={ogmaRef}>
-        <Tooltip
-          ref={ref}
-          eventName="backgroundClick"
-          placement="top"
-        >
+        <Tooltip ref={ref} eventName="backgroundClick" placement="top">
           a
         </Tooltip>
-        <Tooltip
-          ref={ref2}
-          eventName="backgroundClick"
-          placement="right"
-        >
+        <Tooltip ref={ref2} eventName="backgroundClick" placement="right">
           a
         </Tooltip>
-        <Tooltip
-          ref={ref3}
-          eventName="backgroundClick"
-          placement="bottom"
-        >
+        <Tooltip ref={ref3} eventName="backgroundClick" placement="bottom">
           a
         </Tooltip>
-        <Tooltip
-          ref={ref4}
-          eventName="backgroundClick"
-          placement="left"
-        >
+        <Tooltip ref={ref4} eventName="backgroundClick" placement="left">
           a
         </Tooltip>
       </Ogma>,
@@ -451,24 +419,25 @@ describe("Tooltip", () => {
     const ogma = ogmaRef.current!;
 
     // Simulate clicking the background to open the tooltip
-    await act(
-      async () => {
-        await ogma.mouse.click({ x: 150, y: 150 });
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click({ x: 150, y: 150 });
+      await ogma.view.afterNextFrame();
+    });
 
     expect(
       (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
     ).toBe("translate(calc(-50% + 0px),calc(-100% + 0px))");
     expect(
-      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style
+        .transform
     ).toBe("translate(0px,calc(-50% + 0px))");
     expect(
-      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style
+        .transform
     ).toBe("translate(calc(-50% + 0px),0px)");
     expect(
-      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style
+        .transform
     ).toBe("translate(calc(-100% + 0px),calc(-50% + 0px))");
   });
 
@@ -521,24 +490,29 @@ describe("Tooltip", () => {
     const ogma = ogmaRef.current!;
 
     // Simulate clicking the background to open the tooltip
-    await act(
-      async () => {
-        await ogma.mouse.click({ x: 150, y: 150 });
-        await ogma.view.afterNextFrame();
-      }
-    );
+    await act(async () => {
+      await ogma.mouse.click({ x: 150, y: 150 });
+      await ogma.view.afterNextFrame();
+    });
 
     expect(
       (ref.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe(`translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`);
+    ).toBe(
+      `translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`
+    );
     expect(
-      (ref2.current?.element.firstElementChild as HTMLDivElement).style.transform
+      (ref2.current?.element.firstElementChild as HTMLDivElement).style
+        .transform
     ).toBe(`translate(calc(-50% + ${translate.x}px),${translate.y}px)`);
     expect(
-      (ref3.current?.element.firstElementChild as HTMLDivElement).style.transform
-    ).toBe(`translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`);
+      (ref3.current?.element.firstElementChild as HTMLDivElement).style
+        .transform
+    ).toBe(
+      `translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`
+    );
     expect(
-      (ref4.current?.element.firstElementChild as HTMLDivElement).style.transform
+      (ref4.current?.element.firstElementChild as HTMLDivElement).style
+        .transform
     ).toBe(`translate(${translate.x}px,calc(-50% + ${translate.y}px))`);
   });
 
@@ -554,9 +528,6 @@ describe("Tooltip", () => {
         </Tooltip>
       </Ogma>
     );
-    expect(
-      ref.current?.element.querySelector(".custom-tooltip")
-    ).toBeDefined();
+    expect(ref.current?.element.querySelector(".custom-tooltip")).toBeDefined();
   });
-
 });
