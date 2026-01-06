@@ -48,7 +48,7 @@ You will need the CSS or Styled Components (see [`demo/src/index.css`](https://g
 
 ```tsx
 import { Ogma, NodeStyle, Popup, useEvent } from '@linkurious/ogma-react';
-import OgmaLib, { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
+import { Ogma as OgmaLib, MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
 ...
 const [clickedNode, setClickedNode] = useState<OgmaNode|null>(null);
 const ogmaRef = useRef<OgmaLib>();
@@ -177,7 +177,7 @@ Using the parsers:
 
 ```tsx
 import { useState, useEffect } from 'react';
-import OgmaLib, { RawGraph } from '@linkurious/ogma';
+import { Ogma as OgmaLib, RawGraph } from '@linkurious/ogma';
 import { Ogma } from '@linkurious/ogma-react';
 
 export default function App () {
@@ -424,7 +424,7 @@ Custom popup UI layer.
 
 ### `<Tooltip />`
 
-Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a function that returns a ReactNode 
+Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a function that returns a ReactNode
 and has the target of the event as argument.
 
 #### Props
@@ -454,7 +454,7 @@ and has the target of the event as argument.
           {target.getId()}
         </div>
       )
-    }} 
+    }}
   </Tooltip>
 </Ogma>
 ```

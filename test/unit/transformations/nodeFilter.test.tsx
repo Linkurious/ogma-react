@@ -1,7 +1,7 @@
 import { NodeFilterTest, ref } from "./test-components";
 import { render, userEvent, screen } from "../utils";
 import { act } from "react";
-import OgmaLib from "@linkurious/ogma";
+import { Ogma as OgmaLib } from "@linkurious/ogma";
 describe("Node filter", () => {
   let div: HTMLDivElement;
   beforeEach(() => (div = document.createElement("div")));

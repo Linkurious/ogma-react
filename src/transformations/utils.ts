@@ -1,4 +1,4 @@
-import Ogma, { Transformation } from "@linkurious/ogma";
+import { Ogma, Transformation } from "@linkurious/ogma";
 import { TransformationProps } from "./types";
 
 export function toggle<ND, ED>(
