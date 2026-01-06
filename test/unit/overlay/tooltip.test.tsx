@@ -35,7 +35,6 @@ describe("Tooltip", () => {
         <Tooltip eventName="backgroundClick" ref={ref}>
           <div className="custom-child-div">{text}</div>
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
@@ -208,7 +207,6 @@ describe("Tooltip", () => {
         <Tooltip eventName="nodeClick" ref={ref}>
           {(node) => <div className="custom-child-div">{node.getId()}</div>}
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
@@ -248,7 +246,6 @@ describe("Tooltip", () => {
         >
           Static tooltip content
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
@@ -286,7 +283,6 @@ describe("Tooltip", () => {
         >
           Static tooltip content
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
@@ -354,7 +350,6 @@ describe("Tooltip", () => {
         >
           Sized tooltip content
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
@@ -373,7 +368,6 @@ describe("Tooltip", () => {
         >
           Sized tooltip content
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
