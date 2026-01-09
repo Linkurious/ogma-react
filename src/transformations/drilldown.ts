@@ -58,7 +58,6 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
     // transformations callbacks are tricky (drilldown: set of transformations?)
     setTransformation(newTransformation);
     return () => {
-      // TODO: DESTROY THE TRANSFORMATION??
       newTransformation.destroy();
       setTransformation(null);
     };
