@@ -13,19 +13,28 @@ import type { TransformationProps } from "./types";
 
 // Helper types to extract the correct types from Ogma's addDrillDown method
 type OgmaInstance<ND, ED> = ReturnType<typeof useOgma<ND, ED>>;
-type AddDrillDownFn<ND, ED> = OgmaInstance<ND, ED>["transformations"]["addDrillDown"];
-export type Drilldown<ND, ED> = ReturnType<AddDrillDownFn<ND, ED>>;
-export type DrilldownOptions<ND, ED> = NonNullable<Parameters<OmitThisParameter<AddDrillDownFn<ND, ED>>>[0]>;
+type AddDrillDownFn<ND, ED> = OgmaInstance<
+  ND,
+  ED
+>["transformations"]["addDrillDown"];
 
+export type Drilldown<ND, ED> = ReturnType<AddDrillDownFn<ND, ED>>;
+export type DrilldownOptions<ND, ED> = NonNullable<
+  Parameters<OmitThisParameter<AddDrillDownFn<ND, ED>>>[0]
+>;
 
 interface NodeDrilldownPropsBase<ND, ED>
-  extends DrilldownOptions<ND, ED>,
+  extends
+    DrilldownOptions<ND, ED>,
     TransformationProps<ND, ED, DrilldownOptions<ND, ED>> {}
 
 /**
  * Public props: we intentionally hide `enabled` and expose `disabled` (from TransformationProps).
  */
-export type NodeDrilldownProps<ND, ED> = Omit<NodeDrilldownPropsBase<ND, ED>, "enabled">;
+export type NodeDrilldownProps<ND, ED> = Omit<
+  NodeDrilldownPropsBase<ND, ED>,
+  "enabled"
+>;
 
 function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   props: NodeDrilldownProps<ND, ED>,
@@ -33,8 +42,10 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
 ) {
   const ogma = useOgma<ND, ED>();
 
-  const [transformation, setTransformation] =
-    useState<Drilldown<ND, ED> | null>(null);
+  const [transformation, setTransformation] = useState<Drilldown<
+    ND,
+    ED
+  > | null>(null);
 
   // Expose the transformation instance (or null while mounting/unmounted)
   useImperativeHandle(ref, () => transformation!, [transformation]);
@@ -48,7 +59,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
     setTransformation(newTransformation);
     return () => {
       // TODO: DESTROY THE TRANSFORMATION??
-      // newTransformation.destroy();
+      newTransformation.destroy();
       setTransformation(null);
     };
   }, [props.disabled]);
@@ -90,8 +101,9 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
 }
 
 export type NodeDrilldownComponentType = <ND = unknown, ED = unknown>(
-  props: NodeDrilldownProps<ND, ED> &
-    RefAttributes<Drilldown<ND, ED> | null>
+  props: NodeDrilldownProps<ND, ED> & RefAttributes<Drilldown<ND, ED> | null>
 ) => ReactElement | null;
 
-export const NodeDrilldown = forwardRef(NodeDrilldownComponent) as NodeDrilldownComponentType;
+export const NodeDrilldown = forwardRef(
+  NodeDrilldownComponent
+) as NodeDrilldownComponentType;
