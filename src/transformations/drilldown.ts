@@ -8,7 +8,7 @@ import {
   type RefAttributes
 } from "react";
 import { useOgma } from "../context";
-// import { useTransformationCallbacks } from "./utils";
+// TODO: Add transformation callbacks support via useTransformationCallbacks from "./utils" if needed.
 import type { TransformationProps } from "./types";
 
 // Helper types to extract the correct types from Ogma's addDrillDown method
