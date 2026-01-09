@@ -217,11 +217,6 @@ function DrilldownTestC(
     disabled: false,
     ...drilldown
   });
-  function updateDrilldown() {
-    setProps({
-      ...props,
-    });
-  }
   function toggle() {
     setProps({
       ...props,
@@ -230,7 +225,6 @@ function DrilldownTestC(
   }
   return (
     <div>
-      <button onClick={updateDrilldown}>setDrilldown</button>
       <button onClick={toggle}>toggle</button>
 
       <Ogma graph={graph} ref={ref}>
