@@ -18,9 +18,12 @@ import {
   NeighborMerging,
   NeighborMergingProps,
   NodeCollapsing,
-  NodeCollapsingProps
+  NodeCollapsingProps,
+  NodeDrilldownProps,
+  NodeDrilldown,
+  Drilldown
 } from "../../../src";
-import { createRef, forwardRef, useState } from "react";
+import { createRef, forwardRef, Ref, useState } from "react";
 
 export const ref = createRef<OgmaLib>();
 
@@ -185,6 +188,76 @@ function NodeGroupingTestC(
   );
 }
 
+
+function DrilldownTestC(
+  drilldown: Partial<NodeDrilldownProps<unknown, unknown>> = {},
+  drilldownRef: Ref<Drilldown<any, any> | null>
+) {
+  const [props, setProps] = useState<NodeDrilldownProps<unknown, unknown>>({
+    onGetSubgraph: (node) => {
+      const id = node.getId();
+      const nodes = [
+        { id: `${id} - 1` },
+        { id: `${id} - 2` },
+        { id: `${id} - 3` },
+        { id: `${id} - 4` }
+      ];
+      const edges = [
+        {
+          source: `${id} - 1`,
+          target: `${id} - 2`
+        },
+        {
+          source: `1 - 1`,
+          target: `${id} - 2`
+        }
+      ];
+      return Promise.resolve({ nodes, edges });
+    },
+    disabled: false,
+    ...drilldown
+  });
+  function updateDrilldown() {
+    setProps({
+      ...props,
+    });
+  }
+  function toggle() {
+    setProps({
+      ...props,
+      disabled: !props.disabled
+    });
+  }
+  return (
+    <div>
+      <button onClick={updateDrilldown}>setDrilldown</button>
+      <button onClick={toggle}>toggle</button>
+
+      <Ogma graph={graph} ref={ref}>
+        <NodeDrilldown
+          disabled={props.disabled}
+          copyData={props.copyData}
+          depthPath={props.depthPath}
+          duration={props.duration}
+          easing={props.easing}
+          nodeGenerator={props.nodeGenerator}
+          onDestroyed={props.onDestroyed}
+          onDisabled={props.onDisabled}
+          onEnabled={props.onEnabled}
+          onGetSubgraph={props.onGetSubgraph}
+          onGroupUpdate={props.onGroupUpdate}
+          onSetIndex={props.onSetIndex}
+          onUpdated={props.onUpdated}
+          padding={props.padding}
+          parentPath={props.parentPath}
+          showContents={props.showContents}
+          ref={drilldownRef}
+        />
+      </Ogma>
+    </div>
+  );
+}
+
 function NeighborGenerationTestC(
   generator: Partial<NeighborGenerationProps<unknown, unknown>> = {}
 ) {
@@ -306,6 +379,7 @@ export const EdgeFilterTest = forwardRef(EdgeFilterTestC);
 export const NodeFilterTest = forwardRef(NodeFilterTestC);
 export const EdgeGroupingTest = forwardRef(EdgeGroupingTestC);
 export const NodeGroupingTest = forwardRef(NodeGroupingTestC);
+export const DrilldownTest = forwardRef(DrilldownTestC);
 export const NeighborGenerationTest = forwardRef(NeighborGenerationTestC);
 export const NeighborMergingTest = forwardRef(NeighborMergingTestC);
 export const NodeCollapsingTest = forwardRef(NodeCollapsingTestC);
