@@ -26,6 +26,7 @@ Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [
       - [`<NeighborGeneration />`](#neighborgeneration-)
       - [`<NeighborMerging />`](#neighbormerging-)
       - [`<NodeCollapsing />`](#nodecollapsing-)
+      - [`<NodeDrilldown />`](#nodedrilldown-)
     - [`<Geo />`](#geo-)
 
 ## Getting Started
@@ -222,6 +223,7 @@ export default function App () {
   - [`<NeighborGeneration />`](#neighborgeneration-)
   - [`<NeighborMerging />`](#neighbormerging-)
   - [`<NodeCollapsing />`](#nodecollapsing-)
+  - [`<NodeDrilldown />`](#nodedrilldown-)
 - [`<Geo />`](#geo-)
 
 ## API
@@ -707,6 +709,38 @@ Node collapsing transformation. See [`ogma.transformations.addNodeCollapsing()`]
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addNodeCollapsing()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeCollapsing) properties | | Transformation properties |
 
+### `<NodeDrilldown />`
+
+Node drilldown transformation. See [`ogma.transformations.addDrillDown()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addDrillDown) for more information.
+
+#### Props
+
+| Prop         | Type                           | Default | Description |
+| ------------ | ------------------------------ | ------- | ----------- |
+| `parentPath?`   | `string` | `null`  | Path to the parent node ID in the node data |
+| `depthPath?` | `string`      |     | Path to the depth value in the node data              |
+| `nodeGenerator?` | `(node: Ogma.Node) => RawNode \| RawNode[] \| null`      |     | Function to generate child nodes              |
+| `showContents?` | `boolean` | `true`  | Whether to show the contents of the drilled down node |
+| `copyData?` | `boolean` | `false`  | Whether to copy data from parent to generated nodes |
+| `padding?` | `number` | `null`  | Padding around the drilled down content |
+| `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
+| `...rest` | See [`ogma.transformations.addDrillDown()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addDrillDown) properties | | Drilldown transformation properties |
+
+#### Example
+
+```tsx
+<Ogma graph={...}>
+  <NodeDrilldown
+    parentPath="data.parentId"
+    depthPath="data.depth"
+    nodeGenerator={node => ({
+      id: `${node.getId()}-child`,
+      data: { parentId: node.getId() }
+    })}
+    disabled={false}
+  />
+</Ogma>
+```
 
 ### `<Geo />`
 
