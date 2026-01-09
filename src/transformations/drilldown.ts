@@ -68,14 +68,12 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     if (transformation) {
-      // toggle(transformation, !!props.disabled, props.duration);
       const disabled = !!props.disabled;
       const duration = props.duration;
-      // also, `.isEnabled` does not exist on drilldown transformation
-      // if (disabled === transformation.isEnabled()) {
+      // Note: Drilldown transformation does not expose `isEnabled()`,
+      // so we rely on the `disabled` prop to decide whether to enable/disable.
       if (disabled) transformation.disable(duration as number);
       else transformation.enable(duration as number);
-      // }
     }
   }, [props.disabled, props.duration]);
 
