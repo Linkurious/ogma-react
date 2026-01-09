@@ -55,7 +55,10 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
       ...props,
       enabled: !props.disabled
     });
-    // transformations callbacks are tricky (drilldown: set of transformations?)
+    // TODO: Drilldown may internally manage a set of transformations, so we currently do not
+    //       wire it through generic transformation-callback helpers (e.g. useTransformationCallbacks).
+    //       If/when we add React-level transformation callbacks specific to drilldown, revisit this
+    //       effect to ensure callbacks are correctly registered and cleaned up.
     setTransformation(newTransformation);
     return () => {
       newTransformation.destroy();
