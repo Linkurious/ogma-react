@@ -42,6 +42,8 @@
     "build:lib": "vite build && npm run build:files",
     "build:files": "scripts/prepublish.mjs && cp README.md dist",
     "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
+    "lint": "oxlint -A no-unsafe-optional-chaining src demo test",
+    "lint:fix": "oxlint -A no-unsafe-optional-chaining --fix src demo test",
     "test": "vitest",
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "e2e:tests": "playwright test",
@@ -50,19 +52,25 @@
     "postversion": "sync_versions",
     "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist",
     "bump:patch": "npm version patch --no-git-tag-version",
-    "upload": "npm run doc:publish"
+    "upload": "npm run doc:publish",
+    "prepare": "husky"
   },
   "prettier": {
     "trailingComma": "none"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "oxlint -A no-unsafe-optional-chaining --fix"
+    ]
+  },
   "peerDependencies": {
-    "@linkurious/ogma": "^5.1.0",
+    "@linkurious/ogma": "^5.3.9",
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
     "@linkurious/code-tools": "^0.0.15",
-    "@linkurious/eslint-config-ogma": "^1.0.5",
     "@linkurious/ogma-styles": "^0.0.8",
     "@next/bundle-analyzer": "^14.0.0",
     "@playwright/test": "^1.53.2",
@@ -80,8 +88,11 @@
     "dts-bundle-generator": "^9.0.0",
     "feather-icons": "^4.29.2",
     "gh-pages": "^6.0.0",
+    "husky": "^9.1.7",
     "jsdom": "latest",
     "leaflet": "^1.8.0",
+    "lint-staged": "^16.2.7",
+    "oxlint": "^1.39.0",
     "prettier": "^3.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

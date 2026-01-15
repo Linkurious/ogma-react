@@ -64,22 +64,26 @@ describe("Popup", () => {
 
     render(
       <Ogma graph={graph}>
-        <Popup position={{ x: 0, y: 0 }} ref={ref} isOpen contentClass="content" content={text} />
+        <Popup
+          position={{ x: 0, y: 0 }}
+          ref={ref}
+          isOpen
+          contentClass="content"
+          content={text}
+        />
       </Ogma>,
       div
     );
-    expect(
-      ref.current?.element.querySelector(".content")
-    ).toBeInstanceOf(HTMLDivElement);
-    expect(
-      ref.current?.element.querySelector(".content")!.textContent
-    ).toBe(text);
+    expect(ref.current?.element.querySelector(".content")).toBeInstanceOf(
+      HTMLDivElement
+    );
+    expect(ref.current?.element.querySelector(".content")!.textContent).toBe(
+      text
+    );
   });
 
   it("should close the popup on close button click", async () => {
-    render(
-      <PopupComponent />
-    );
+    render(<PopupComponent />);
     expect(popupRef.current?.isHidden()).toEqual(false);
     await act(async () => {
       screen.getByText("X").click();
