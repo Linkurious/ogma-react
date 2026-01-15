@@ -1,7 +1,17 @@
 import { ReactNode, ReactElement } from "react";
 import { renderToString } from "react-dom/server";
-import OgmaLib, { Node as OgmaNode, Edge, Point } from "@linkurious/ogma";
-import { Content, PositionGetter, Placement, TooltipEventFunctions } from "./types";
+import {
+  Ogma as OgmaLib,
+  Node as OgmaNode,
+  Edge,
+  Point
+} from "@linkurious/ogma";
+import {
+  Content,
+  PositionGetter,
+  Placement,
+  TooltipEventFunctions
+} from "./types";
 
 export function getContent(
   ogma: OgmaLib,
@@ -37,10 +47,12 @@ export function getCloseButton(
   return "";
 }
 
-export function getEventNameFromTooltipEvent(eventName: keyof TooltipEventFunctions): "mouseover" | "click" | "doubleclick" {
+export function getEventNameFromTooltipEvent(
+  eventName: keyof TooltipEventFunctions
+): "mouseover" | "click" | "doubleclick" {
   if (eventName.endsWith("Doubleclick")) {
     return "doubleclick";
-  // Take into account click and rightclick events
+    // Take into account click and rightclick events
   } else if (eventName.toLowerCase().endsWith("click")) {
     return "click";
   } else {
@@ -48,7 +60,10 @@ export function getEventNameFromTooltipEvent(eventName: keyof TooltipEventFuncti
   }
 }
 
-function getOffsetAmount(target: OgmaNode | Edge | "background", zoom: number): number {
+function getOffsetAmount(
+  target: OgmaNode | Edge | "background",
+  zoom: number
+): number {
   // Get the offset amount based on the target type
 
   if (target instanceof OgmaNode) {
@@ -62,12 +77,19 @@ function getOffsetAmount(target: OgmaNode | Edge | "background", zoom: number): 
   return 0; // No offset for background
 }
 
-function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge, zoom: number) {
+function getStrokeWidth(
+  strokeType: "inner" | "outer",
+  target: OgmaNode | Edge,
+  zoom: number
+) {
   // Get the stroke width based on the type and zoom level
   // @ts-expect-error the attribute does exist
-  const strokeWidth = target.getAttribute(`${strokeType}Stroke.width`) as number;
+  const strokeWidth = target.getAttribute(
+    `${strokeType}Stroke.width`
+  ) as number;
   // @ts-expect-error the attribute does exist
-  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) > target.size) return 0;
+  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) > target.size)
+    return 0;
 
   // @ts-expect-error the attribute does exist
   if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) === "fixed") {
@@ -77,7 +99,11 @@ function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge, 
   }
 }
 
-export function getOffset(target: OgmaNode | Edge | "background", zoom: number, placement: Placement): Point {
+export function getOffset(
+  target: OgmaNode | Edge | "background",
+  zoom: number,
+  placement: Placement
+): Point {
   // Get the offset of the layer based on the placement
   const offsetAmount = getOffsetAmount(target, zoom);
   const offset = { x: 0, y: 0 };
@@ -98,7 +124,11 @@ export function getOffset(target: OgmaNode | Edge | "background", zoom: number, 
   return offset;
 }
 
-export function isOverflowing(bb: DOMRect, clientWidth: number, clientHeight: number) {
+export function isOverflowing(
+  bb: DOMRect,
+  clientWidth: number,
+  clientHeight: number
+) {
   if (bb.left < 0) {
     return "right";
   }
@@ -114,7 +144,11 @@ export function isOverflowing(bb: DOMRect, clientWidth: number, clientHeight: nu
   return null;
 }
 
-export function getTranslate(newPlacement: Placement | null, placement: Placement, translate: {x: number, y: number}) {
+export function getTranslate(
+  newPlacement: Placement | null,
+  placement: Placement,
+  translate: { x: number; y: number }
+) {
   switch (newPlacement || placement) {
     case "top":
       return `translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`;

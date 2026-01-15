@@ -1,9 +1,9 @@
 import React from "react";
 import { render, waitFor } from "./utils";
 
-import OgmaLib, { RawGraph, Theme } from "@linkurious/ogma";
+import { Ogma as OgmaLib, RawGraph, Theme } from "@linkurious/ogma";
 import { Ogma, useOgma } from "../../src";
-import { afternoonNap, morningBreeze } from '@linkurious/ogma-styles';
+import { afternoonNap, morningBreeze } from "@linkurious/ogma-styles";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
 const graph: RawGraph = {
@@ -73,8 +73,14 @@ describe("Ogma", () => {
     expect(ref.current?.getOptions().backgroundColor).toBe(backgroundColor);
 
     const newBackgroundColor = "blue";
-    rerender(<Ogma ref={ref} graph={graph} options={{ backgroundColor: newBackgroundColor }} />);
-    
+    rerender(
+      <Ogma
+        ref={ref}
+        graph={graph}
+        options={{ backgroundColor: newBackgroundColor }}
+      />
+    );
+
     expect(ref.current?.getOptions().backgroundColor).toBe(newBackgroundColor);
   });
 
@@ -99,7 +105,7 @@ describe("Ogma", () => {
     const mockData = {
       nodes: [
         { id: 0, attributes: { color: "red", x: 0, y: 0 } },
-        { id: 1, attributes: { color: "green", x: 25, y: 0 } },
+        { id: 1, attributes: { color: "green", x: 25, y: 0 } }
       ]
     } as RawGraph;
 
@@ -112,7 +118,12 @@ describe("Ogma", () => {
     };
 
     const { rerender } = render(
-      <Ogma ref={ref} graph={mockData} onAddNodes={mockOnNodesAdded} onReady={onReady} />,
+      <Ogma
+        ref={ref}
+        graph={mockData}
+        onAddNodes={mockOnNodesAdded}
+        onReady={onReady}
+      />,
       div
     );
 
@@ -128,14 +139,20 @@ describe("Ogma", () => {
     // Rerender without the handler
     rerender(<Ogma ref={ref} graph={mockData} />);
 
-    ref.current?.addNode({ id: 3, attributes: { color: "yellow", x: 25, y: 25 } });
+    ref.current?.addNode({
+      id: 3,
+      attributes: { color: "yellow", x: 25, y: 25 }
+    });
 
     // add another node - handler should not be called
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(1);
 
     rerender(<Ogma ref={ref} graph={mockData} onAddNodes={mockOnNodesAdded} />);
 
-    ref.current?.addNode({ id: 4, attributes: { color: "purple", x: 50, y: 50 } });
+    ref.current?.addNode({
+      id: 4,
+      attributes: { color: "purple", x: 50, y: 50 }
+    });
 
     // Check if the handler was called again
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(2);
@@ -143,9 +160,7 @@ describe("Ogma", () => {
 
   it("should set the theme of the graph correctly with the prop changes", async () => {
     const mockData = {
-      nodes: [
-        { id: 0, attributes: { x: 0, y: 0 } },
-      ]
+      nodes: [{ id: 0, attributes: { x: 0, y: 0 } }]
     } as RawGraph;
 
     const theme: Theme = afternoonNap as Theme<unknown, unknown>;
@@ -167,11 +182,10 @@ describe("Ogma", () => {
     expect(nodeColor).toMatch("#BD8A61");
 
     const theme2: Theme = morningBreeze as Theme<unknown, unknown>;
-    rerender(<Ogma ref={ref} graph={mockData} theme={theme2} />)
+    rerender(<Ogma ref={ref} graph={mockData} theme={theme2} />);
 
     // node color should be the new theme's node color after rerendering
     const nodeColor2 = ref.current?.getNodes().get(0).getAttribute("color");
     expect(nodeColor2).toMatch("#43a2ca");
-
-  })
+  });
 });

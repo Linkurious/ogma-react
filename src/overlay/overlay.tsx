@@ -7,7 +7,8 @@ import {
   useImperativeHandle
 } from "react";
 
-import OgmaLib, {
+import {
+  Ogma as OgmaLib,
   Overlay as OverlayLayer,
   Size,
   Point
@@ -36,7 +37,14 @@ const offScreenPos: Point = { x: -9999, y: -9999 };
 // TODO: use props for these classes
 const OverlayComponent = forwardRef(
   <ND = unknown, ED = unknown>(
-    { position, children, className = "", size, scaled, index }: OverlayProps<ND, ED>,
+    {
+      position,
+      children,
+      className = "",
+      size,
+      scaled,
+      index
+    }: OverlayProps<ND, ED>,
     ref?: Ref<OverlayLayer>
   ) => {
     const ogma = useOgma<ND, ED>();

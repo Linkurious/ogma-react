@@ -1,6 +1,4 @@
-import Ogma, {
-  EventTypes
-} from "@linkurious/ogma";
+import { Ogma, EventTypes } from "@linkurious/ogma";
 import { OgmaProps } from "./ogma";
 import {
   getEventNameFromProp,

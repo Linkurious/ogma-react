@@ -1,3 +1,4 @@
+export * from "./drilldown";
 export * from "./nodeGrouping";
 export * from "./edgeGrouping";
 export * from "./nodeCollapsing";

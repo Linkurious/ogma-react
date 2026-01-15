@@ -1,4 +1,4 @@
-import OgmaLib from "@linkurious/ogma";
+import { Ogma as OgmaLib } from "@linkurious/ogma";
 import { Ogma } from "../../src";
 import { createRef } from "react";
 import { Geo } from "../../src";

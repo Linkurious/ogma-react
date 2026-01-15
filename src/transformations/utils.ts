@@ -1,4 +1,4 @@
-import Ogma, { Transformation } from "@linkurious/ogma";
+import { Ogma, Transformation } from "@linkurious/ogma";
 import { TransformationProps } from "./types";
 
 export function toggle<ND, ED>(
@@ -19,15 +19,15 @@ export function useTransformationCallbacks<ND, ED>(
 ) {
   const enabledListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
-    props.onEnabled && props.onEnabled(transformation);
+    if (props.onEnabled) props.onEnabled(transformation);
   };
   const disabledListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
-    props.onDisabled && props.onDisabled(transformation);
+    if (props.onDisabled) props.onDisabled(transformation);
   };
   const updatedListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
-    props.onUpdated && props.onUpdated(transformation);
+    if (props.onUpdated) props.onUpdated(transformation);
   };
   const setIndexListener = ({
     target,
@@ -37,7 +37,7 @@ export function useTransformationCallbacks<ND, ED>(
     index: number;
   }) => {
     if (target !== transformation) return;
-    props.onSetIndex && props.onSetIndex(transformation, index);
+    if (props.onSetIndex) props.onSetIndex(transformation, index);
   };
   const destroyedListener = ({
     target
@@ -45,7 +45,7 @@ export function useTransformationCallbacks<ND, ED>(
     target: Transformation<ND, ED>;
   }) => {
     if (target !== transformation) return;
-    props.onDestroyed && props.onDestroyed(transformation);
+    if (props.onDestroyed) props.onDestroyed(transformation);
     ogma.events
       .off(enabledListener)
       .off(disabledListener)

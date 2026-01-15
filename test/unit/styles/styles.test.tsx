@@ -1,7 +1,7 @@
 import React, { act, createRef } from "react";
 import { Root, createRoot } from "react-dom/client";
 import { userEvent, waitFor } from "../utils";
-import OgmaLib, { Edge } from "@linkurious/ogma";
+import { Ogma as OgmaLib, type Edge } from "@linkurious/ogma";
 import { Ogma, NodeStyle, EdgeStyle } from "../../../src";
 import graph from "../fixtures/simple_graph.json";
 
@@ -39,7 +39,7 @@ describe("styles", async () => {
     expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
       "red",
       "red",
-      "red",
+      "red"
     ]);
   });
 
@@ -61,7 +61,7 @@ describe("styles", async () => {
     expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
       "red",
       "red",
-      "green",
+      "green"
     ]);
   });
 
@@ -70,13 +70,8 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <NodeStyle.Selected
-            attributes={{ color: "red" }}
-            fullOverwrite
-          />
-          <NodeStyle
-            attributes={{ color: "grey" }}
-          />
+          <NodeStyle.Selected attributes={{ color: "red" }} fullOverwrite />
+          <NodeStyle attributes={{ color: "grey" }} />
         </Ogma>
       )
     );
@@ -84,18 +79,10 @@ describe("styles", async () => {
     const ogma = ref.current!;
     const nodes = ogma.getNodes();
     nodes.setSelected(true);
-    expect(nodes.getAttribute("color")).toStrictEqual([
-      "red",
-      "red",
-      "red",
-    ]);
+    expect(nodes.getAttribute("color")).toStrictEqual(["red", "red", "red"]);
     nodes.setSelected(false);
     await ogma.view.afterNextFrame();
-    expect(nodes.getAttribute("color")).toStrictEqual([
-      "grey",
-      "grey",
-      "grey",
-    ]);
+    expect(nodes.getAttribute("color")).toStrictEqual(["grey", "grey", "grey"]);
   });
 
   it("Sets the attributes for hovered nodes correctly", async () => {
@@ -103,23 +90,21 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <NodeStyle.Hovered
-            attributes={{ color: "red" }}
-          />
-          <NodeStyle
-            attributes={{ color: "grey" }}
-          />
+          <NodeStyle.Hovered attributes={{ color: "red" }} />
+          <NodeStyle attributes={{ color: "grey" }} />
         </Ogma>
       )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
     const node = ogma.getNodes().get(0);
-    await ogma.mouse.move(ogma.view.graphToScreenCoordinates(node.getPosition()));
+    await ogma.mouse.move(
+      ogma.view.graphToScreenCoordinates(node.getPosition())
+    );
     await ogma.view.afterNextFrame();
     await ogma.view.afterNextFrame();
     expect(node.getAttribute("color")).toStrictEqual("red");
-    await ogma.mouse.move({x: -1000, y: -1000});
+    await ogma.mouse.move({ x: -1000, y: -1000 });
     await ogma.view.afterNextFrame();
     expect(node.getAttribute("color")).toStrictEqual("grey");
   });
@@ -166,7 +151,7 @@ describe("styles", async () => {
 
     expect(ref.current!.getEdges().getAttribute("color")).toStrictEqual([
       "red",
-      "red",
+      "red"
     ]);
   });
 
@@ -186,7 +171,7 @@ describe("styles", async () => {
     await ref.current!.view.afterNextFrame();
     expect(ref.current!.getEdges().getAttribute("color")).toStrictEqual([
       "grey",
-      "green",
+      "green"
     ]);
   });
 
@@ -195,13 +180,8 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <EdgeStyle.Selected
-            attributes={{ color: "red" }}
-            fullOverwrite
-          />
-          <EdgeStyle
-            attributes={{ color: "grey" }}
-          />
+          <EdgeStyle.Selected attributes={{ color: "red" }} fullOverwrite />
+          <EdgeStyle attributes={{ color: "grey" }} />
         </Ogma>
       )
     );
@@ -209,16 +189,10 @@ describe("styles", async () => {
     const ogma = ref.current!;
     const edges = ogma.getEdges();
     edges.setSelected(true);
-    expect(edges.getAttribute("color")).toStrictEqual([
-      "red",
-      "red"
-    ]);
+    expect(edges.getAttribute("color")).toStrictEqual(["red", "red"]);
     edges.setSelected(false);
     await ogma.view.afterNextFrame();
-    expect(edges.getAttribute("color")).toStrictEqual([
-      "grey",
-      "grey"
-    ]);
+    expect(edges.getAttribute("color")).toStrictEqual(["grey", "grey"]);
   });
 
   it("Sets the attributes for hovered edges correctly", async () => {
@@ -226,12 +200,8 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <EdgeStyle.Hovered
-            attributes={{ color: "red" }}
-          />
-          <EdgeStyle
-            attributes={{ color: "grey" }}
-          />
+          <EdgeStyle.Hovered attributes={{ color: "red" }} />
+          <EdgeStyle attributes={{ color: "grey" }} />
         </Ogma>
       )
     );
@@ -242,14 +212,14 @@ describe("styles", async () => {
     const dest = edge.getTarget();
     const midpoint = {
       x: (src.getPosition().x + dest.getPosition().x) / 2,
-      y: (src.getPosition().y + dest.getPosition().y) / 2,
+      y: (src.getPosition().y + dest.getPosition().y) / 2
     };
     await ogma.mouse.move(ogma.view.graphToScreenCoordinates(midpoint));
     await ogma.view.afterNextFrame();
     await ogma.view.afterNextFrame();
     edge = ogma.getHoveredElement() as Edge;
     expect(edge.getAttribute("color")).toStrictEqual("red");
-    await ogma.mouse.move({x: -1000, y: -1000});
+    await ogma.mouse.move({ x: -1000, y: -1000 });
     await ogma.view.afterNextFrame();
     expect(edge.getAttribute("color")).toStrictEqual("grey");
   });

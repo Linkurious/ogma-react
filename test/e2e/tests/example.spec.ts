@@ -1,4 +1,4 @@
-import Ogma from "@linkurious/ogma";
+import { Ogma } from "@linkurious/ogma";
 import os from "os";
 import { test, expect, Page } from "@playwright/test";
 
@@ -14,8 +14,8 @@ declare global {
 const TOLERATED_DIFFERENCE = 50;
 const initialState = "initial-state.png";
 
-const REPLACE = process.env.CI_COMMIT === 'true';
-const folder = './test/e2e/tests/example.spec.ts-snapshots';
+const REPLACE = process.env.CI_COMMIT === "true";
+const folder = "./test/e2e/tests/example.spec.ts-snapshots";
 const system = os.platform();
 
 let page: Page;
@@ -33,7 +33,7 @@ test.beforeEach(async () => {
   await page.locator(".App");
   await page.waitForTimeout(1000);
 
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(initialState, {
       maxDiffPixels: TOLERATED_DIFFERENCE,
       timeout: 10000
@@ -44,7 +44,7 @@ test.beforeEach(async () => {
     const fileName = `initial-state-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileName}`,
-      type: 'png'
+      type: "png"
     });
   }
 });
@@ -60,7 +60,7 @@ test("mouse hover", async () => {
   await page.mouse.move(pos.x, pos.y);
 
   const fileName = "node-hovered.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE,
       timeout: 5000
@@ -71,13 +71,13 @@ test("mouse hover", async () => {
     const fileNameSys = `node-hovered-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 
   // Reset hover state by moving the mouse away
   await page.mouse.move(0, 0, { steps: 10 });
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(initialState, {
       // Only the position is different compared to the initial screenshot
       maxDiffPixels: 45 + TOLERATED_DIFFERENCE,
@@ -102,7 +102,7 @@ test("tooltip", async () => {
   });
 
   const fileName = "tooltip-opened.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -112,13 +112,13 @@ test("tooltip", async () => {
     const fileNameSys = `tooltip-opened-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 
   // Click outside to close the tooltip
   await page.mouse.click(0, 0);
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(initialState, {
       // Only the position is different compared to the initial screenshot
       maxDiffPixels: 45 + TOLERATED_DIFFERENCE,
@@ -131,8 +131,11 @@ test("tooltip repositioning", async () => {
   // Get the position of the first node
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
-    const coords = ogma.view.screenToGraphCoordinates({ x: window.innerWidth - 10, y: window.innerHeight / 2 })
-    ogma.getNodes().get(0).setAttributes(coords)
+    const coords = ogma.view.screenToGraphCoordinates({
+      x: window.innerWidth - 10,
+      y: window.innerHeight / 2
+    });
+    ogma.getNodes().get(0).setAttributes(coords);
     return { x: window.innerWidth - 10, y: window.innerHeight / 2 };
   });
 
@@ -144,7 +147,7 @@ test("tooltip repositioning", async () => {
   });
 
   const fileName = "tooltip-repositioned.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -154,7 +157,7 @@ test("tooltip repositioning", async () => {
     const fileNameSys = `tooltip-repositioned-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 });
@@ -166,7 +169,7 @@ test("add node", async () => {
   await page.mouse.click(50, 50);
 
   const fileName = "node-added.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -176,7 +179,7 @@ test("add node", async () => {
     const fileNameSys = `node-added-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 });
@@ -195,7 +198,7 @@ test("add node with class", async () => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const fileName = "node-added-with-class.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -205,7 +208,7 @@ test("add node with class", async () => {
     const fileNameSys = `node-added-with-class-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 });
@@ -217,7 +220,7 @@ test("node grouping", async () => {
   await page.mouse.click(50, 50);
 
   const fileName = "node-grouping-disabled.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -227,7 +230,7 @@ test("node grouping", async () => {
     const fileNameSys = `node-grouping-disabled-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 
@@ -237,7 +240,7 @@ test("node grouping", async () => {
   await page.mouse.click(50, 50);
 
   const fileName2 = "node-grouping-reenabled.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName2, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -247,7 +250,7 @@ test("node grouping", async () => {
     const fileNameSys = `node-grouping-reenabled-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 });
@@ -259,7 +262,7 @@ test("geo mode", async () => {
   await page.mouse.click(50, 50);
 
   const fileName = "geo-mode-enabled.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -269,7 +272,7 @@ test("geo mode", async () => {
     const fileNameSys = `geo-mode-enabled-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 
@@ -279,7 +282,7 @@ test("geo mode", async () => {
   await page.mouse.click(50, 50);
 
   const fileName2 = "geo-mode-disabled.png";
-  if (! REPLACE) {
+  if (!REPLACE) {
     await expect(page).toHaveScreenshot(fileName2, {
       maxDiffPixels: TOLERATED_DIFFERENCE
     });
@@ -289,7 +292,7 @@ test("geo mode", async () => {
     const fileNameSys = `geo-mode-disabled-chromium-${system}.png`;
     await page.screenshot({
       path: `${folder}/${fileNameSys}`,
-      type: 'png'
+      type: "png"
     });
   }
 });

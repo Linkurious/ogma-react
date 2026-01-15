@@ -26,6 +26,7 @@ Wrapper library for [`@linkurious/ogma`](https://ogma.linkurio.us) to use with [
       - [`<NeighborGeneration />`](#neighborgeneration-)
       - [`<NeighborMerging />`](#neighbormerging-)
       - [`<NodeCollapsing />`](#nodecollapsing-)
+      - [`<NodeDrilldown />`](#nodedrilldown-)
     - [`<Geo />`](#geo-)
 
 ## Getting Started
@@ -48,7 +49,7 @@ You will need the CSS or Styled Components (see [`demo/src/index.css`](https://g
 
 ```tsx
 import { Ogma, NodeStyle, Popup, useEvent } from '@linkurious/ogma-react';
-import OgmaLib, { MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
+import { Ogma as OgmaLib, MouseButtonEvent, Node as OgmaNode } from '@linkurious/ogma';
 ...
 const [clickedNode, setClickedNode] = useState<OgmaNode|null>(null);
 const ogmaRef = useRef<OgmaLib>();
@@ -177,7 +178,7 @@ Using the parsers:
 
 ```tsx
 import { useState, useEffect } from 'react';
-import OgmaLib, { RawGraph } from '@linkurious/ogma';
+import { Ogma as OgmaLib, RawGraph } from '@linkurious/ogma';
 import { Ogma } from '@linkurious/ogma-react';
 
 export default function App () {
@@ -222,6 +223,7 @@ export default function App () {
   - [`<NeighborGeneration />`](#neighborgeneration-)
   - [`<NeighborMerging />`](#neighbormerging-)
   - [`<NodeCollapsing />`](#nodecollapsing-)
+  - [`<NodeDrilldown />`](#nodedrilldown-)
 - [`<Geo />`](#geo-)
 
 ## API
@@ -424,7 +426,7 @@ Custom popup UI layer.
 
 ### `<Tooltip />`
 
-Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a function that returns a ReactNode 
+Tooltip component. It automatically adjusts the position of the tooltip based on the target of the event (or is static if position is defined). Its children can be a function that returns a ReactNode
 and has the target of the event as argument.
 
 #### Props
@@ -454,7 +456,7 @@ and has the target of the event as argument.
           {target.getId()}
         </div>
       )
-    }} 
+    }}
   </Tooltip>
 </Ogma>
 ```
@@ -707,6 +709,38 @@ Node collapsing transformation. See [`ogma.transformations.addNodeCollapsing()`]
 | `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
 | `...rest` | See [`ogma.transformations.addNodeCollapsing()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addNodeCollapsing) properties | | Transformation properties |
 
+### `<NodeDrilldown />`
+
+Node drilldown transformation. See [`ogma.transformations.addDrillDown()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addDrillDown) for more information.
+
+#### Props
+
+| Prop         | Type                           | Default | Description |
+| ------------ | ------------------------------ | ------- | ----------- |
+| `parentPath?`   | `string` | `null`  | Path to the parent node ID in the node data |
+| `depthPath?` | `string`      |     | Path to the depth value in the node data              |
+| `nodeGenerator?` | `(node: Ogma.Node) => RawNode \| RawNode[] \| null`      |     | Function to generate child nodes              |
+| `showContents?` | `boolean` | `true`  | Whether to show the contents of the drilled down node |
+| `copyData?` | `boolean` | `false`  | Whether to copy data from parent to generated nodes |
+| `padding?` | `number` | `null`  | Padding around the drilled down content |
+| `ref?`       | `React.Ref<Ogma.Transformation>`    | `null`  | Reference to the transformation                  |
+| `...rest` | See [`ogma.transformations.addDrillDown()`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addDrillDown) properties | | Drilldown transformation properties |
+
+#### Example
+
+```tsx
+<Ogma graph={...}>
+  <NodeDrilldown
+    parentPath="data.parentId"
+    depthPath="data.depth"
+    nodeGenerator={node => ({
+      id: `${node.getId()}-child`,
+      data: { parentId: node.getId() }
+    })}
+    disabled={false}
+  />
+</Ogma>
+```
 
 ### `<Geo />`
 
