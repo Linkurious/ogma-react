@@ -50,22 +50,27 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   // Expose the transformation instance (or null while mounting/unmounted)
   useImperativeHandle(ref, () => transformation!, [transformation]);
 
+  // Initialize the Drilldown transformation
   useEffect(() => {
-    const newTransformation = ogma.transformations.addDrillDown({
-      ...props,
-      enabled: !props.disabled
+    const { disabled, ...rest } = props;
+    const drilldown = ogma.transformations.addDrillDown({
+      ...rest,
+      enabled: !disabled
     });
     // TODO: Drilldown may internally manage a set of transformations, so we currently do not
     //       wire it through generic transformation-callback helpers (e.g. useTransformationCallbacks).
     //       If/when we add React-level transformation callbacks specific to drilldown, revisit this
     //       effect to ensure callbacks are correctly registered and cleaned up.
-    setTransformation(newTransformation);
+    setTransformation(drilldown);
     return () => {
-      newTransformation.destroy();
+      drilldown.destroy();
       setTransformation(null);
     };
-  }, [props.disabled]);
+  }, []);
 
+  // Enable/disable the transformation based on the `disabled` prop
+  // Note: This useEffect is not dependent on the `duration` prop to avoid
+  //       unnecessary re-enabling/disabling when only the duration changes.
   useEffect(() => {
     if (transformation) {
       const disabled = !!props.disabled;
@@ -75,10 +80,14 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
       if (disabled) transformation.disable(duration as number);
       else transformation.enable(duration as number);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled]);
 
+  // Update other options when their corresponding props change
   useEffect(() => {
-    transformation?.setOptions(props);
+    // Extract the disabled prop from the rest
+    // to avoid overwriting the above enable/disable logic
+    const { disabled: _disabled, ...rest } = props;
+    transformation?.setOptions(rest);
   }, [
     props.copyData,
     props.depthPath,
