@@ -86,7 +86,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     // Extract the disabled prop from the rest
     // to avoid overwriting the above enable/disable logic
-    const { disabled: _disabled, ...rest } = props;
+    const { disabled, ...rest } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
     transformation?.setOptions(rest);
   }, [
     props.copyData,
