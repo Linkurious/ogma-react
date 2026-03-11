@@ -157,6 +157,7 @@ test("node grouping", async () => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
+  await page.waitForTimeout(1000);
 
   await expect(page).toHaveScreenshot(
     "node-grouping-disabled.png",
@@ -167,6 +168,7 @@ test("node grouping", async () => {
   await page.getByTitle("Show controls").click();
   await page.getByText("Node grouping").click();
   await page.mouse.click(50, 50);
+  await page.waitForTimeout(1000);
 
   await expect(page).toHaveScreenshot(
     "node-grouping-reenabled.png",
