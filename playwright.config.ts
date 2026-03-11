@@ -11,8 +11,12 @@ import { defineConfig, devices } from "@playwright/test";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+const updateSnapshots =
+  process.env.CI_COMMIT === "true" || process.env.CI_PR_COMMIT === "true";
+
 export default defineConfig({
   testDir: "./test/e2e/tests",
+  updateSnapshots: updateSnapshots ? "all" : "missing",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -41,7 +45,10 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] }
+      use: {
+        ...devices["Desktop Chrome"],
+        headless: true
+      }
     }
 
     // {
