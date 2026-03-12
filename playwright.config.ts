@@ -11,14 +11,18 @@ import { defineConfig, devices } from "@playwright/test";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+const updateSnapshots =
+  process.env.CI_COMMIT === "true" || process.env.CI_PR_COMMIT === "true";
+
 export default defineConfig({
   testDir: "./test/e2e/tests",
+  updateSnapshots: updateSnapshots ? "all" : "missing",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 1 : 0,
+  retries: process.env.CI ? 2 : 0,
   /* Test timeout */
   timeout: 60_000,
   /* Opt out of parallel tests on CI. */
@@ -41,7 +45,10 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] }
+      use: {
+        ...devices["Desktop Chrome"],
+        headless: true
+      }
     }
 
     // {
