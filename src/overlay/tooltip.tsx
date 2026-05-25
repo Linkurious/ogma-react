@@ -1,6 +1,7 @@
 import {
   useEffect,
   useState,
+  useRef,
   ReactNode,
   Ref,
   forwardRef,
@@ -67,7 +68,14 @@ const TooltipComponent = <
   const [target, setTarget] = useState<
     OgmaNode<ND, ED> | Edge<ED, ND> | Point
   >();
+  // Ref-based mirror of `target` so event handler closures always see the
+  // current value without needing to be re-registered on every hover change.
+  const targetRef = useRef<OgmaNode<ND, ED> | Edge<ED, ND> | Point | undefined>(
+    undefined
+  );
   const [point, setPoint] = useState<Point>();
+  // Ref-based mirror of `point` for the same reason.
+  const pointRef = useRef<Point | undefined>(undefined);
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
@@ -86,6 +94,7 @@ const TooltipComponent = <
         x: point.x + offset.x,
         y: point.y + offset.y
       };
+      pointRef.current = point;
       setPoint(point);
       layer?.setPosition(pos);
     } else {
@@ -100,6 +109,8 @@ const TooltipComponent = <
   }
 
   function hideTooltip() {
+    targetRef.current = undefined;
+    pointRef.current = undefined;
     layer?.hide();
     setTarget(undefined);
   }
@@ -126,6 +137,7 @@ const TooltipComponent = <
 
     let onEvent: (evt: any) => void = () => null;
     let onUnevent: (evt: any) => void = () => null;
+    let onViewUpdate: (() => void) | null = null;
 
     const event = getEventNameFromTooltipEvent(eventName);
     if (event === "mouseover") {
@@ -133,6 +145,7 @@ const TooltipComponent = <
         if (eventName.startsWith("node")) {
           if (evt.target?.isNode) {
             const node = evt.target;
+            targetRef.current = node;
             setTarget(node);
             showTooltip(node, node.getPosition());
           }
@@ -143,22 +156,50 @@ const TooltipComponent = <
               x: evt.x,
               y: evt.y
             });
+            targetRef.current = evt.target;
             setTarget(evt.target);
             showTooltip(evt.target, pos);
           }
         }
       };
       onUnevent = (evt) => {
-        // Hide the tooltip when mouse leaves the target
+        // Hide the tooltip only when the mouse leaves the *same* target that
+        // triggered the show. Without this check, rapidly moving across
+        // multiple nodes/edges would fire a foreign mouseout and close the
+        // tooltip prematurely.
         if (eventName.startsWith("node") && evt.target?.isNode) {
-          hideTooltip();
+          if (evt.target === targetRef.current) hideTooltip();
         } else if (eventName.startsWith("edge")) {
           if (evt.target && !evt.target.isNode) {
-            hideTooltip();
+            if (evt.target === targetRef.current) hideTooltip();
           }
         }
       };
       ogma.events.on("mouseout", onUnevent);
+
+      // Keep the tooltip anchored to its node when the graph is panned,
+      // zoomed, or when the node is dragged to a new position.
+      onViewUpdate = () => {
+        const currentTarget = targetRef.current;
+        const currentPoint = pointRef.current;
+        if (!currentTarget || !currentPoint || !layer) return;
+        // Only nodes move in graph-space during drag; edge/background tooltips
+        // are already expressed in graph coordinates so they follow naturally.
+        if (!(currentTarget instanceof OgmaNode)) return;
+        const newPoint = currentTarget.getPosition();
+        pointRef.current = newPoint;
+        setPoint({ ...newPoint }); // triggers overflow re-check via useEffect
+        const zoom = ogma.geo.enabled()
+          ? ogma.geo.getZoom()!
+          : ogma.view.getZoom();
+        const offset = getOffset(currentTarget, zoom, placement);
+        layer.setPosition({
+          x: newPoint.x + offset.x,
+          y: newPoint.y + offset.y
+        });
+      };
+      ogma.events.on("nodesDragProgress", onViewUpdate);
+      ogma.events.on("idle", onViewUpdate);
     } else {
       // Click events
       onEvent = (evt) => {
@@ -223,6 +264,9 @@ const TooltipComponent = <
     return () => {
       ogma.events.off(onEvent);
       ogma.events.off(onUnevent);
+      if (onViewUpdate) {
+        ogma.events.off(onViewUpdate);
+      }
       if (layer) {
         layer.destroy();
         setLayer(null);
