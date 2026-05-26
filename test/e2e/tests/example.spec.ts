@@ -105,7 +105,7 @@ test("tooltip repositioning", async () => {
   });
 
   // Hover over the node near the edge — tooltip should reposition to avoid overflow
-  await page.mouse.move(pos.x, pos.y);
+  await page.mouse.move(pos.x, pos.y, { steps: 10 });
   await page.waitForTimeout(1000);
 
   await expect(page).toHaveScreenshot(
