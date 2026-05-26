@@ -21,7 +21,8 @@ import {
   Geo,
   NodeGroupingProps,
   useEvent,
-  Tooltip
+  Tooltip,
+  Popup
 } from "../../src";
 
 // custom components:
@@ -70,6 +71,7 @@ export default function App() {
 
   // UI layers
   const [outlines, setOutlines] = useState(false);
+  const [clickedNode, setClickedNode] = useState<OgmaNode<ND, ED> | null>(null);
 
   // load the graph
   useEffect(() => {
@@ -86,6 +88,19 @@ export default function App() {
     if (!ogmaInstanceRef.current) return;
     ogmaInstanceRef.current.view.locateGraph({ duration: 250, padding: 50 });
   });
+
+  const onClick = useEvent<ND, ED, "click">(
+    "click",
+    (evt) => {
+      if (evt.target?.isNode) {
+        setClickedNode(evt.target as OgmaNode<ND, ED>);
+        return;
+      } else if (clickedNode) {
+        setClickedNode(null);
+      }
+    },
+    []
+  );
 
   const onReady = useCallback((instance: OgmaLib<ND, ED>) => {
     ogmaInstanceRef.current = instance;
@@ -125,6 +140,7 @@ export default function App() {
         ref={ogmaInstanceRef}
         graph={graph}
         onAddNodes={onAddNodes}
+        onClick={onClick}
         onReady={onReady}
         theme={morningBreeze as Theme<ND, ED>}
       >
@@ -180,8 +196,8 @@ export default function App() {
           nodeGenerator={groupingOptions.nodeGenerator}
         />
 
-        <Tooltip<ND, ED, "nodeRightclick">
-          eventName="nodeRightclick"
+        <Tooltip<ND, ED, "nodeHover">
+          eventName="nodeHover"
           bodyClass="ogma-tooltip"
           placement="right"
         >
@@ -189,6 +205,33 @@ export default function App() {
             return <div>{target.getId()}</div>;
           }}
         </Tooltip>
+        <Tooltip<ND, ED, "edgeHover">
+          eventName="edgeHover"
+          bodyClass="ogma-tooltip"
+          placement="right"
+          position={{ x: 0, y: 0 }}
+        >
+          {(target) => {
+            return <div>{target.getId()}</div>;
+          }}
+        </Tooltip>
+        <Popup<ND, ED>
+          isOpen={!!clickedNode}
+          position={() => {
+            if (!clickedNode) return null;
+            const nodePosition = clickedNode.getPosition();
+            return {
+              x: nodePosition.x,
+              y: nodePosition.y
+            };
+          }}
+          onClose={() => setClickedNode(null)}
+          popupBodyClass="popup ogma-tooltip"
+          placement="top"
+        >
+          {clickedNode ? <div>{clickedNode.getId()}</div> : null}
+        </Popup>
+
         <GraphOutlines visible={outlines} />
 
         {/* Geo mode */}
