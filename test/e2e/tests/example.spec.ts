@@ -66,7 +66,7 @@ test("mouse hover", async () => {
   });
 });
 
-test("tooltip", async () => {
+test("popup", async () => {
   // Get the position of the first node
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
@@ -74,19 +74,15 @@ test("tooltip", async () => {
     return ogma.view.graphToScreenCoordinates(position);
   });
 
-  // Wait for the hover effect to take place and then open the tooltip
-  await page.mouse.move(pos.x, pos.y);
-  await page.waitForTimeout(1000);
-  await page.mouse.click(pos.x, pos.y, {
-    button: "right"
-  });
+  // Left-click the node to open the popup
+  await page.mouse.click(pos.x, pos.y);
 
   await expect(page).toHaveScreenshot(
-    "tooltip-opened.png",
+    "popup-opened.png",
     getScreenshotOptions(page)
   );
 
-  // Click outside to close the tooltip
+  // Click outside to close the popup
   await page.mouse.click(0, 0);
   await expect(page).toHaveScreenshot(initialState, {
     // Only the position is different compared to the initial screenshot
@@ -97,7 +93,7 @@ test("tooltip", async () => {
 });
 
 test("tooltip repositioning", async () => {
-  // Get the position of the first node
+  // Move a node to the right edge of the screen
   const pos = await page.evaluate(() => {
     const ogma = window.ogma;
     const coords = ogma.view.screenToGraphCoordinates({
@@ -108,12 +104,9 @@ test("tooltip repositioning", async () => {
     return { x: window.innerWidth - 10, y: window.innerHeight / 2 };
   });
 
-  // Wait for the hover effect to take place and then open the tooltip
-  await page.mouse.move(pos.x, pos.y);
+  // Hover over the node near the edge — tooltip should reposition to avoid overflow
+  await page.mouse.move(pos.x, pos.y, { steps: 10 });
   await page.waitForTimeout(1000);
-  await page.mouse.click(pos.x, pos.y, {
-    button: "right"
-  });
 
   await expect(page).toHaveScreenshot(
     "tooltip-repositioned.png",

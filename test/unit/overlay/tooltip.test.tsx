@@ -52,24 +52,23 @@ describe("Tooltip", () => {
     const ogmaRef = createRef<OgmaLib>();
 
     render(
-      <Ogma ref={ogmaRef}>
-        <Tooltip eventName="backgroundClick" ref={ref}>
-          {(pos) => (
-            <div className="custom-child-div">
-              x: {pos.x}, y: {pos.y}
-            </div>
-          )}
+      <Ogma ref={ogmaRef} graph={graph}>
+        <Tooltip eventName="nodeHover" ref={ref}>
+          {(node) => <div className="custom-child-div">id: {node.getId()}</div>}
         </Tooltip>
-        ,
       </Ogma>,
       div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
 
-    // Open the tooltip by clicking on the background
+    // Open the tooltip by hovering a node
     await act(async () => {
-      await ogmaRef.current!.mouse.click({ x: 0, y: 0 });
+      await ogmaRef.current!.layouts.force({ locate: true });
+      const node = ogmaRef.current!.getNodes().get(0);
+      await ogmaRef.current!.mouse.move(
+        ogmaRef.current!.view.graphToScreenCoordinates(node.getPosition())
+      );
       await ogmaRef.current!.view.afterNextFrame();
       await ogmaRef.current!.view.afterNextFrame();
     });
@@ -83,9 +82,6 @@ describe("Tooltip", () => {
   it("should show the tooltip on the correct event", async () => {
     const ref1 = createRef<Overlay>();
     const ref2 = createRef<Overlay>();
-    const ref3 = createRef<Overlay>();
-    const ref4 = createRef<Overlay>();
-    const ref5 = createRef<Overlay>();
     const ogmaRef = createRef<OgmaLib>();
 
     render(
@@ -94,15 +90,6 @@ describe("Tooltip", () => {
           content
         </Tooltip>
         <Tooltip eventName="edgeHover" ref={ref2}>
-          content
-        </Tooltip>
-        <Tooltip eventName="backgroundClick" ref={ref3}>
-          content
-        </Tooltip>
-        <Tooltip eventName="nodeDoubleclick" ref={ref4}>
-          content
-        </Tooltip>
-        <Tooltip eventName="edgeRightclick" ref={ref5}>
           content
         </Tooltip>
       </Ogma>,
@@ -144,45 +131,6 @@ describe("Tooltip", () => {
           await ogma.view.afterNextFrame();
           await ogma.view.afterNextFrame();
         }
-      },
-      {
-        ref: ref3,
-        showTooltip: async () => {
-          await ogma.mouse.click({ x: 10000, y: 10000 });
-          await ogma.view.afterNextFrame();
-        },
-        hideTooltip: async () => {
-          await ogma.mouse.click(
-            ogma.view.graphToScreenCoordinates(node.getPosition())
-          );
-          await ogma.view.afterNextFrame();
-        }
-      },
-      {
-        ref: ref4,
-        showTooltip: async () => {
-          await ogma.mouse.doubleclick(
-            ogma.view.graphToScreenCoordinates(node.getPosition())
-          );
-          await ogma.view.afterNextFrame();
-        },
-        hideTooltip: async () => {
-          await ogma.mouse.click({ x: -10000, y: -10000 });
-          await ogma.view.afterNextFrame();
-        }
-      },
-      {
-        ref: ref5,
-        showTooltip: async () => {
-          await ogma.mouse.rightClick(
-            ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
-          );
-          await ogma.view.afterNextFrame();
-        },
-        hideTooltip: async () => {
-          await ogma.mouse.click({ x: -10000, y: -10000 });
-          await ogma.view.afterNextFrame();
-        }
       }
     ];
 
@@ -204,7 +152,7 @@ describe("Tooltip", () => {
 
     render(
       <Ogma ref={ogmaRef} graph={graph}>
-        <Tooltip eventName="nodeClick" ref={ref}>
+        <Tooltip eventName="nodeHover" ref={ref}>
           {(node) => <div className="custom-child-div">{node.getId()}</div>}
         </Tooltip>
       </Ogma>,
@@ -217,11 +165,11 @@ describe("Tooltip", () => {
     await ogma.layouts.force({ locate: true });
     const nodes = ogma.getNodes();
 
-    // Simulate clicking the nodes of the graph then check the tooltip content
+    // Simulate hovering the nodes of the graph then check the tooltip content
     for (let i = 0; i < nodes.size; i++) {
       const node = nodes.get(i);
       await act(async () => {
-        await ogma.mouse.click(
+        await ogma.mouse.move(
           ogma.view.graphToScreenCoordinates(node.getPosition())
         );
         await ogma.view.afterNextFrame();
@@ -237,10 +185,10 @@ describe("Tooltip", () => {
     const position = { x: 100, y: 100 };
     const ogmaRef = createRef<OgmaLib>();
     render(
-      <Ogma ref={ogmaRef}>
+      <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip
           ref={ref}
-          eventName="backgroundClick"
+          eventName="nodeHover"
           position={position}
           placement="top"
         >
@@ -274,10 +222,10 @@ describe("Tooltip", () => {
     const position = { x: 100, y: 100 };
     const ogmaRef = createRef<OgmaLib>();
     const { rerender } = render(
-      <Ogma ref={ogmaRef}>
+      <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip
           ref={ref}
-          eventName="backgroundClick"
+          eventName="nodeHover"
           position={position}
           placement="bottom"
         >
@@ -309,10 +257,10 @@ describe("Tooltip", () => {
 
     const newPosition = { x: 200, y: 200 };
     rerender(
-      <Ogma ref={ogmaRef}>
+      <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip
           ref={ref}
-          eventName="backgroundClick"
+          eventName="nodeHover"
           position={newPosition}
           placement="bottom"
         >
@@ -379,7 +327,7 @@ describe("Tooltip", () => {
       <Ogma>
         <Tooltip
           ref={ref}
-          eventName="backgroundClick"
+          eventName="nodeHover"
           size={{ width: 400, height: 300 }}
         >
           Sized tooltip content
@@ -397,17 +345,17 @@ describe("Tooltip", () => {
     const ref3 = createRef<Overlay>();
     const ref4 = createRef<Overlay>();
     render(
-      <Ogma ref={ogmaRef}>
-        <Tooltip ref={ref} eventName="backgroundClick" placement="top">
+      <Ogma ref={ogmaRef} graph={graph}>
+        <Tooltip ref={ref} eventName="nodeHover" placement="top">
           a
         </Tooltip>
-        <Tooltip ref={ref2} eventName="backgroundClick" placement="right">
+        <Tooltip ref={ref2} eventName="edgeHover" placement="right">
           a
         </Tooltip>
-        <Tooltip ref={ref3} eventName="backgroundClick" placement="bottom">
+        <Tooltip ref={ref3} eventName="nodeHover" placement="bottom">
           a
         </Tooltip>
-        <Tooltip ref={ref4} eventName="backgroundClick" placement="left">
+        <Tooltip ref={ref4} eventName="edgeHover" placement="left">
           a
         </Tooltip>
       </Ogma>,
@@ -417,10 +365,27 @@ describe("Tooltip", () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
 
     const ogma = ogmaRef.current!;
+    await ogma.layouts.force({ locate: true });
+    const node = ogma.getNodes().get(0);
+    const edge = ogma.getEdges().get(0);
 
-    // Simulate clicking the background to open the tooltip
+    // Simulate hover events to open each tooltip
     await act(async () => {
-      await ogma.mouse.click({ x: 150, y: 150 });
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(node.getPosition())
+      );
+      await ogma.view.afterNextFrame();
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+      );
+      await ogma.view.afterNextFrame();
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(node.getPosition())
+      );
+      await ogma.view.afterNextFrame();
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+      );
       await ogma.view.afterNextFrame();
     });
 
@@ -448,10 +413,10 @@ describe("Tooltip", () => {
     const ref4 = createRef<Overlay>();
     const translate = { x: 10, y: 20 };
     render(
-      <Ogma ref={ogmaRef}>
+      <Ogma ref={ogmaRef} graph={graph}>
         <Tooltip
           ref={ref}
-          eventName="backgroundClick"
+          eventName="nodeHover"
           placement="top"
           translate={translate}
         >
@@ -459,7 +424,7 @@ describe("Tooltip", () => {
         </Tooltip>
         <Tooltip
           ref={ref2}
-          eventName="backgroundClick"
+          eventName="nodeHover"
           placement="bottom"
           translate={translate}
         >
@@ -467,7 +432,7 @@ describe("Tooltip", () => {
         </Tooltip>
         <Tooltip
           ref={ref3}
-          eventName="backgroundClick"
+          eventName="edgeHover"
           placement="left"
           translate={translate}
         >
@@ -475,7 +440,7 @@ describe("Tooltip", () => {
         </Tooltip>
         <Tooltip
           ref={ref4}
-          eventName="backgroundClick"
+          eventName="edgeHover"
           placement="right"
           translate={translate}
         >
@@ -488,10 +453,27 @@ describe("Tooltip", () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
 
     const ogma = ogmaRef.current!;
+    await ogma.layouts.force({ locate: true });
+    const node = ogma.getNodes().get(0);
+    const edge = ogma.getEdges().get(0);
 
-    // Simulate clicking the background to open the tooltip
+    // Simulate hover events to open each tooltip
     await act(async () => {
-      await ogma.mouse.click({ x: 150, y: 150 });
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(node.getPosition())
+      );
+      await ogma.view.afterNextFrame();
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(node.getPosition())
+      );
+      await ogma.view.afterNextFrame();
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+      );
+      await ogma.view.afterNextFrame();
+      await ogma.mouse.move(
+        ogma.view.graphToScreenCoordinates(getMiddlePoint(edge)!)
+      );
       await ogma.view.afterNextFrame();
     });
 
@@ -519,11 +501,7 @@ describe("Tooltip", () => {
   it("should support bodyClass", () => {
     render(
       <Ogma>
-        <Tooltip
-          ref={ref}
-          eventName="backgroundClick"
-          bodyClass="custom-tooltip"
-        >
+        <Tooltip ref={ref} eventName="nodeHover" bodyClass="custom-tooltip">
           Tooltip content
         </Tooltip>
       </Ogma>

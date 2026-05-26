@@ -1,6 +1,7 @@
 import {
   useEffect,
   useState,
+  useRef,
   ReactNode,
   Ref,
   forwardRef,
@@ -16,12 +17,7 @@ import {
   Edge
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import {
-  getEventNameFromTooltipEvent,
-  getOffset,
-  getTranslate,
-  isOverflowing
-} from "./utils";
+import { getOffset, getTranslate, isOverflowing } from "./utils";
 import { Placement, TooltipEventFunctions } from "./types";
 import { createPortal } from "react-dom";
 
@@ -64,28 +60,39 @@ const TooltipComponent = <
   ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma<ND, ED>();
-  const [target, setTarget] = useState<
-    OgmaNode<ND, ED> | Edge<ED, ND> | Point
-  >();
+  const [target, setTarget] = useState<OgmaNode<ND, ED> | Edge<ED, ND>>();
+  // Ref-based mirror of `target` so event handler closures always see the
+  // current value without needing to be re-registered on every hover change.
+  const targetRef = useRef<OgmaNode<ND, ED> | Edge<ED, ND> | undefined>(
+    undefined
+  );
   const [point, setPoint] = useState<Point>();
+  // Ref-based mirror of `point` for the same reason.
+  const pointRef = useRef<Point | undefined>(undefined);
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
-  function showTooltip(
-    target: OgmaNode<ND, ED> | Edge<ED, ND> | "background",
-    point: Point
-  ) {
+  function showTooltip(_target: OgmaNode<ND, ED> | Edge<ED, ND>, point: Point) {
     // If the position is not set, use the point provided
     if (!position) {
       const zoom = ogma.geo.enabled()
         ? ogma.geo.getZoom()!
         : ogma.view.getZoom();
-      const offset = getOffset(target, zoom, placement);
-      const pos = {
-        x: point.x + offset.x,
-        y: point.y + offset.y
-      };
+      const offset = getOffset("background", zoom, placement);
+
+      // Apply offset only in the appropriate direction based on placement
+      let pos = { x: point.x, y: point.y };
+      if (placement === "top" || placement === "bottom") {
+        pos.y = point.y + offset.y;
+      } else if (placement === "left" || placement === "right") {
+        pos.x = point.x + offset.x;
+      } else if (placement === "center") {
+        pos.x = point.x + offset.x;
+        pos.y = point.y + offset.y;
+      }
+
+      pointRef.current = point;
       setPoint(point);
       layer?.setPosition(pos);
     } else {
@@ -100,6 +107,8 @@ const TooltipComponent = <
   }
 
   function hideTooltip() {
+    targetRef.current = undefined;
+    pointRef.current = undefined;
     layer?.hide();
     setTarget(undefined);
   }
@@ -111,7 +120,7 @@ const TooltipComponent = <
       position: position ? position : offScreenPos,
       element: `
       <div style="pointer-events: none">
-        <div class="${bodyClass}" style="pointer-events: auto">
+        <div class="${bodyClass}" style="pointer-events: none">
         </div>
       </div>`,
       size: size || { width: "auto", height: "auto" },
@@ -124,105 +133,85 @@ const TooltipComponent = <
   useEffect(() => {
     if (!layer) return;
 
+    (layer.element.firstElementChild as HTMLElement).style.pointerEvents =
+      "none";
+
     let onEvent: (evt: any) => void = () => null;
     let onUnevent: (evt: any) => void = () => null;
+    let onMouseMove: ((evt: any) => void) | null = null;
 
-    const event = getEventNameFromTooltipEvent(eventName);
-    if (event === "mouseover") {
-      onEvent = (evt: MouseOverEvent<ND, ED>) => {
-        if (eventName.startsWith("node")) {
-          if (evt.target?.isNode) {
-            const node = evt.target;
-            setTarget(node);
-            showTooltip(node, node.getPosition());
-          }
-        } else if (eventName.startsWith("edge")) {
-          if (evt.target && !evt.target.isNode) {
-            // Show the tooltip where the mouse is currently at
-            const pos = ogma.view.screenToGraphCoordinates({
-              x: evt.x,
-              y: evt.y
-            });
-            setTarget(evt.target);
-            showTooltip(evt.target, pos);
-          }
+    const getMouseGraphPoint = (evt: { x: number; y: number }) =>
+      ogma.view.screenToGraphCoordinates({
+        x: evt.x,
+        y: evt.y
+      });
+
+    const moveTooltipToMouse = (evt: { x: number; y: number }) => {
+      const currentTarget = targetRef.current;
+      if (!currentTarget || !layer || position) return;
+
+      const mousePoint = getMouseGraphPoint(evt);
+      const zoom = ogma.geo.enabled()
+        ? ogma.geo.getZoom()!
+        : ogma.view.getZoom();
+      const offset = getOffset("background", zoom, placement);
+
+      pointRef.current = mousePoint;
+      setPoint({ ...mousePoint });
+      layer.setPosition({
+        x: mousePoint.x + offset.x,
+        y: mousePoint.y + offset.y
+      });
+    };
+
+    onEvent = (evt: MouseOverEvent<ND, ED>) => {
+      if (eventName.startsWith("node")) {
+        if (evt.target?.isNode) {
+          const node = evt.target;
+          const pos = getMouseGraphPoint(evt);
+          targetRef.current = node;
+          setTarget(node);
+          showTooltip(node, pos);
         }
-      };
-      onUnevent = (evt) => {
-        // Hide the tooltip when mouse leaves the target
-        if (eventName.startsWith("node") && evt.target?.isNode) {
-          hideTooltip();
-        } else if (eventName.startsWith("edge")) {
-          if (evt.target && !evt.target.isNode) {
-            hideTooltip();
-          }
+      } else if (eventName.startsWith("edge")) {
+        if (evt.target && !evt.target.isNode) {
+          // Show the tooltip where the mouse is currently at
+          const pos = getMouseGraphPoint(evt);
+          targetRef.current = evt.target;
+          setTarget(evt.target);
+          showTooltip(evt.target, pos);
         }
-      };
-      ogma.events.on("mouseout", onUnevent);
-    } else {
-      // Click events
-      onEvent = (evt) => {
-        // Check if the event name corresponds to the actual event
-        if (eventName.endsWith("Rightclick") && evt.button === "left") {
-          return;
+      }
+    };
+    onUnevent = (evt) => {
+      // Hide the tooltip only when the mouse leaves the *same* target that
+      // triggered the show. Without this check, rapidly moving across
+      // multiple nodes/edges would fire a foreign mouseout and close the
+      // tooltip prematurely.
+      if (eventName.startsWith("node") && evt.target?.isNode) {
+        if (evt.target === targetRef.current) hideTooltip();
+      } else if (eventName.startsWith("edge")) {
+        if (evt.target && !evt.target.isNode) {
+          if (evt.target === targetRef.current) hideTooltip();
         }
-        if (eventName.startsWith("background")) {
-          if (!evt.target) {
-            const pos = ogma.view.screenToGraphCoordinates({
-              x: evt.x,
-              y: evt.y
-            });
-            setTarget(pos);
-            showTooltip("background", pos);
-          }
-        } else if (eventName.startsWith("node")) {
-          if (evt.target?.isNode) {
-            const node = evt.target;
-            setTarget(node);
-            showTooltip(node, node.getPosition());
-          }
-        } else {
-          if (evt.target && !evt.target.isNode) {
-            // Show the tooltip where the mouse is currently at
-            const pos = ogma.view.screenToGraphCoordinates({
-              x: evt.x,
-              y: evt.y
-            });
-            setTarget(evt.target);
-            showTooltip(evt.target, pos);
-          }
-        }
-      };
-      onUnevent = (evt) => {
-        // Hide the tooltip when a click is somewhere that's not the target
-        if (eventName.startsWith("node")) {
-          if (!evt.target?.isNode) {
-            hideTooltip();
-          }
-        } else if (eventName.startsWith("edge")) {
-          if (!evt.target || evt.target.isNode) {
-            hideTooltip();
-          }
-        } else if (eventName.startsWith("background")) {
-          if (evt.target) {
-            hideTooltip();
-          } else if (
-            (eventName.endsWith("Rightclick") && evt.button === "left") ||
-            (eventName.endsWith("Click") && evt.button === "right")
-          ) {
-            hideTooltip();
-          }
-        }
-      };
-      ogma.events.on("click", onUnevent);
-    }
+      }
+    };
+    ogma.events.on("mouseout", onUnevent);
+
+    onMouseMove = (evt) => {
+      moveTooltipToMouse(evt);
+    };
+    ogma.events.on("mousemove", onMouseMove);
 
     layer.hide();
-    ogma.events.on(event, onEvent);
+    ogma.events.on("mouseover", onEvent);
 
     return () => {
       ogma.events.off(onEvent);
       ogma.events.off(onUnevent);
+      if (onMouseMove) {
+        ogma.events.off(onMouseMove);
+      }
       if (layer) {
         layer.destroy();
         setLayer(null);
@@ -266,11 +255,7 @@ const TooltipComponent = <
       const zoom = ogma.geo.enabled()
         ? ogma.geo.getZoom()!
         : ogma.view.getZoom();
-      const t =
-        target instanceof OgmaNode || target instanceof Edge
-          ? target
-          : "background";
-      const offset = getOffset(t, zoom, newPlacement);
+      const offset = getOffset("background", zoom, newPlacement);
 
       layer?.setPosition({
         x: point!.x + offset.x,
