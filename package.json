@@ -98,7 +98,7 @@
     "react-dom": "^19.2.0",
     "react-feather": "^2.0.10",
     "tslib": "^2.5.0",
-    "typescript": "^5.3.2",
+    "typescript": "^7.0.0",
     "vite": "latest",
     "vitest": "latest"
   },
