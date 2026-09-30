@@ -20,7 +20,10 @@ export interface LayerProps {
 }
 
 const LayerComponent = forwardRef(
-  <ND = unknown, ED = unknown>({ children, className = "", index }: LayerProps, ref?: Ref<OgmaLayer>) => {
+  <ND = unknown, ED = unknown>(
+    { children, className = "", index }: LayerProps,
+    ref?: Ref<OgmaLayer>
+  ) => {
     const ogma = useOgma<ND, ED>();
     const [layer, setLayer] = useState<OgmaLayer | null>(null);
 
@@ -54,8 +57,7 @@ const LayerComponent = forwardRef(
   }
 );
 
-// @ts-expect-error types are used for useOgma
-type LayerType = <ND, ED>(
+type LayerType = <_ND, _ED>(
   props: LayerProps & { ref?: Ref<OgmaLayer> }
 ) => React.ReactElement | null;
 

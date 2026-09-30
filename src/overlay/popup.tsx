@@ -8,11 +8,7 @@ import {
   useImperativeHandle
 } from "react";
 
-import {
-  Overlay as OverlayLayer,
-  Size,
-  Point
-} from "@linkurious/ogma";
+import { Overlay as OverlayLayer, Size, Point } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import {
   getContent,
@@ -175,8 +171,7 @@ const PopupComponent = <ND = unknown, ED = unknown>(
   return children ? createPortal(children, contentElement) : null;
 };
 
-// @ts-expect-error types are used for useOgma
-type PopupType = <ND, ED>(
+type PopupType = <_ND, _ED>(
   props: PopupProps & { ref?: Ref<OverlayLayer> }
 ) => React.ReactElement | null;
 

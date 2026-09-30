@@ -63,8 +63,7 @@ const CanvasLayerComponent = <ND = unknown, ED = unknown>(
   return null;
 };
 
-// @ts-expect-error types are used for useOgma
-type CanvasLayerType = <ND, ED>(
+type CanvasLayerType = <_ND, _ED>(
   props: CanvasLayerProps & { ref?: Ref<OgmaCanvasLayer> }
 ) => React.ReactElement | null;
 

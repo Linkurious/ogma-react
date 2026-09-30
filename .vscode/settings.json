@@ -2,5 +2,8 @@
   "editor.formatOnSave": true,
   "[markdown]": {
     "editor.formatOnSave": false
-  }
+  },
+  "eslint.enable": false,
+  "oxc.enable": true,
+  "oxc.lint.run": "onSave"
 }

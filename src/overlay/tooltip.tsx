@@ -40,14 +40,18 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
   translate?: {
     x: number;
     y: number;
-  }
+  };
   /** The content of the tooltip, can be a function that returns a ReactNode */
   children?: ReactNode | TooltipEventFunctions[K];
 }
 
 const offScreenPos: Point = { x: -9999, y: -9999 };
 
-const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, ED = unknown>(
+const TooltipComponent = <
+  K extends keyof TooltipEventFunctions,
+  ND = unknown,
+  ED = unknown
+>(
   {
     eventName,
     position,
@@ -55,21 +59,28 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     placement = "top",
     bodyClass = "ogma-tooltip--body",
     translate = { x: 0, y: 0 },
-    size,
+    size
   }: TooltipProps<K>,
   ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma<ND, ED>();
-  const [target, setTarget] = useState<OgmaNode<ND, ED> | Edge<ED, ND> | Point>();
+  const [target, setTarget] = useState<
+    OgmaNode<ND, ED> | Edge<ED, ND> | Point
+  >();
   const [point, setPoint] = useState<Point>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
-  function showTooltip(target: OgmaNode<ND, ED> | Edge<ED, ND> | "background", point: Point) {
+  function showTooltip(
+    target: OgmaNode<ND, ED> | Edge<ED, ND> | "background",
+    point: Point
+  ) {
     // If the position is not set, use the point provided
-    if (! position) {
-      const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
+    if (!position) {
+      const zoom = ogma.geo.enabled()
+        ? ogma.geo.getZoom()!
+        : ogma.view.getZoom();
       const offset = getOffset(target, zoom, placement);
       const pos = {
         x: point.x + offset.x,
@@ -95,7 +106,6 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
 
   // Initialize the tooltip layer when the component mounts
   useEffect(() => {
-
     // Create initial empty content container
     const currentLayer = ogma.layers.addOverlay({
       position: position ? position : offScreenPos,
@@ -108,12 +118,11 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
       scaled: false
     });
     setLayer(currentLayer);
-
   }, []);
 
   // Set up event listeners for the tooltip layer when it changes
   useEffect(() => {
-    if (! layer) return;
+    if (!layer) return;
 
     let onEvent: (evt: any) => void = () => null;
     let onUnevent: (evt: any) => void = () => null;
@@ -128,9 +137,12 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
             showTooltip(node, node.getPosition());
           }
         } else if (eventName.startsWith("edge")) {
-          if (evt.target && ! evt.target.isNode) {
+          if (evt.target && !evt.target.isNode) {
             // Show the tooltip where the mouse is currently at
-            const pos = ogma.view.screenToGraphCoordinates({x: evt.x, y: evt.y})
+            const pos = ogma.view.screenToGraphCoordinates({
+              x: evt.x,
+              y: evt.y
+            });
             setTarget(evt.target);
             showTooltip(evt.target, pos);
           }
@@ -141,11 +153,11 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
         if (eventName.startsWith("node") && evt.target?.isNode) {
           hideTooltip();
         } else if (eventName.startsWith("edge")) {
-          if (evt.target && ! evt.target.isNode) {
+          if (evt.target && !evt.target.isNode) {
             hideTooltip();
           }
         }
-      }
+      };
       ogma.events.on("mouseout", onUnevent);
     } else {
       // Click events
@@ -155,8 +167,11 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
           return;
         }
         if (eventName.startsWith("background")) {
-          if (! evt.target) {
-            const pos = ogma.view.screenToGraphCoordinates({ x: evt.x, y: evt.y });
+          if (!evt.target) {
+            const pos = ogma.view.screenToGraphCoordinates({
+              x: evt.x,
+              y: evt.y
+            });
             setTarget(pos);
             showTooltip("background", pos);
           }
@@ -167,9 +182,12 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
             showTooltip(node, node.getPosition());
           }
         } else {
-          if (evt.target && ! evt.target.isNode) {
+          if (evt.target && !evt.target.isNode) {
             // Show the tooltip where the mouse is currently at
-            const pos = ogma.view.screenToGraphCoordinates({ x: evt.x, y: evt.y })
+            const pos = ogma.view.screenToGraphCoordinates({
+              x: evt.x,
+              y: evt.y
+            });
             setTarget(evt.target);
             showTooltip(evt.target, pos);
           }
@@ -178,22 +196,24 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
       onUnevent = (evt) => {
         // Hide the tooltip when a click is somewhere that's not the target
         if (eventName.startsWith("node")) {
-          if (! evt.target?.isNode) {
+          if (!evt.target?.isNode) {
             hideTooltip();
           }
         } else if (eventName.startsWith("edge")) {
-          if (! evt.target || evt.target.isNode) {
+          if (!evt.target || evt.target.isNode) {
             hideTooltip();
           }
         } else if (eventName.startsWith("background")) {
           if (evt.target) {
             hideTooltip();
-          } else if (eventName.endsWith("Rightclick") && evt.button === "left"
-                  || eventName.endsWith("Click") && evt.button === "right") {
+          } else if (
+            (eventName.endsWith("Rightclick") && evt.button === "left") ||
+            (eventName.endsWith("Click") && evt.button === "right")
+          ) {
             hideTooltip();
           }
         }
-      }
+      };
       ogma.events.on("click", onUnevent);
     }
 
@@ -207,11 +227,11 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
         layer.destroy();
         setLayer(null);
       }
-    }
+    };
   }, [layer]);
 
   useEffect(() => {
-    if (! layer || ! layer.element) return;
+    if (!layer || !layer.element) return;
 
     if (position) {
       // Update the position of the layer if it exists
@@ -219,7 +239,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     }
     if (placement || bodyClass) {
       // Update the class of the layer based on the placement
-      layer.element.firstElementChild!.className = "ogma-popup--body " + bodyClass;
+      layer.element.firstElementChild!.className =
+        "ogma-popup--body " + bodyClass;
     }
     if (size) {
       // Update the size of the layer if it exists
@@ -235,11 +256,20 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     const window = element.ownerDocument.defaultView!;
 
     // Check if the tooltip is overflowing and adjust the placement if needed
-    const newPlacement = isOverflowing(bb, window.innerWidth, window.innerHeight);
+    const newPlacement = isOverflowing(
+      bb,
+      window.innerWidth,
+      window.innerHeight
+    );
     if (newPlacement) {
       // Recalculate the offset with the new placement
-      const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
-      const t = target instanceof OgmaNode || target instanceof Edge ? target : "background";
+      const zoom = ogma.geo.enabled()
+        ? ogma.geo.getZoom()!
+        : ogma.view.getZoom();
+      const t =
+        target instanceof OgmaNode || target instanceof Edge
+          ? target
+          : "background";
       const offset = getOffset(t, zoom, newPlacement);
 
       layer?.setPosition({
@@ -254,31 +284,28 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
 
     // Make the element visible after re-positioning to avoid flickering
     layer.show();
-    
-  }, [point])
+  }, [point]);
 
   // Render children through portal if they exist, otherwise render nothing
   if (!layer || !layer.element) return null;
 
   if (children instanceof Function) {
-    if (! target) return null;
+    if (!target) return null;
     // @ts-expect-error the target is always correct (only the type is not)
     const content = children(target);
     if (content === null) {
-      layer.hide()
+      layer.hide();
       return null;
-    }; 
+    }
     return createPortal(content, layer.element.firstElementChild!);
   } else {
-    return children ? createPortal(children, layer.element.firstElementChild!) : null;
+    return children
+      ? createPortal(children, layer.element.firstElementChild!)
+      : null;
   }
-
 };
 
-type TooltipComponentType = <
-  // @ts-expect-error used for useOgma
-  ND, ED, K extends keyof TooltipEventFunctions
->(
+type TooltipComponentType = <_ND, _ED, K extends keyof TooltipEventFunctions>(
   props: TooltipProps<K> & React.RefAttributes<OverlayLayer>
 ) => React.ReactElement | null;
 
