@@ -55,6 +55,10 @@
   "prettier": {
     "trailingComma": "none"
   },
+  "engines": {
+    "node": ">=24.20.0",
+    "npm": ">=11.19.0"
+  },
   "peerDependencies": {
     "@linkurious/ogma": "^5.1.0",
     "react": ">=17.0.0",
