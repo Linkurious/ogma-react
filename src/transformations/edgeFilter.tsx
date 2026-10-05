@@ -11,11 +11,12 @@ import {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
-import { toggle, useTransformationCallbacks } from "./utils";
+import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 
 interface EdgeFilterPropsC<ND, ED>
-  extends EdgeFilterOptions<ND, ED>,
-    TransformationProps<ND, ED, EdgeFilterOptions<ND, ED>> {};
+  extends
+    EdgeFilterOptions<ND, ED>,
+    TransformationProps<ND, ED, EdgeFilterOptions<ND, ED>> {}
 
 export type EdgeFilterProps<ND, ED> = Omit<EdgeFilterPropsC<ND, ED>, "enabled">;
 
@@ -31,7 +32,7 @@ function EdgeFilterComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addEdgeFilter({
-      ...props,
+      ...withAnimation(ogma, props),
       enabled: !props.disabled
     });
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -49,14 +50,16 @@ function EdgeFilterComponent<ND = unknown, ED = unknown>(
   }, [props.disabled]);
 
   useEffect(() => {
-    transformation?.setOptions(props);
+    transformation?.setOptions(withAnimation(ogma, props));
   }, [props.criteria]);
 
   return null;
 }
 
 type EdgeFilterType = <ND, ED>(
-  props: EdgeFilterProps<ND, ED> & { ref?: Ref<EdgeFilterTransformation<ND, ED>> }
+  props: EdgeFilterProps<ND, ED> & {
+    ref?: Ref<EdgeFilterTransformation<ND, ED>>;
+  }
 ) => React.ReactElement | null;
 
 /**

@@ -10,7 +10,7 @@ import {
 import { useOgma } from "../context";
 // TODO: Add transformation callbacks support via useTransformationCallbacks from "./utils" if needed.
 import type { TransformationProps } from "./types";
-import { animationArg } from "./utils";
+import { animationArg, withAnimation } from "./utils";
 
 // Helper types to extract the correct types from Ogma's addDrillDown method
 type OgmaInstance<ND, ED> = ReturnType<typeof useOgma<ND, ED>>;
@@ -66,7 +66,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     const { disabled, ...rest } = props;
     const drilldown = ogma.transformations.addDrillDown({
-      ...rest,
+      ...withAnimation(ogma, rest),
       enabled: !disabled
     });
     // TODO: Drilldown may internally manage a set of transformations, so we currently do not
@@ -99,7 +99,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
     // Extract the disabled prop from the rest
     // to avoid overwriting the above enable/disable logic
     const { disabled, ...rest } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
-    transformation?.setOptions(rest);
+    transformation?.setOptions(withAnimation(ogma, rest));
   }, [
     props.copyData,
     props.depthPath,

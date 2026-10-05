@@ -11,13 +11,17 @@ import {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
-import { toggle, useTransformationCallbacks } from "./utils";
+import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 
 interface NodeCollapsingPropsC<ND, ED>
-  extends NodeCollapsingOptions<ND, ED>,
-    TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {};
+  extends
+    NodeCollapsingOptions<ND, ED>,
+    TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {}
 
-export type NodeCollapsingProps<ND, ED> = Omit<NodeCollapsingPropsC<ND, ED>, "enabled">;
+export type NodeCollapsingProps<ND, ED> = Omit<
+  NodeCollapsingPropsC<ND, ED>,
+  "enabled"
+>;
 
 export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
   props: NodeCollapsingProps<ND, ED>,
@@ -31,7 +35,7 @@ export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeCollapsing({
-      ...props,
+      ...withAnimation(ogma, props),
       enabled: !props.disabled
     });
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -50,14 +54,18 @@ export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
   }, [props.disabled, props.animate, props.duration]);
 
   useEffect(() => {
-    transformation?.setOptions(props);
+    transformation?.setOptions(withAnimation(ogma, props));
   }, [props.edgeGenerator, props.selector]);
 
   return null;
 }
 
 type NodeCollapsingType = <ND, ED>(
-  props: NodeCollapsingProps<ND, ED> & { ref?: Ref<NodeCollapsingTransformation<ND, ED>> }
+  props: NodeCollapsingProps<ND, ED> & {
+    ref?: Ref<NodeCollapsingTransformation<ND, ED>>;
+  }
 ) => React.ReactElement | null;
 
-export const NodeCollapsing = forwardRef(NodeCollapsingComponent) as NodeCollapsingType;
+export const NodeCollapsing = forwardRef(
+  NodeCollapsingComponent
+) as NodeCollapsingType;

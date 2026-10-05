@@ -11,13 +11,17 @@ import {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
-import { toggle, useTransformationCallbacks } from "./utils";
+import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 
 interface EdgeGroupingPropsC<ED, ND>
-  extends EdgeGroupingOptions<ED, ND>,
-    TransformationProps<ED, ND, EdgeGroupingOptions<ED, ND>> {};
+  extends
+    EdgeGroupingOptions<ED, ND>,
+    TransformationProps<ED, ND, EdgeGroupingOptions<ED, ND>> {}
 
-export type EdgeGroupingProps<ND, ED> = Omit<EdgeGroupingPropsC<ND, ED>, "enabled">;
+export type EdgeGroupingProps<ND, ED> = Omit<
+  EdgeGroupingPropsC<ND, ED>,
+  "enabled"
+>;
 
 function EdgeGroupingComponent<ND = unknown, ED = unknown>(
   props: EdgeGroupingProps<ED, ND>,
@@ -31,7 +35,7 @@ function EdgeGroupingComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addEdgeGrouping({
-      ...props,
+      ...withAnimation(ogma, props),
       enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
@@ -50,7 +54,7 @@ function EdgeGroupingComponent<ND = unknown, ED = unknown>(
   }, [props.disabled, props.animate, props.duration]);
 
   useEffect(() => {
-    transformation?.setOptions(props);
+    transformation?.setOptions(withAnimation(ogma, props));
   }, [
     props.selector,
     props.generator,
@@ -62,10 +66,14 @@ function EdgeGroupingComponent<ND = unknown, ED = unknown>(
 }
 
 type EdgeGroupingType = <ND, ED>(
-  props: EdgeGroupingProps<ND, ED> & { ref?: Ref<EdgeGroupingTransformation<ND, ED>> }
+  props: EdgeGroupingProps<ND, ED> & {
+    ref?: Ref<EdgeGroupingTransformation<ND, ED>>;
+  }
 ) => React.ReactElement | null;
 
 /**
  * Edge grouping transformation component. It wraps around Ogma [`EdgeGrouping` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeGrouping).
  */
-export const EdgeGrouping = forwardRef(EdgeGroupingComponent) as EdgeGroupingType;
+export const EdgeGrouping = forwardRef(
+  EdgeGroupingComponent
+) as EdgeGroupingType;
