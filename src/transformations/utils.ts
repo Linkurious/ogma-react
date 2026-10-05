@@ -1,6 +1,8 @@
 import { Ogma, Transformation } from "@linkurious/ogma";
 import { AnimationProps, TransformationProps } from "./types";
 
+type EnableArg = Parameters<Transformation<unknown, unknown>["enable"]>[0];
+
 /**
  * Ogma 6 takes `animate: boolean`, Ogma 5 takes `duration: number`.
  * Accept both props and translate to what the installed Ogma expects.
@@ -8,11 +10,13 @@ import { AnimationProps, TransformationProps } from "./types";
 export function animationArg<ND, ED>(
   ogma: Ogma<ND, ED>,
   { animate, duration }: AnimationProps
-): boolean | number | undefined {
-  if (parseInt(ogma.build.version, 10) >= 6) {
-    return animate ?? (duration === undefined ? undefined : duration > 0);
-  }
-  return duration ?? (animate === false ? 0 : undefined);
+) {
+  const arg =
+    parseInt(ogma.build.version, 10) >= 6
+      ? (animate ?? (duration === undefined ? undefined : duration > 0))
+      : (duration ?? (animate === false ? 0 : undefined));
+  // the parameter type differs between Ogma 5 (number) and 6 (boolean)
+  return arg as EnableArg;
 }
 
 export function toggle<ND, ED>(
@@ -22,7 +26,7 @@ export function toggle<ND, ED>(
   props: AnimationProps
 ) {
   if (disabled === transformation.isEnabled()) {
-    const arg = animationArg(ogma, props) as boolean | undefined;
+    const arg = animationArg(ogma, props);
     if (disabled) transformation.disable(arg);
     else transformation.enable(arg);
   }

@@ -86,7 +86,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     if (transformation) {
       const disabled = !!props.disabled;
-      const animate = animationArg(ogma, props) as boolean | undefined;
+      const animate = animationArg(ogma, props);
       // Note: Drilldown transformation does not expose `isEnabled()`,
       // so we rely on the `disabled` prop to decide whether to enable/disable.
       if (disabled) transformation.disable(animate);
