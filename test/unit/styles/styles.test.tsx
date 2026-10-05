@@ -160,6 +160,8 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
+          {/* explicit base: the default edge colour differs between Ogma versions */}
+          <EdgeStyle attributes={{ color: "grey" }} />
           <EdgeStyle
             attributes={{ color: "green" }}
             selector={(edge) => Number(edge.getId()) > 0}
