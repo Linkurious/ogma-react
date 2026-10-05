@@ -78,7 +78,7 @@
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/lodash.throttle": "4.1.9",
-    "@types/node": "24.19.0",
+    "@types/node": "24.19.1",
     "@types/react": "19.2.13",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.3",
