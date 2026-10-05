@@ -1,14 +1,30 @@
 import { Ogma, Transformation } from "@linkurious/ogma";
-import { TransformationProps } from "./types";
+import { AnimationProps, TransformationProps } from "./types";
+
+/**
+ * Ogma 6 takes `animate: boolean`, Ogma 5 takes `duration: number`.
+ * Accept both props and translate to what the installed Ogma expects.
+ */
+export function animationArg<ND, ED>(
+  ogma: Ogma<ND, ED>,
+  { animate, duration }: AnimationProps
+): boolean | number | undefined {
+  if (parseInt(ogma.build.version, 10) >= 6) {
+    return animate ?? (duration === undefined ? undefined : duration > 0);
+  }
+  return duration ?? (animate === false ? 0 : undefined);
+}
 
 export function toggle<ND, ED>(
+  ogma: Ogma<ND, ED>,
   transformation: Transformation<ND, ED>,
   disabled: boolean,
-  duration?: number
+  props: AnimationProps
 ) {
   if (disabled === transformation.isEnabled()) {
-    if (disabled) transformation.disable(duration as number);
-    else transformation.enable(duration as number);
+    const arg = animationArg(ogma, props) as boolean | undefined;
+    if (disabled) transformation.disable(arg);
+    else transformation.enable(arg);
   }
 }
 

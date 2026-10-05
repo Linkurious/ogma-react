@@ -45,9 +45,9 @@ export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     if (transformation) {
-      toggle(transformation, !!props.disabled, props.duration);
+      toggle(ogma, transformation, !!props.disabled, props);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled, props.animate, props.duration]);
 
   useEffect(() => {
     transformation?.setOptions(props);

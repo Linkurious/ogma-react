@@ -10,6 +10,7 @@ import {
 import { useOgma } from "../context";
 // TODO: Add transformation callbacks support via useTransformationCallbacks from "./utils" if needed.
 import type { TransformationProps } from "./types";
+import { animationArg } from "./utils";
 
 // Helper types to extract the correct types from Ogma's addDrillDown method
 type OgmaInstance<ND, ED> = ReturnType<typeof useOgma<ND, ED>>;
@@ -28,13 +29,24 @@ interface NodeDrilldownPropsBase<ND, ED>
     DrilldownOptions<ND, ED>,
     TransformationProps<ND, ED, DrilldownOptions<ND, ED>> {}
 
+/** Options that exist in Ogma 5 only; ignored by Ogma 6. */
+interface LegacyDrilldownProps {
+  /** @deprecated Ogma 5 only */
+  parentPath?: string;
+  /** @deprecated Ogma 5 only */
+  depthPath?: string;
+  /** @deprecated Ogma 5 only */
+  easing?: string;
+}
+
 /**
  * Public props: we intentionally hide `enabled` and expose `disabled` (from TransformationProps).
  */
 export type NodeDrilldownProps<ND, ED> = Omit<
   NodeDrilldownPropsBase<ND, ED>,
   "enabled"
->;
+> &
+  LegacyDrilldownProps;
 
 function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   props: NodeDrilldownProps<ND, ED>,
@@ -69,16 +81,16 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   }, []);
 
   // Enable/disable the transformation based on the `disabled` prop
-  // Note: This useEffect is not dependent on the `duration` prop to avoid
-  //       unnecessary re-enabling/disabling when only the duration changes.
+  // Note: This useEffect is not dependent on the `animate` prop to avoid
+  //       unnecessary re-enabling/disabling when only the animate flag changes.
   useEffect(() => {
     if (transformation) {
       const disabled = !!props.disabled;
-      const duration = props.duration;
+      const animate = animationArg(ogma, props) as boolean | undefined;
       // Note: Drilldown transformation does not expose `isEnabled()`,
       // so we rely on the `disabled` prop to decide whether to enable/disable.
-      if (disabled) transformation.disable(duration as number);
-      else transformation.enable(duration as number);
+      if (disabled) transformation.disable(animate);
+      else transformation.enable(animate);
     }
   }, [props.disabled]);
 
@@ -91,6 +103,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   }, [
     props.copyData,
     props.depthPath,
+    props.animate,
     props.duration,
     props.easing,
     props.nodeGenerator,
