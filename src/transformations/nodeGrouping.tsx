@@ -10,14 +10,18 @@ import {
   NodeGrouping as NodeGroupingTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { toggle, useTransformationCallbacks } from "./utils";
+import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 import { TransformationProps } from "./types";
 
 interface NodeGroupingPropsC<ND, ED>
-  extends NodeGroupingOptions<ND, ED>,
+  extends
+    NodeGroupingOptions<ND, ED>,
     TransformationProps<ND, ED, NodeGroupingOptions<ND, ED>> {}
 
-export type NodeGroupingProps<ND, ED> = Omit<NodeGroupingPropsC<ND, ED>, "enabled">;
+export type NodeGroupingProps<ND, ED> = Omit<
+  NodeGroupingPropsC<ND, ED>,
+  "enabled"
+>;
 
 function NodeGroupingComponent<ND = unknown, ED = unknown>(
   props: NodeGroupingProps<ND, ED>,
@@ -30,7 +34,7 @@ function NodeGroupingComponent<ND = unknown, ED = unknown>(
   useImperativeHandle(ref, () => transformation!, [transformation]);
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeGrouping({
-      ...props,
+      ...withAnimation(ogma, props),
       enabled: !props.disabled
     });
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -43,12 +47,12 @@ function NodeGroupingComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     if (transformation) {
-      toggle(transformation, !!props.disabled, props.duration);
+      toggle(ogma, transformation, !!props.disabled, props);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled, props.animate, props.duration]);
 
   useEffect(() => {
-    transformation?.setOptions(props);
+    transformation?.setOptions(withAnimation(ogma, props));
   }, [
     props.groupIdFunction,
     props.groupSelfLoopEdges,
@@ -65,7 +69,11 @@ function NodeGroupingComponent<ND = unknown, ED = unknown>(
 }
 
 type NodeGroupingType = <ND, ED>(
-  props: NodeGroupingProps<ND, ED> & { ref?: Ref<NodeGroupingTransformation<ND, ED>> }
+  props: NodeGroupingProps<ND, ED> & {
+    ref?: Ref<NodeGroupingTransformation<ND, ED>>;
+  }
 ) => React.ReactElement | null;
 
-export const NodeGrouping = forwardRef(NodeGroupingComponent) as NodeGroupingType;
+export const NodeGrouping = forwardRef(
+  NodeGroupingComponent
+) as NodeGroupingType;

@@ -1,14 +1,49 @@
 import { Ogma, Transformation } from "@linkurious/ogma";
-import { TransformationProps } from "./types";
+import { AnimationProps, TransformationProps } from "./types";
+
+type EnableArg = Parameters<Transformation<unknown, unknown>["enable"]>[0];
+
+const isOgma6 = (ogma: Ogma<any, any>) => parseInt(ogma.build.version, 10) >= 6;
+
+/**
+ * Ogma 6 takes `animate: boolean`, Ogma 5 takes `duration: number`.
+ * Accept both props and translate to what the installed Ogma expects.
+ */
+export function animationArg<ND, ED>(
+  ogma: Ogma<ND, ED>,
+  { animate, duration }: AnimationProps
+) {
+  const arg = isOgma6(ogma)
+    ? (animate ?? (duration === undefined ? undefined : duration > 0))
+    : (duration ?? (animate === false ? 0 : undefined));
+  // the parameter type differs between Ogma 5 (number) and 6 (boolean)
+  return arg as EnableArg;
+}
+
+/** Replace `animate`/`duration` in the options with the one the installed Ogma understands. */
+export function withAnimation<ND, ED, P extends AnimationProps>(
+  ogma: Ogma<ND, ED>,
+  props: P
+): P {
+  const { animate, duration, ...rest } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
+  const arg = animationArg(ogma, props);
+  if (arg === undefined) return rest as P;
+  return {
+    ...rest,
+    [isOgma6(ogma) ? "animate" : "duration"]: arg
+  } as unknown as P;
+}
 
 export function toggle<ND, ED>(
+  ogma: Ogma<ND, ED>,
   transformation: Transformation<ND, ED>,
   disabled: boolean,
-  duration?: number
+  props: AnimationProps
 ) {
   if (disabled === transformation.isEnabled()) {
-    if (disabled) transformation.disable(duration as number);
-    else transformation.enable(duration as number);
+    const arg = animationArg(ogma, props);
+    if (disabled) transformation.disable(arg);
+    else transformation.enable(arg);
   }
 }
 
