@@ -65,3 +65,26 @@ code {
   padding: 10px;
   border-radius: 5px;
 }
+.App {
+  position: relative;
+}
+
+.geo-basemap {
+  position: absolute;
+  inset: 0;
+}
+
+.geo-basemap[hidden] {
+  display: none;
+}
+
+.ogma-container {
+  position: relative;
+  z-index: 1;
+}
+
+.geo-provider {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+}

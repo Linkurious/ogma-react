@@ -3,6 +3,7 @@ import { Drawer } from "./Drawer";
 import { Toggle } from "./Toggle";
 import { Slider } from "./Slider";
 import { Menu as MenuIcon } from "react-feather";
+import type { GeoProvider } from "./GeoBasemap";
 import "./Controls.css";
 
 interface ControlsProps {
@@ -14,6 +15,9 @@ interface ControlsProps {
   setOutlines: (value: boolean) => void;
   geoEnabled: boolean;
   setGeoEnabled: (value: boolean) => void;
+  geoProvider: GeoProvider;
+  setGeoProvider: (value: GeoProvider) => void;
+  mapboxAvailable: boolean;
   addNode: () => void;
   useClass: boolean;
   setUseClass: (value: boolean) => void;
@@ -26,6 +30,9 @@ export function Controls({
   setEdgeWidth,
   geoEnabled,
   setGeoEnabled,
+  geoProvider,
+  setGeoProvider,
+  mapboxAvailable,
   outlines,
   setOutlines,
   addNode,
@@ -100,6 +107,17 @@ export function Controls({
             onChange={() => setGeoEnabled(!geoEnabled)}
             label="Geo mode"
           />
+          <select
+            className="geo-provider"
+            value={geoProvider}
+            onChange={(e) => setGeoProvider(e.target.value as GeoProvider)}
+          >
+            <option value="maplibre">MapLibre</option>
+            <option value="mapbox" disabled={!mapboxAvailable}>
+              Mapbox{mapboxAvailable ? "" : " (set VITE_MAPBOX_TOKEN)"}
+            </option>
+            <option value="deck">deck.gl</option>
+          </select>
         </div>
         <div className="controls-section">
           <div className="link-button" onClick={() => addNode()}>
@@ -107,11 +125,7 @@ export function Controls({
           </div>
         </div>
         <div className="controls-section">
-          <Toggle
-            checked={useClass}
-            onChange={setUseClass}
-            label="Use class"
-          />
+          <Toggle checked={useClass} onChange={setUseClass} label="Use class" />
         </div>
       </Drawer>
     </>

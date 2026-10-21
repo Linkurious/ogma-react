@@ -744,26 +744,45 @@ Node drilldown transformation. See [`ogma.transformations.addDrillDown()`](https
 
 ### `<Geo />`
 
-Geo mode component. It's the first version of this component and we are still gathering feedback on how you can use it.
+Geo mode component. You create and own the map instance (Mapbox GL, MapLibre GL or deck.gl) and pass it to `<Geo />`, which binds it to the Ogma instance. The map is never removed by the component, so you are responsible for disposing of it.
+
+`mapbox-gl`, `maplibre-gl` and `@deck.gl/core` are optional peer dependencies: install only the one you use.
 
 #### Props
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `enabled?`       | `boolean`    | `false`  | On/off toggle |
-| `...rest` | `Ogma.GeomModeOptions`  | | See [`GeoModeOptions`](https://doc.linkurio.us/ogma/latest/api.html#GeoModeOptions) properties |
+| `provider`   | `"mapbox" \| "maplibre" \| "deck"` | | Library the `map` was created with |
+| `map`        | `mapboxgl.Map \| maplibregl.Map \| Deck` | | Map instance created by the user. Nothing is bound until it is defined |
+| `enabled?`   | `boolean`    | `false`  | On/off toggle |
+| `onReady?`   | `(geo: Geo) => void` | | Called when the binding is created |
+| `...rest`    | `GeoOptions` | | `latitudePath`, `longitudePath`, `getCoordinates`, `projection`, `syncCamera`, `syncOnDrag`, `sizeRatio`, ... See `GeoOptions` in `@linkurious/ogma/geo` |
 
 #### Example
 
 ```tsx
-<Ogma graph={...}>
-  <Geo
-    enabled={true}
-    tileUrlTemplate="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-    longitudePath="data.lng"
-    latitudePath="data.lat"
-  />
-</Ogma>
+import mapboxgl from "mapbox-gl";
+
+function App() {
+  const [map, setMap] = useState<mapboxgl.Map>();
+
+  return (
+    <Ogma
+      graph={...}
+      onReady={(ogma) => {
+        setMap(new mapboxgl.Map({ container: ogma.getContainer()!, style: "..." }));
+      }}
+    >
+      <Geo
+        provider="mapbox"
+        map={map}
+        enabled={true}
+        longitudePath="data.lng"
+        latitudePath="data.lat"
+      />
+    </Ogma>
+  );
+}
 ```
 
 
