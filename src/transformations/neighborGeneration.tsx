@@ -11,13 +11,17 @@ import {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
-import { toggle, useTransformationCallbacks } from "./utils";
+import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 
 interface NeighborGenerationPropsC<ND, ED>
-  extends NeighborGenerationOptions<ND, ED>,
-    TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {};
+  extends
+    NeighborGenerationOptions<ND, ED>,
+    TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {}
 
-export type NeighborGenerationProps<ND, ED> = Omit<NeighborGenerationPropsC<ND, ED>, "enabled">;
+export type NeighborGenerationProps<ND, ED> = Omit<
+  NeighborGenerationPropsC<ND, ED>,
+  "enabled"
+>;
 
 function NeighborGenerationComponent<ND = unknown, ED = unknown>(
   props: NeighborGenerationProps<ND, ED>,
@@ -31,7 +35,7 @@ function NeighborGenerationComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborGeneration({
-      ...props,
+      ...withAnimation(ogma, props),
       enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
@@ -45,12 +49,12 @@ function NeighborGenerationComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     if (transformation) {
-      toggle(transformation, !!props.disabled, props.duration);
+      toggle(ogma, transformation, !!props.disabled, props);
     }
-  }, [props.disabled, props.duration]);
+  }, [props.disabled, props.animate, props.duration]);
 
   useEffect(() => {
-    transformation?.setOptions(props);
+    transformation?.setOptions(withAnimation(ogma, props));
   }, [
     props.edgeGenerator,
     props.nodeGenerator,
@@ -62,7 +66,11 @@ function NeighborGenerationComponent<ND = unknown, ED = unknown>(
 }
 
 type NeighborGenerationType = <ND, ED>(
-  props: NeighborGenerationProps<ND, ED> & { ref?: Ref<NeighborGenerationTransformation<ND, ED>> }
+  props: NeighborGenerationProps<ND, ED> & {
+    ref?: Ref<NeighborGenerationTransformation<ND, ED>>;
+  }
 ) => React.ReactElement | null;
 
-export const NeighborGeneration = forwardRef(NeighborGenerationComponent) as NeighborGenerationType;
+export const NeighborGeneration = forwardRef(
+  NeighborGenerationComponent
+) as NeighborGenerationType;

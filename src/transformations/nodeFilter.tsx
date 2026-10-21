@@ -11,10 +11,11 @@ import {
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
-import { toggle, useTransformationCallbacks } from "./utils";
+import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 
 interface NodeFilterPropsC<ED, ND>
-  extends NodeFilterOptions<ED, ND>,
+  extends
+    NodeFilterOptions<ED, ND>,
     TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
 
 export type NodeFilterProps<ND, ED> = Omit<NodeFilterPropsC<ND, ED>, "enabled">;
@@ -31,7 +32,7 @@ function NodeFilterComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeFilter({
-      ...props,
+      ...withAnimation(ogma, props),
       enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
@@ -45,19 +46,21 @@ function NodeFilterComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     if (transformation) {
-      toggle(transformation, !!props.disabled, props.duration);
+      toggle(ogma, transformation, !!props.disabled, props);
     }
   }, [props.disabled]);
 
   useEffect(() => {
-    transformation?.setOptions(props);
+    transformation?.setOptions(withAnimation(ogma, props));
   }, [props.criteria]);
 
   return null;
 }
 
 type NodeFilterType = <ND, ED>(
-  props: NodeFilterProps<ND, ED> & { ref?: Ref<NodeFilterTransformation<ND, ED>> }
+  props: NodeFilterProps<ND, ED> & {
+    ref?: Ref<NodeFilterTransformation<ND, ED>>;
+  }
 ) => React.ReactElement | null;
 
 /**
