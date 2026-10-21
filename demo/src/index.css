@@ -59,9 +59,47 @@ code {
 }
 
 .ogma-tooltip {
-  background-color: black;
-  color: white;
+  color: var(--overlay-text-color);
+  background-color: var(--overlay-background-color);
   font-size: 14px;
   padding: 10px;
   border-radius: 5px;
+  position: relative;
+  box-shadow: 0 8px 30px #0000001f;
+}
+
+.ogma-popup--close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 16px;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  font-size: 14px;
+  transform: translateX(-50%) translateY(calc(-100% - 10px));
+  padding: 16px;
+}
+
+.popup::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid var(--overlay-background-color);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
