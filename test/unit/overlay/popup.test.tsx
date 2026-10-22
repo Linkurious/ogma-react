@@ -25,7 +25,7 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div
+      div,
     );
 
     expect(ref.current).toBeDefined();
@@ -42,20 +42,12 @@ describe("Popup", () => {
           <div className="custom-child-div">{text}</div>
         </Popup>
       </Ogma>,
-      div
+      div,
     );
-    expect(
-      ref.current?.element.querySelector(".ogma-popup--body")
-    ).toBeInstanceOf(HTMLElement);
-    expect(
-      ref.current?.element.querySelector(".ogma-popup--close")
-    ).toBeDefined();
-    expect(
-      ref.current?.element.querySelector(".custom-child-div")
-    ).toBeInstanceOf(HTMLElement);
-    expect(
-      ref.current?.element.querySelector(".custom-child-div")!.textContent
-    ).toBe(text);
+    expect(ref.current?.element.querySelector(".ogma-popup--body")).toBeInstanceOf(HTMLElement);
+    expect(ref.current?.element.querySelector(".ogma-popup--close")).toBeDefined();
+    expect(ref.current?.element.querySelector(".custom-child-div")).toBeInstanceOf(HTMLElement);
+    expect(ref.current?.element.querySelector(".custom-child-div")!.textContent).toBe(text);
   });
 
   it("should support content prop", () => {
@@ -64,22 +56,12 @@ describe("Popup", () => {
 
     render(
       <Ogma graph={graph}>
-        <Popup
-          position={{ x: 0, y: 0 }}
-          ref={ref}
-          isOpen
-          contentClass="content"
-          content={text}
-        />
+        <Popup position={{ x: 0, y: 0 }} ref={ref} isOpen contentClass="content" content={text} />
       </Ogma>,
-      div
+      div,
     );
-    expect(ref.current?.element.querySelector(".content")).toBeInstanceOf(
-      HTMLDivElement
-    );
-    expect(ref.current?.element.querySelector(".content")!.textContent).toBe(
-      text
-    );
+    expect(ref.current?.element.querySelector(".content")).toBeInstanceOf(HTMLDivElement);
+    expect(ref.current?.element.querySelector(".content")!.textContent).toBe(text);
   });
 
   it("should close the popup on close button click", async () => {
@@ -107,10 +89,10 @@ describe("Popup", () => {
           Popup
         </Popup>
       </Ogma>,
-      div
+      div,
     );
     expect((ref.current?.element as HTMLDivElement).style.transform).toContain(
-      `translate(150px, 150px) rotate(0rad) translate(0px, 0px)`
+      `translate(150px, 150px) rotate(0rad) translate(0px, 0px)`,
     );
   });
 
@@ -129,7 +111,7 @@ describe("Popup", () => {
           Popup
         </Popup>
       </Ogma>,
-      div
+      div,
     );
     expect(ref.current?.element.classList.contains("custom-class")).toBe(true);
   });
@@ -149,11 +131,11 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div
+      div,
     );
-    expect(
-      ref.current?.element.querySelector(".custom-close-button")
-    ).toBeInstanceOf(HTMLSpanElement);
+    expect(ref.current?.element.querySelector(".custom-close-button")).toBeInstanceOf(
+      HTMLSpanElement,
+    );
   });
 
   it("should support custom bottom placement", () => {
@@ -171,13 +153,11 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div
+      div,
     );
-    expect(
-      (ref.current?.element as HTMLDivElement).classList.contains(
-        "ogma-popup--bottom"
-      )
-    ).toBe(true);
+    expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--bottom")).toBe(
+      true,
+    );
   });
 
   it("should support custom left placement", () => {
@@ -195,13 +175,11 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div
+      div,
     );
-    expect(
-      (ref.current?.element as HTMLDivElement).classList.contains(
-        "ogma-popup--left"
-      )
-    ).toBe(true);
+    expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--left")).toBe(
+      true,
+    );
   });
 
   it("should support custom right placement", () => {
@@ -219,12 +197,10 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div
+      div,
     );
-    expect(
-      (ref.current?.element as HTMLDivElement).classList.contains(
-        "ogma-popup--right"
-      )
-    ).toBe(true);
+    expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--right")).toBe(
+      true,
+    );
   });
 });

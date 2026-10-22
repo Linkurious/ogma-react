@@ -12,7 +12,7 @@ export const MousePosition = () => {
     (pos: Point) => {
       requestAnimationFrame(() => setPosition(pos));
     },
-    [setPosition]
+    [setPosition],
   );
 
   useEffect(() => {

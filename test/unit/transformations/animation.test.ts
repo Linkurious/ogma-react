@@ -1,12 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { Ogma } from "@linkurious/ogma";
-import {
-  animationArg,
-  withAnimation
-} from "../../../src/transformations/utils";
+import { animationArg, withAnimation } from "../../../src/transformations/utils";
 
-const ogma = (version: string) =>
-  ({ build: { version } }) as unknown as Ogma<unknown, unknown>;
+const ogma = (version: string) => ({ build: { version } }) as unknown as Ogma<unknown, unknown>;
 const v5 = ogma("5.3.11");
 const v6 = ogma("6.0.6");
 
@@ -32,11 +28,11 @@ describe("withAnimation", () => {
   it("emits only the option the installed Ogma understands", () => {
     expect(withAnimation(v6, { duration: 0, a: 1 })).toEqual({
       animate: false,
-      a: 1
+      a: 1,
     });
     expect(withAnimation(v5, { animate: false, a: 1 })).toEqual({
       duration: 0,
-      a: 1
+      a: 1,
     });
   });
 

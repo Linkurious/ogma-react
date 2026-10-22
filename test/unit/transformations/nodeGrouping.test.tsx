@@ -41,20 +41,20 @@ describe("Node grouping", () => {
         onDestroyed={() => (states.onDestroyed = true)}
         onUpdated={() => (states.onUpdated = true)}
       />,
-      div
+      div,
     );
     await (ref.current as OgmaLib).transformations.afterNextUpdate();
     expect(states).toEqual({
       onEnabled: true,
       onDestroyed: false,
-      onUpdated: false
+      onUpdated: false,
     });
     await act(() => userEvent.click(screen.getByText("setGrouping")));
     await ref.current?.transformations.afterNextUpdate();
     expect(states).toEqual({
       onEnabled: true,
       onDestroyed: false,
-      onUpdated: true
+      onUpdated: true,
     });
   });
 });

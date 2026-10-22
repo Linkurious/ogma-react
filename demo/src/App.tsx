@@ -4,7 +4,7 @@ import {
   RawGraph,
   NodeGrouping as NodeGroupingTransformation,
   NodeAttributesValue,
-  Theme
+  Theme,
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback, useMemo } from "react";
@@ -21,7 +21,7 @@ import {
   Geo,
   NodeGroupingProps,
   useEvent,
-  Tooltip
+  Tooltip,
 } from "../../src";
 
 // custom components:
@@ -64,7 +64,7 @@ export default function App() {
     nodeGenerator: (nodes) => {
       return { data: { multiplier: nodes.size } };
     },
-    disabled: true
+    disabled: true,
   });
   const [useClass, setUseClass] = useState(false);
 
@@ -96,7 +96,7 @@ export default function App() {
     if (!ogmaInstanceRef.current) return;
     const size = ogmaInstanceRef.current.getNodes().size;
     const node = ogmaInstanceRef.current.addNode({
-      id: size
+      id: size,
     });
     if (size % 2) node.addClass("class");
   }, []);
@@ -110,8 +110,8 @@ export default function App() {
         return categories.includes("INVESTOR") ? "#FF0000" : "#00FF00";
       },
       halo: {
-        width: 0
-      }
+        width: 0,
+      },
     };
   }, []); // memoize the style class props
 
@@ -136,8 +136,8 @@ export default function App() {
             text: {
               content: (node: OgmaNode) => node?.getData("properties.name"),
               font: "IBM Plex Sans",
-              minVisibleSize: 3
-            }
+              minVisibleSize: 3,
+            },
           }}
         />
 
@@ -147,24 +147,19 @@ export default function App() {
             color: "#FF0000",
             halo: {
               width: 2,
-              color: "#FF0000"
-            }
+              color: "#FF0000",
+            },
           }}
           fullOverwrite={false}
         />
 
         <EdgeStyle<ND, ED> attributes={{ width: edgeWidth }} />
-        {useClass && (
-          <StyleClass<ND, ED>
-            name="class"
-            nodeAttributes={styleClassNodeAttributes}
-          />
-        )}
+        {useClass && <StyleClass<ND, ED> name="class" nodeAttributes={styleClassNodeAttributes} />}
 
         <EdgeStyle.Hovered<ND, ED>
           attributes={{
             width: (e) => e.getData("weight") * edgeWidth,
-            color: "#FF0000"
+            color: "#FF0000",
           }}
           fullOverwrite={false}
         />

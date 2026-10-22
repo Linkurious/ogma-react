@@ -8,12 +8,7 @@ interface DrawerProps {
   className?: string;
 }
 
-export const Drawer: React.FC<DrawerProps> = ({
-  isOpen,
-  children,
-  onClosed,
-  className,
-}) => {
+export const Drawer: React.FC<DrawerProps> = ({ isOpen, children, onClosed, className }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(isOpen);
 
   useEffect(() => {
@@ -33,9 +28,7 @@ export const Drawer: React.FC<DrawerProps> = ({
           onClick={closeDrawer}
         ></div>
       )}
-      <div
-        className={`drawer ${isDrawerOpen ? "open" : ""} ${className || ""}`}
-      >
+      <div className={`drawer ${isDrawerOpen ? "open" : ""} ${className || ""}`}>
         <button className="close-button" onClick={closeDrawer}>
           &times;
         </button>

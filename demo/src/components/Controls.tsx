@@ -30,7 +30,7 @@ export function Controls({
   setOutlines,
   addNode,
   useClass,
-  setUseClass
+  setUseClass,
 }: ControlsProps) {
   //const ogma = useOgma();
   const [drawerShown, setDrawerShown] = useState(false);
@@ -40,19 +40,12 @@ export function Controls({
     <>
       <div className="control-buttons">
         {!drawerShown && (
-          <button
-            onClick={() => setDrawerShown(!drawerShown)}
-            title="Show controls"
-          >
+          <button onClick={() => setDrawerShown(!drawerShown)} title="Show controls">
             <MenuIcon width={18} />
           </button>
         )}
       </div>
-      <Drawer
-        isOpen={drawerShown}
-        onClosed={() => setDrawerShown(false)}
-        className="controls"
-      >
+      <Drawer isOpen={drawerShown} onClosed={() => setDrawerShown(false)} className="controls">
         <h2>Controls</h2>
         <div className="controls-section">
           <Toggle
@@ -107,11 +100,7 @@ export function Controls({
           </div>
         </div>
         <div className="controls-section">
-          <Toggle
-            checked={useClass}
-            onChange={setUseClass}
-            label="Use class"
-          />
+          <Toggle checked={useClass} onChange={setUseClass} label="Use class" />
         </div>
       </Drawer>
     </>

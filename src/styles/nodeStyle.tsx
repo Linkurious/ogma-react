@@ -3,15 +3,9 @@ import {
   NodeSelector,
   NodeAttributesValue,
   StyleRule,
-  HoverNodeOptions
+  HoverNodeOptions,
 } from "@linkurious/ogma";
-import {
-  useEffect,
-  Ref,
-  forwardRef,
-  useState,
-  useImperativeHandle
-} from "react";
+import { useEffect, Ref, forwardRef, useState, useImperativeHandle } from "react";
 import { useOgma } from "../context";
 
 interface NodeRuleProps<ND, ED> {
@@ -32,7 +26,7 @@ interface SelectedNodeProps<ND, ED> {
 const NodeStyleComponent = forwardRef(
   <ND = unknown, ED = unknown>(
     { selector, attributes }: NodeRuleProps<ND, ED>,
-    ref?: Ref<StyleRule<ND, ED>>
+    ref?: Ref<StyleRule<ND, ED>>,
   ) => {
     const ogma = useOgma() as OgmaLib<ND, ED>;
     const [rule, setRule] = useState<StyleRule<ND, ED>>();
@@ -50,12 +44,12 @@ const NodeStyleComponent = forwardRef(
       };
     }, [selector, attributes]);
     return null;
-  }
+  },
 );
 
 const Hovered = <ND = unknown, ED = unknown>({
   attributes,
-  fullOverwrite
+  fullOverwrite,
 }: HoveredNodeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
@@ -71,7 +65,7 @@ const Hovered = <ND = unknown, ED = unknown>({
 
 const Selected = <ND = unknown, ED = unknown>({
   attributes,
-  fullOverwrite
+  fullOverwrite,
 }: SelectedNodeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
@@ -86,20 +80,17 @@ const Selected = <ND = unknown, ED = unknown>({
 };
 
 type NodeStyleComponentType = <ND, ED>(
-  props: NodeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> }
+  props: NodeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> },
 ) => React.ReactElement | null;
 
 /**
  * This component wraps around Ogma [`NodeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addNodeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the nodes.
  */
-export const NodeStyle = Object.assign(
-  NodeStyleComponent as NodeStyleComponentType,
-  {
-    Hovered,
-    Selected
-  }
-);
+export const NodeStyle = Object.assign(NodeStyleComponent as NodeStyleComponentType, {
+  Hovered,
+  Selected,
+});
 
 // backward compatibility
 export { NodeStyle as NodeStyleRule };

@@ -9,15 +9,12 @@ export function LayoutService() {
     (_evt: { nodes: NodeList }) => {
       ogma.events.once("idle", () => ogma.layouts.force({ locate: true }));
     },
-    [ogma]
+    [ogma],
   );
 
   useEffect(() => {
     // register listener
-    ogma.events.on(
-      ["addNodes", "transformationEnabled", "transformationDisabled"],
-      onNodesAdded
-    );
+    ogma.events.on(["addNodes", "transformationEnabled", "transformationDisabled"], onNodesAdded);
 
     // cleanup
     return () => {

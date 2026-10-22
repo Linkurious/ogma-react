@@ -30,9 +30,6 @@ describe("Edge grouping", () => {
     expect(ref.current?.getEdges().getId()).toEqual([0, 2, `group-1[0-2]`]);
     await act(() => userEvent.click(screen.getByText("setGrouping")));
     await ref.current?.transformations.afterNextUpdate();
-    expect(ref.current?.getEdges().getId()).toEqual([
-      `group-1[0-2]`,
-      `group-0[0-1]`
-    ]);
+    expect(ref.current?.getEdges().getId()).toEqual([`group-1[0-2]`, `group-0[0-1]`]);
   });
 });

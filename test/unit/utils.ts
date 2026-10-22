@@ -7,12 +7,12 @@ afterEach(() => {
   cleanup();
 });
 
-// @ts-ignore
+// @ts-expect-error
 const customRender = (ui: React.ReactElement, options = {}) =>
   render(ui, {
     // wrap provider(s) here if needed
     wrapper: ({ children }) => children,
-    ...options
+    ...options,
   });
 
 const getMiddlePoint = (edge: Edge) => {
@@ -21,9 +21,9 @@ const getMiddlePoint = (edge: Edge) => {
   if (!source || !target) return null;
   return {
     x: (source.getPosition().x + target.getPosition().x) / 2,
-    y: (source.getPosition().y + target.getPosition().y) / 2
+    y: (source.getPosition().y + target.getPosition().y) / 2,
   };
-}
+};
 
 export * from "@testing-library/react";
 export { default as userEvent } from "@testing-library/user-event";

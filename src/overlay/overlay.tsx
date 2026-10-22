@@ -1,18 +1,6 @@
-import {
-  useEffect,
-  useState,
-  ReactNode,
-  Ref,
-  forwardRef,
-  useImperativeHandle
-} from "react";
+import { useEffect, useState, ReactNode, Ref, forwardRef, useImperativeHandle } from "react";
 
-import {
-  Ogma as OgmaLib,
-  Overlay as OverlayLayer,
-  Size,
-  Point
-} from "@linkurious/ogma";
+import { Ogma as OgmaLib, Overlay as OverlayLayer, Size, Point } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { getPosition } from "./utils";
 import { createPortal } from "react-dom";
@@ -37,15 +25,8 @@ const offScreenPos: Point = { x: -9999, y: -9999 };
 // TODO: use props for these classes
 const OverlayComponent = forwardRef(
   <ND = unknown, ED = unknown>(
-    {
-      position,
-      children,
-      className = "",
-      size,
-      scaled,
-      index
-    }: OverlayProps<ND, ED>,
-    ref?: Ref<OverlayLayer>
+    { position, children, className = "", size, scaled, index }: OverlayProps<ND, ED>,
+    ref?: Ref<OverlayLayer>,
   ) => {
     const ogma = useOgma<ND, ED>();
     const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -64,9 +45,9 @@ const OverlayComponent = forwardRef(
           position: pos || offScreenPos,
           element: newElement,
           size: size || ({ width: "auto", height: "auto" } as any as Size),
-          scaled
+          scaled,
         },
-        index
+        index,
       );
 
       setLayer(overlay);
@@ -92,11 +73,11 @@ const OverlayComponent = forwardRef(
     if (!layer) return null;
 
     return createPortal(children, layer.element);
-  }
+  },
 );
 
 type OverlayType = <ND, ED>(
-  props: OverlayProps<ND, ED> & { ref?: Ref<OverlayLayer> }
+  props: OverlayProps<ND, ED> & { ref?: Ref<OverlayLayer> },
 ) => React.ReactElement | null;
 
 export const Overlay = OverlayComponent as OverlayType;

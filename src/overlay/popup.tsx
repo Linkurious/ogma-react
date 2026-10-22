@@ -5,17 +5,12 @@ import {
   ReactElement,
   Ref,
   forwardRef,
-  useImperativeHandle
+  useImperativeHandle,
 } from "react";
 
 import { Overlay as OverlayLayer, Size, Point } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import {
-  getContent,
-  getPosition,
-  getContainerClass,
-  getCloseButton
-} from "./utils";
+import { getContent, getPosition, getContainerClass, getCloseButton } from "./utils";
 import { Placement, PositionGetter } from "./types";
 import { createPortal } from "react-dom";
 
@@ -71,9 +66,9 @@ const PopupComponent = <ND = unknown, ED = unknown>(
     contentClass = POPUP_CONTENT_CLASS,
     popupBodyClass = POPUP_BODY_CLASS,
     size,
-    closeOnEsc = true
+    closeOnEsc = true,
   }: PopupProps,
-  ref?: Ref<OverlayLayer>
+  ref?: Ref<OverlayLayer>,
 ) => {
   const ogma = useOgma<ND, ED>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -98,13 +93,11 @@ const PopupComponent = <ND = unknown, ED = unknown>(
           </div>
         </div>`,
         size: size || { width: "auto", height: "auto" },
-        scaled: false
+        scaled: false,
       });
 
       onClick = (evt: MouseEvent) => {
-        const closeButton = currentLayer?.element.querySelector(
-          `.${closeButtonClass}`
-        ) as Element;
+        const closeButton = currentLayer?.element.querySelector(`.${closeButtonClass}`) as Element;
         if (evt.target && closeButton.contains(evt.target as Node)) {
           evt.stopPropagation();
           evt.preventDefault();
@@ -121,9 +114,7 @@ const PopupComponent = <ND = unknown, ED = unknown>(
       setLayer(currentLayer);
       // Update content if static content is provided
       if (content && !children) {
-        const contentElement = currentLayer.element.querySelector(
-          `.${contentClass}`
-        );
+        const contentElement = currentLayer.element.querySelector(`.${contentClass}`);
         const html = getContent(ogma, pos, content, children);
         if (contentElement) contentElement.innerHTML = html;
       }
@@ -172,7 +163,7 @@ const PopupComponent = <ND = unknown, ED = unknown>(
 };
 
 type PopupType = <_ND, _ED>(
-  props: PopupProps & { ref?: Ref<OverlayLayer> }
+  props: PopupProps & { ref?: Ref<OverlayLayer> },
 ) => React.ReactElement | null;
 
 /**

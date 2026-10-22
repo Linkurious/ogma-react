@@ -1,96 +1,81 @@
-import {
-  StyleClassDefinition,
-  StyleClass as OgmaStyleClass
-} from "@linkurious/ogma";
+import { StyleClassDefinition, StyleClass as OgmaStyleClass } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import {
-  forwardRef,
-  Ref,
-  useEffect,
-  useImperativeHandle,
-  useState,
-  memo
-} from "react";
+import { forwardRef, Ref, useEffect, useImperativeHandle, useState, memo } from "react";
 
 interface StyleProps<ND, ED> extends StyleClassDefinition<ND, ED> {
   name: string;
 }
 
-const styleClassComponent = forwardRef(<ND = unknown, ED = unknown>(
-  {
-    name,
-    edgeAttributes,
-    edgeDependencies,
-    edgeOutput,
-    nodeAttributes,
-    nodeDependencies,
-    nodeOutput
-  }: StyleProps<ND, ED>,
-  ref?: Ref<OgmaStyleClass<ND, ED>>
-) => {
-  const ogma = useOgma<ND, ED>();
-  const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(
-    null
-  );
-
-  useImperativeHandle(ref, () => styleClass as OgmaStyleClass<ND, ED>, [
-    styleClass
-  ]);
-
-  useEffect(() => {
-    const style = {
+const styleClassComponent = forwardRef(
+  <ND = unknown, ED = unknown>(
+    {
+      name,
       edgeAttributes,
       edgeDependencies,
       edgeOutput,
       nodeAttributes,
       nodeDependencies,
-      nodeOutput
-    };
+      nodeOutput,
+    }: StyleProps<ND, ED>,
+    ref?: Ref<OgmaStyleClass<ND, ED>>,
+  ) => {
+    const ogma = useOgma<ND, ED>();
+    const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(null);
 
-    async function setup() {
-      const newStyleClass = ogma.styles.createClass({ name, ...style });
-      await ogma.view.afterNextFrame();
-      setStyleClass(newStyleClass);
-    }
-    setup();
+    useImperativeHandle(ref, () => styleClass as OgmaStyleClass<ND, ED>, [styleClass]);
 
-    return () => {
-      async function cleanup() {
-        // Only destroy if we have a reference and it still exists
-        const currentClass = ogma.styles.getClass(name);
-        if (currentClass) await currentClass.destroy();
-        setStyleClass(null);
+    useEffect(() => {
+      const style = {
+        edgeAttributes,
+        edgeDependencies,
+        edgeOutput,
+        nodeAttributes,
+        nodeDependencies,
+        nodeOutput,
+      };
+
+      async function setup() {
+        const newStyleClass = ogma.styles.createClass({ name, ...style });
+        await ogma.view.afterNextFrame();
+        setStyleClass(newStyleClass);
       }
-      cleanup();
-    };
-  }, []);
+      setup();
 
-  useEffect(() => {
-    if (!styleClass) return;
-    styleClass.update({
+      return () => {
+        async function cleanup() {
+          // Only destroy if we have a reference and it still exists
+          const currentClass = ogma.styles.getClass(name);
+          if (currentClass) await currentClass.destroy();
+          setStyleClass(null);
+        }
+        cleanup();
+      };
+    }, []);
+
+    useEffect(() => {
+      if (!styleClass) return;
+      styleClass.update({
+        edgeAttributes,
+        edgeDependencies,
+        edgeOutput,
+        nodeAttributes,
+        nodeDependencies,
+        nodeOutput,
+      });
+    }, [
       edgeAttributes,
       edgeDependencies,
       edgeOutput,
       nodeAttributes,
       nodeDependencies,
-      nodeOutput
-    });
-  }, [
-    edgeAttributes,
-    edgeDependencies,
-    edgeOutput,
-    nodeAttributes,
-    nodeDependencies,
-    nodeOutput
-  ]);
+      nodeOutput,
+    ]);
 
-  return null;
-});
+    return null;
+  },
+);
 
-const arePropsEqual = <ND, ED>(
-  prev: StyleProps<ND, ED>,
-  next: StyleProps<ND, ED>
-) => {
+const arePropsEqual = <ND, ED>(prev: StyleProps<ND, ED>, next: StyleProps<ND, ED>) => {
   return (
     prev.name === next.name &&
     prev.edgeAttributes === next.edgeAttributes &&
@@ -103,7 +88,7 @@ const arePropsEqual = <ND, ED>(
 };
 
 type StyleClassComponentType = <ND, ED>(
-  props: StyleProps<ND, ED> & { ref?: Ref<OgmaStyleClass<ND, ED>> }
+  props: StyleProps<ND, ED> & { ref?: Ref<OgmaStyleClass<ND, ED>> },
 ) => React.ReactElement | null;
 
 /**

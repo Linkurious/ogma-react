@@ -5,11 +5,7 @@ export const Logo = () => {
   return (
     <div className="Logo">
       Ogma + <ReactIcon width={18} height={18} className="ReactIcon" /> React
-      <a
-        href="https://github.com/linkurious/ogma-react"
-        target="_blank"
-        className="gh-link"
-      >
+      <a href="https://github.com/linkurious/ogma-react" target="_blank" className="gh-link">
         <div title="Go to code">
           <GithubIcon />
         </div>

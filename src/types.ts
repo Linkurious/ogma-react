@@ -1,6 +1,4 @@
-import {
-  EventTypes
-} from "@linkurious/ogma";
+import { EventTypes } from "@linkurious/ogma";
 
 export type EventNames<ND, ED> = keyof EventTypes<ND, ED>;
 
@@ -18,8 +16,8 @@ export function forEachEventHandler<ND, ED>(
   handlers: EventHandlers<ND, ED>,
   callback: <K extends EventNames<ND, ED>>(
     eventName: K,
-    handler: (event: EventTypes<ND, ED>[K]) => void
-  ) => void
+    handler: (event: EventTypes<ND, ED>[K]) => void,
+  ) => void,
 ) {
   // Type-safe iteration
   (Object.keys(handlers) as EventNames<ND, ED>[]).forEach((eventName) => {
@@ -30,9 +28,7 @@ export function forEachEventHandler<ND, ED>(
 }
 
 // Helper to convert onEventName to eventname
-export function getEventNameFromProp<ND, ED>(
-  propName: string
-): keyof EventTypes<ND, ED> | null {
+export function getEventNameFromProp<ND, ED>(propName: string): keyof EventTypes<ND, ED> | null {
   if (propName.startsWith("on") && propName.length > 2) {
     // remove 'on' and convert first letter to lowercase
     const eventName = propName[2].toLowerCase() + propName.substring(3);

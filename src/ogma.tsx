@@ -7,22 +7,14 @@ import {
   useImperativeHandle,
   ReactNode,
   Ref,
-  memo
+  memo,
 } from "react";
-import {
-  Ogma as OgmaLib,
-  Options as OgmaOptions,
-  RawGraph,
-  EventTypes
-} from "@linkurious/ogma";
-import { Theme } from "@linkurious/ogma";
+import { Ogma as OgmaLib, Options as OgmaOptions, RawGraph, EventTypes,Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import { EventHandlerProps, EventHandlers } from "./types";
 import { isContentEqual, handleEventProps } from "./utils";
 
-export interface OgmaProps<ND, ED> extends EventHandlerProps<
-  EventTypes<ND, ED>
-> {
+export interface OgmaProps<ND, ED> extends EventHandlerProps<EventTypes<ND, ED>> {
   options?: Partial<OgmaOptions>;
   onReady?: (ogma: OgmaLib<ND, ED>) => void;
   graph?: RawGraph<ND, ED>;
@@ -36,17 +28,14 @@ const defaultOptions = {};
 /**
  * Main component for the Ogma library.
  */
-export const OgmaComponent = <ND, ED>(
-  props: OgmaProps<ND, ED>,
-  ref?: Ref<OgmaLib<ND, ED>>
-) => {
+export const OgmaComponent = <ND, ED>(props: OgmaProps<ND, ED>, ref?: Ref<OgmaLib<ND, ED>>) => {
   const {
     options = defaultOptions,
     children,
     graph,
     onReady,
     theme,
-    className = "ogma-container"
+    className = "ogma-container",
   } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -65,7 +54,7 @@ export const OgmaComponent = <ND, ED>(
     const instance = new OgmaLib<ND, ED>({
       container: containerRef.current,
       graph,
-      options
+      options,
     });
     setGraphData(graph);
     setOgmaOptions(options);
@@ -120,15 +109,11 @@ export const OgmaComponent = <ND, ED>(
   }, [props]);
 
   return (
-    <div
-      style={{ width: "100%", height: "100%" }}
-      className={className}
-      ref={containerRef}
-    >
+    <div style={{ width: "100%", height: "100%" }} className={className} ref={containerRef}>
       {ogma && (
         <OgmaContext.Provider
           value={{
-            ogma: ogma
+            ogma: ogma,
           }}
         >
           {children}
@@ -139,7 +124,7 @@ export const OgmaComponent = <ND, ED>(
 };
 
 type OgmaComponentType = <ND, ED>(
-  props: OgmaProps<ND, ED> & { ref?: Ref<OgmaLib<ND, ED>> }
+  props: OgmaProps<ND, ED> & { ref?: Ref<OgmaLib<ND, ED>> },
 ) => React.ReactElement | null;
 
 export const Ogma = memo(forwardRef(OgmaComponent)) as OgmaComponentType;

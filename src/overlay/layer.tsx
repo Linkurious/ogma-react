@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useState,
-  ReactNode,
-  Ref,
-  forwardRef,
-  useImperativeHandle
-} from "react";
+import { useEffect, useState, ReactNode, Ref, forwardRef, useImperativeHandle } from "react";
 import { createPortal } from "react-dom";
 import { Layer as OgmaLayer } from "@linkurious/ogma";
 import { useOgma } from "../context";
@@ -22,7 +15,7 @@ export interface LayerProps {
 const LayerComponent = forwardRef(
   <ND = unknown, ED = unknown>(
     { children, className = "", index }: LayerProps,
-    ref?: Ref<OgmaLayer>
+    ref?: Ref<OgmaLayer>,
   ) => {
     const ogma = useOgma<ND, ED>();
     const [layer, setLayer] = useState<OgmaLayer | null>(null);
@@ -54,11 +47,11 @@ const LayerComponent = forwardRef(
     if (!layer) return null;
 
     return createPortal(children, layer.element);
-  }
+  },
 );
 
 type LayerType = <_ND, _ED>(
-  props: LayerProps & { ref?: Ref<OgmaLayer> }
+  props: LayerProps & { ref?: Ref<OgmaLayer> },
 ) => React.ReactElement | null;
 
 export const Layer = LayerComponent as LayerType;

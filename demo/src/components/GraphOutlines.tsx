@@ -33,7 +33,5 @@ export function GraphOutlines({ visible = true }: GraphOutlinesProps) {
     };
   }, []);
 
-  return (
-    <CanvasLayer visible={visible} render={render} ref={layerRef} index={0} />
-  );
+  return <CanvasLayer visible={visible} render={render} ref={layerRef} index={0} />;
 }

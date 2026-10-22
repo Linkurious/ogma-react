@@ -1,7 +1,6 @@
 import { Overlay } from "@linkurious/ogma";
 import { Ogma, Popup } from "../../../src";
-import { createRef } from "react";
-import React from "react";
+import React, { createRef } from "react";
 
 export const ref = createRef<Overlay>();
 
@@ -21,5 +20,5 @@ export const PopupComponent = () => {
         Popup content
       </Popup>
     </Ogma>
-  )
-}
+  );
+};

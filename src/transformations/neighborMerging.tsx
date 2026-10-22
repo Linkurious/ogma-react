@@ -1,13 +1,7 @@
-import {
-  useEffect,
-  useState,
-  Ref,
-  useImperativeHandle,
-  forwardRef
-} from "react";
+import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
 import {
   NeighborMergingOptions,
-  NeighborMerging as NeighborMergingTransformation
+  NeighborMerging as NeighborMergingTransformation,
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -18,25 +12,21 @@ interface NeighborMergingPropsC<ND, ED>
     NeighborMergingOptions<ND, ED>,
     TransformationProps<ND, ED, NeighborMergingOptions<ND, ED>> {}
 
-export type NeighborMergingProps<ND, ED> = Omit<
-  NeighborMergingPropsC<ND, ED>,
-  "enabled"
->;
+export type NeighborMergingProps<ND, ED> = Omit<NeighborMergingPropsC<ND, ED>, "enabled">;
 
 function NeighborMergingComponent<ND = unknown, ED = unknown>(
   props: NeighborMergingProps<ND, ED>,
-  ref: Ref<NeighborMergingTransformation<ND, ED>>
+  ref: Ref<NeighborMergingTransformation<ND, ED>>,
 ) {
   const ogma = useOgma<ND, ED>();
-  const [transformation, setTransformation] =
-    useState<NeighborMergingTransformation<ND, ED>>();
+  const [transformation, setTransformation] = useState<NeighborMergingTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
 
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborMerging({
       ...withAnimation(ogma, props),
-      enabled: !props.disabled
+      enabled: !props.disabled,
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -63,9 +53,7 @@ function NeighborMergingComponent<ND = unknown, ED = unknown>(
 type NeighborMergingType = <ND, ED>(
   props: NeighborMergingProps<ND, ED> & {
     ref?: Ref<NeighborMergingTransformation<ND, ED>>;
-  }
+  },
 ) => React.ReactElement | null;
 
-export const NeighborMerging = forwardRef(
-  NeighborMergingComponent
-) as NeighborMergingType;
+export const NeighborMerging = forwardRef(NeighborMergingComponent) as NeighborMergingType;

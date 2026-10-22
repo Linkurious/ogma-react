@@ -1,15 +1,11 @@
 import { Ogma, EventTypes } from "@linkurious/ogma";
 import { OgmaProps } from "./ogma";
-import {
-  getEventNameFromProp,
-  EventHandlers,
-  forEachEventHandler
-} from "./types";
+import { getEventNameFromProp, EventHandlers, forEachEventHandler } from "./types";
 
 export function handleEventProps<ND, ED>(
   ogma: Ogma<ND, ED>,
   props: any,
-  previousEventHandlers: EventHandlers<ND, ED>
+  previousEventHandlers: EventHandlers<ND, ED>,
 ): void {
   // Get all current event handler props
   const currentEventHandlers: EventHandlers<ND, ED> = {};
@@ -24,7 +20,7 @@ export function handleEventProps<ND, ED>(
     if (eventName && typeof propValue === "function") {
       // No type assertion needed, eventName is already verified
       currentEventHandlers[eventName] = propValue as (
-        event: EventTypes<ND, ED>[NonNullable<typeof eventName>]
+        event: EventTypes<ND, ED>[NonNullable<typeof eventName>],
       ) => void;
     }
   });

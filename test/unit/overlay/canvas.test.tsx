@@ -15,7 +15,7 @@ describe("Canvas Overlay", () => {
           }}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
 
     expect(ref.current).toBeDefined();
@@ -33,7 +33,7 @@ describe("Canvas Overlay", () => {
           ref={ref}
           visible={false}
         />
-      </Ogma>
+      </Ogma>,
     );
 
     expect(ref.current?.isHidden()).toBe(true);
@@ -51,7 +51,7 @@ describe("Canvas Overlay", () => {
           visible={true}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
     expect(ref.current?.isHidden()).toBe(false);
 
@@ -65,7 +65,7 @@ describe("Canvas Overlay", () => {
           visible={false}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
     expect(ref.current?.isHidden()).toBe(true);
   });
@@ -82,7 +82,7 @@ describe("Canvas Overlay", () => {
           index={1}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
 
     expect(ref.current?.getLevel()).toEqual(1);
@@ -100,7 +100,7 @@ describe("Canvas Overlay", () => {
           index={0}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
     expect(ref.current?.getLevel()).toEqual(0);
 
@@ -114,7 +114,7 @@ describe("Canvas Overlay", () => {
           index={1}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
     expect(ref.current?.getLevel()).toEqual(1);
   });
@@ -130,7 +130,7 @@ describe("Canvas Overlay", () => {
           }}
           ref={ref}
         />
-      </Ogma>
+      </Ogma>,
     );
     expect(ref.current).toBeDefined();
     await act(async () => {

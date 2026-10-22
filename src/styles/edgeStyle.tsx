@@ -3,15 +3,9 @@ import {
   EdgeSelector,
   EdgeAttributesValue,
   StyleRule,
-  HoverEdgeOptions
+  HoverEdgeOptions,
 } from "@linkurious/ogma";
-import {
-  useEffect,
-  useState,
-  Ref,
-  forwardRef,
-  useImperativeHandle
-} from "react";
+import { useEffect, useState, Ref, forwardRef, useImperativeHandle } from "react";
 import { useOgma } from "../context";
 
 interface EdgeRuleProps<ND, ED> {
@@ -32,7 +26,7 @@ interface SelectedEdgeProps<ND, ED> {
 const EdgeStyleComponent = forwardRef(
   <ND = unknown, ED = unknown>(
     { selector, attributes }: EdgeRuleProps<ND, ED>,
-    ref?: Ref<StyleRule<ND, ED>>
+    ref?: Ref<StyleRule<ND, ED>>,
   ) => {
     const ogma = useOgma() as OgmaLib<ND, ED>;
     const [rule, setRule] = useState<StyleRule<ND, ED>>();
@@ -51,12 +45,12 @@ const EdgeStyleComponent = forwardRef(
       };
     }, [selector, attributes]);
     return null;
-  }
+  },
 );
 
 const Hovered = <ND = unknown, ED = unknown>({
   attributes,
-  fullOverwrite
+  fullOverwrite,
 }: HoveredEdgeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
@@ -72,7 +66,7 @@ const Hovered = <ND = unknown, ED = unknown>({
 
 const Selected = <ND = unknown, ED = unknown>({
   attributes,
-  fullOverwrite
+  fullOverwrite,
 }: SelectedEdgeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
@@ -87,20 +81,17 @@ const Selected = <ND = unknown, ED = unknown>({
 };
 
 type EdgeStyleComponentType = <ND, ED>(
-  props: EdgeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> }
+  props: EdgeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> },
 ) => React.ReactElement | null;
 
 /**
  * This component wraps around Ogma [`EdgeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addEdgeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the edges.
  */
-export const EdgeStyle = Object.assign(
-  EdgeStyleComponent as EdgeStyleComponentType,
-  {
-    Hovered,
-    Selected
-  }
-);
+export const EdgeStyle = Object.assign(EdgeStyleComponent as EdgeStyleComponentType, {
+  Hovered,
+  Selected,
+});
 
 // backward compatibility
 export { EdgeStyle as EdgeStyleRule };
