@@ -9,7 +9,10 @@ const isOgma6 = (ogma: Ogma<any, any>) => parseInt(ogma.build.version, 10) >= 6;
  * Ogma 6 takes `animate: boolean`, Ogma 5 takes `duration: number`.
  * Accept both props and translate to what the installed Ogma expects.
  */
-export function animationArg<ND, ED>(ogma: Ogma<ND, ED>, { animate, duration }: AnimationProps) {
+export function animationArg<ND, ED>(
+  ogma: Ogma<ND, ED>,
+  { animate, duration }: AnimationProps
+) {
   const arg = isOgma6(ogma)
     ? (animate ?? (duration === undefined ? undefined : duration > 0))
     : (duration ?? (animate === false ? 0 : undefined));
@@ -18,7 +21,10 @@ export function animationArg<ND, ED>(ogma: Ogma<ND, ED>, { animate, duration }: 
 }
 
 /** Replace `animate`/`duration` in the options with the one the installed Ogma understands. */
-export function withAnimation<ND, ED, P extends AnimationProps>(ogma: Ogma<ND, ED>, props: P): P {
+export function withAnimation<ND, ED, P extends AnimationProps>(
+  ogma: Ogma<ND, ED>,
+  props: P
+): P {
   const { animate, duration, ...rest } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
   const arg = animationArg(ogma, props);
   if (arg === undefined) return rest as P;
@@ -68,7 +74,11 @@ export function useTransformationCallbacks<ND, ED>(
     if (target !== transformation) return;
     if (props.onSetIndex) props.onSetIndex(transformation, index);
   };
-  const destroyedListener = ({ target }: { target: Transformation<ND, ED> }) => {
+  const destroyedListener = ({
+    target
+  }: {
+    target: Transformation<ND, ED>;
+  }) => {
     if (target !== transformation) return;
     if (props.onDestroyed) props.onDestroyed(transformation);
     ogma.events

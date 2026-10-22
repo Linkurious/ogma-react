@@ -1,7 +1,17 @@
 import { ReactNode, ReactElement } from "react";
 import { renderToString } from "react-dom/server";
-import { Ogma as OgmaLib, Node as OgmaNode, Edge, Point } from "@linkurious/ogma";
-import { Content, PositionGetter, Placement, TooltipEventFunctions } from "./types";
+import {
+  Ogma as OgmaLib,
+  Node as OgmaNode,
+  Edge,
+  Point
+} from "@linkurious/ogma";
+import {
+  Content,
+  PositionGetter,
+  Placement,
+  TooltipEventFunctions
+} from "./types";
 
 export function getContent(
   ogma: OgmaLib,
@@ -10,7 +20,8 @@ export function getContent(
   children?: ReactNode
 ): string {
   if (typeof content === "string") return content;
-  else if (typeof content === "function") return renderToString(content(ogma, position));
+  else if (typeof content === "function")
+    return renderToString(content(ogma, position));
   return renderToString(children as any);
 }
 
@@ -28,7 +39,9 @@ export function getCloseButton(
 ) {
   if (closeButton) {
     const closeButtonElement =
-      typeof closeButton === "string" ? closeButton : renderToString(closeButton as ReactElement);
+      typeof closeButton === "string"
+        ? closeButton
+        : renderToString(closeButton as ReactElement);
     return `<div class=${closeButtonClass}>${closeButtonElement}</div>`;
   }
   return "";
@@ -47,7 +60,10 @@ export function getEventNameFromTooltipEvent(
   }
 }
 
-function getOffsetAmount(target: OgmaNode | Edge | "background", zoom: number): number {
+function getOffsetAmount(
+  target: OgmaNode | Edge | "background",
+  zoom: number
+): number {
   // Get the offset amount based on the target type
 
   if (target instanceof OgmaNode) {
@@ -61,12 +77,19 @@ function getOffsetAmount(target: OgmaNode | Edge | "background", zoom: number): 
   return 0; // No offset for background
 }
 
-function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge, zoom: number) {
+function getStrokeWidth(
+  strokeType: "inner" | "outer",
+  target: OgmaNode | Edge,
+  zoom: number
+) {
   // Get the stroke width based on the type and zoom level
   // @ts-expect-error the attribute does exist
-  const strokeWidth = target.getAttribute(`${strokeType}Stroke.width`) as number;
+  const strokeWidth = target.getAttribute(
+    `${strokeType}Stroke.width`
+  ) as number;
   // @ts-expect-error the attribute does exist
-  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) > target.size) return 0;
+  if (target.getAttribute(`${strokeType}Stroke.minVisibleSize`) > target.size)
+    return 0;
 
   // @ts-expect-error the attribute does exist
   if (target.getAttribute(`${strokeType}Stroke.scalingMethod`) === "fixed") {
@@ -101,7 +124,11 @@ export function getOffset(
   return offset;
 }
 
-export function isOverflowing(bb: DOMRect, clientWidth: number, clientHeight: number) {
+export function isOverflowing(
+  bb: DOMRect,
+  clientWidth: number,
+  clientHeight: number
+) {
   if (bb.left < 0) {
     return "right";
   }

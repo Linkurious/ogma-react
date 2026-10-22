@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { Ogma } from "@linkurious/ogma";
-import { animationArg, withAnimation } from "../../../src/transformations/utils";
+import {
+  animationArg,
+  withAnimation
+} from "../../../src/transformations/utils";
 
-const ogma = (version: string) => ({ build: { version } }) as unknown as Ogma<unknown, unknown>;
+const ogma = (version: string) =>
+  ({ build: { version } }) as unknown as Ogma<unknown, unknown>;
 const v5 = ogma("5.3.11");
 const v6 = ogma("6.0.6");
 

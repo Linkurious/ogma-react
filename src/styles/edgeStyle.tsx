@@ -5,7 +5,13 @@ import {
   StyleRule,
   HoverEdgeOptions
 } from "@linkurious/ogma";
-import { useEffect, useState, Ref, forwardRef, useImperativeHandle } from "react";
+import {
+  useEffect,
+  useState,
+  Ref,
+  forwardRef,
+  useImperativeHandle
+} from "react";
 import { useOgma } from "../context";
 
 interface EdgeRuleProps<ND, ED> {
@@ -88,10 +94,13 @@ type EdgeStyleComponentType = <ND, ED>(
  * This component wraps around Ogma [`EdgeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addEdgeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the edges.
  */
-export const EdgeStyle = Object.assign(EdgeStyleComponent as EdgeStyleComponentType, {
-  Hovered,
-  Selected
-});
+export const EdgeStyle = Object.assign(
+  EdgeStyleComponent as EdgeStyleComponentType,
+  {
+    Hovered,
+    Selected
+  }
+);
 
 // backward compatibility
 export { EdgeStyle as EdgeStyleRule };

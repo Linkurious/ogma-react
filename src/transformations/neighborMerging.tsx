@@ -1,4 +1,10 @@
-import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
+import {
+  useEffect,
+  useState,
+  Ref,
+  useImperativeHandle,
+  forwardRef
+} from "react";
 import {
   NeighborMergingOptions,
   NeighborMerging as NeighborMergingTransformation
@@ -12,14 +18,18 @@ interface NeighborMergingPropsC<ND, ED>
     NeighborMergingOptions<ND, ED>,
     TransformationProps<ND, ED, NeighborMergingOptions<ND, ED>> {}
 
-export type NeighborMergingProps<ND, ED> = Omit<NeighborMergingPropsC<ND, ED>, "enabled">;
+export type NeighborMergingProps<ND, ED> = Omit<
+  NeighborMergingPropsC<ND, ED>,
+  "enabled"
+>;
 
 function NeighborMergingComponent<ND = unknown, ED = unknown>(
   props: NeighborMergingProps<ND, ED>,
   ref: Ref<NeighborMergingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
-  const [transformation, setTransformation] = useState<NeighborMergingTransformation<ND, ED>>();
+  const [transformation, setTransformation] =
+    useState<NeighborMergingTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
 
@@ -56,4 +66,6 @@ type NeighborMergingType = <ND, ED>(
   }
 ) => React.ReactElement | null;
 
-export const NeighborMerging = forwardRef(NeighborMergingComponent) as NeighborMergingType;
+export const NeighborMerging = forwardRef(
+  NeighborMergingComponent
+) as NeighborMergingType;

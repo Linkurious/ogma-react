@@ -154,7 +154,12 @@ export default function App() {
         />
 
         <EdgeStyle<ND, ED> attributes={{ width: edgeWidth }} />
-        {useClass && <StyleClass<ND, ED> name="class" nodeAttributes={styleClassNodeAttributes} />}
+        {useClass && (
+          <StyleClass<ND, ED>
+            name="class"
+            nodeAttributes={styleClassNodeAttributes}
+          />
+        )}
 
         <EdgeStyle.Hovered<ND, ED>
           attributes={{

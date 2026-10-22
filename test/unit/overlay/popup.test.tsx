@@ -44,10 +44,18 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect(ref.current?.element.querySelector(".ogma-popup--body")).toBeInstanceOf(HTMLElement);
-    expect(ref.current?.element.querySelector(".ogma-popup--close")).toBeDefined();
-    expect(ref.current?.element.querySelector(".custom-child-div")).toBeInstanceOf(HTMLElement);
-    expect(ref.current?.element.querySelector(".custom-child-div")!.textContent).toBe(text);
+    expect(
+      ref.current?.element.querySelector(".ogma-popup--body")
+    ).toBeInstanceOf(HTMLElement);
+    expect(
+      ref.current?.element.querySelector(".ogma-popup--close")
+    ).toBeDefined();
+    expect(
+      ref.current?.element.querySelector(".custom-child-div")
+    ).toBeInstanceOf(HTMLElement);
+    expect(
+      ref.current?.element.querySelector(".custom-child-div")!.textContent
+    ).toBe(text);
   });
 
   it("should support content prop", () => {
@@ -56,12 +64,22 @@ describe("Popup", () => {
 
     render(
       <Ogma graph={graph}>
-        <Popup position={{ x: 0, y: 0 }} ref={ref} isOpen contentClass="content" content={text} />
+        <Popup
+          position={{ x: 0, y: 0 }}
+          ref={ref}
+          isOpen
+          contentClass="content"
+          content={text}
+        />
       </Ogma>,
       div
     );
-    expect(ref.current?.element.querySelector(".content")).toBeInstanceOf(HTMLDivElement);
-    expect(ref.current?.element.querySelector(".content")!.textContent).toBe(text);
+    expect(ref.current?.element.querySelector(".content")).toBeInstanceOf(
+      HTMLDivElement
+    );
+    expect(ref.current?.element.querySelector(".content")!.textContent).toBe(
+      text
+    );
   });
 
   it("should close the popup on close button click", async () => {
@@ -133,9 +151,9 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect(ref.current?.element.querySelector(".custom-close-button")).toBeInstanceOf(
-      HTMLSpanElement
-    );
+    expect(
+      ref.current?.element.querySelector(".custom-close-button")
+    ).toBeInstanceOf(HTMLSpanElement);
   });
 
   it("should support custom bottom placement", () => {
@@ -155,9 +173,11 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--bottom")).toBe(
-      true
-    );
+    expect(
+      (ref.current?.element as HTMLDivElement).classList.contains(
+        "ogma-popup--bottom"
+      )
+    ).toBe(true);
   });
 
   it("should support custom left placement", () => {
@@ -177,9 +197,11 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--left")).toBe(
-      true
-    );
+    expect(
+      (ref.current?.element as HTMLDivElement).classList.contains(
+        "ogma-popup--left"
+      )
+    ).toBe(true);
   });
 
   it("should support custom right placement", () => {
@@ -199,8 +221,10 @@ describe("Popup", () => {
       </Ogma>,
       div
     );
-    expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--right")).toBe(
-      true
-    );
+    expect(
+      (ref.current?.element as HTMLDivElement).classList.contains(
+        "ogma-popup--right"
+      )
+    ).toBe(true);
   });
 });

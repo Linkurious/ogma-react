@@ -14,7 +14,10 @@ import { animationArg, withAnimation } from "./utils";
 
 // Helper types to extract the correct types from Ogma's addDrillDown method
 type OgmaInstance<ND, ED> = ReturnType<typeof useOgma<ND, ED>>;
-type AddDrillDownFn<ND, ED> = OgmaInstance<ND, ED>["transformations"]["addDrillDown"];
+type AddDrillDownFn<ND, ED> = OgmaInstance<
+  ND,
+  ED
+>["transformations"]["addDrillDown"];
 
 export type Drilldown<ND, ED> = ReturnType<AddDrillDownFn<ND, ED>>;
 export type DrilldownOptions<ND, ED> = NonNullable<
@@ -22,7 +25,9 @@ export type DrilldownOptions<ND, ED> = NonNullable<
 >;
 
 interface NodeDrilldownPropsBase<ND, ED>
-  extends DrilldownOptions<ND, ED>, TransformationProps<ND, ED, DrilldownOptions<ND, ED>> {}
+  extends
+    DrilldownOptions<ND, ED>,
+    TransformationProps<ND, ED, DrilldownOptions<ND, ED>> {}
 
 /** Options that exist in Ogma 5 only; ignored by Ogma 6. */
 interface LegacyDrilldownProps {
@@ -37,7 +42,10 @@ interface LegacyDrilldownProps {
 /**
  * Public props: we intentionally hide `enabled` and expose `disabled` (from TransformationProps).
  */
-export type NodeDrilldownProps<ND, ED> = Omit<NodeDrilldownPropsBase<ND, ED>, "enabled"> &
+export type NodeDrilldownProps<ND, ED> = Omit<
+  NodeDrilldownPropsBase<ND, ED>,
+  "enabled"
+> &
   LegacyDrilldownProps;
 
 function NodeDrilldownComponent<ND = unknown, ED = unknown>(
@@ -46,7 +54,10 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
 ) {
   const ogma = useOgma<ND, ED>();
 
-  const [transformation, setTransformation] = useState<Drilldown<ND, ED> | null>(null);
+  const [transformation, setTransformation] = useState<Drilldown<
+    ND,
+    ED
+  > | null>(null);
 
   // Expose the transformation instance (or null while mounting/unmounted)
   useImperativeHandle(ref, () => transformation!, [transformation]);
@@ -115,4 +126,6 @@ export type NodeDrilldownComponentType = <ND = unknown, ED = unknown>(
   props: NodeDrilldownProps<ND, ED> & RefAttributes<Drilldown<ND, ED> | null>
 ) => ReactElement | null;
 
-export const NodeDrilldown = forwardRef(NodeDrilldownComponent) as NodeDrilldownComponentType;
+export const NodeDrilldown = forwardRef(
+  NodeDrilldownComponent
+) as NodeDrilldownComponentType;

@@ -81,7 +81,10 @@ test("tooltip", async () => {
     button: "right"
   });
 
-  await expect(page).toHaveScreenshot("tooltip-opened.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "tooltip-opened.png",
+    getScreenshotOptions(page)
+  );
 
   // Click outside to close the tooltip
   await page.mouse.click(0, 0);
@@ -112,7 +115,10 @@ test("tooltip repositioning", async () => {
     button: "right"
   });
 
-  await expect(page).toHaveScreenshot("tooltip-repositioned.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "tooltip-repositioned.png",
+    getScreenshotOptions(page)
+  );
 });
 
 test("add node", async () => {
@@ -121,7 +127,10 @@ test("add node", async () => {
   await page.getByText("Add node").click();
   await page.mouse.click(50, 50);
 
-  await expect(page).toHaveScreenshot("node-added.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "node-added.png",
+    getScreenshotOptions(page)
+  );
 });
 
 test("add node with class", async () => {
@@ -137,7 +146,10 @@ test("add node with class", async () => {
   // Wait for the force layout to finish
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  await expect(page).toHaveScreenshot("node-added-with-class.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "node-added-with-class.png",
+    getScreenshotOptions(page)
+  );
 });
 
 test("node grouping", async () => {
@@ -147,7 +159,10 @@ test("node grouping", async () => {
   await page.mouse.click(50, 50);
   await page.waitForTimeout(1000);
 
-  await expect(page).toHaveScreenshot("node-grouping-disabled.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "node-grouping-disabled.png",
+    getScreenshotOptions(page)
+  );
 
   // Disable node grouping
   await page.getByTitle("Show controls").click();
@@ -155,7 +170,10 @@ test("node grouping", async () => {
   await page.mouse.click(50, 50);
   await page.waitForTimeout(1000);
 
-  await expect(page).toHaveScreenshot("node-grouping-reenabled.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "node-grouping-reenabled.png",
+    getScreenshotOptions(page)
+  );
 });
 
 test("geo mode", async () => {
@@ -164,14 +182,20 @@ test("geo mode", async () => {
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
 
-  await expect(page).toHaveScreenshot("geo-mode-enabled.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "geo-mode-enabled.png",
+    getScreenshotOptions(page)
+  );
 
   // Disable geo mode
   await page.getByTitle("Show controls").click();
   await page.getByText("Geo mode").click();
   await page.mouse.click(50, 50);
 
-  await expect(page).toHaveScreenshot("geo-mode-disabled.png", getScreenshotOptions(page));
+  await expect(page).toHaveScreenshot(
+    "geo-mode-disabled.png",
+    getScreenshotOptions(page)
+  );
 });
 
 test.afterAll(async () => {

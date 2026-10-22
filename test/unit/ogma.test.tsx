@@ -52,7 +52,11 @@ describe("Ogma", () => {
         return resolve(null);
       };
       render(
-        <Ogma graph={graph} onReady={onReady} options={{ backgroundColor, minimumWidth }} />,
+        <Ogma
+          graph={graph}
+          onReady={onReady}
+          options={{ backgroundColor, minimumWidth }}
+        />,
         div
       );
     });
@@ -69,7 +73,13 @@ describe("Ogma", () => {
     expect(ref.current?.getOptions().backgroundColor).toBe(backgroundColor);
 
     const newBackgroundColor = "blue";
-    rerender(<Ogma ref={ref} graph={graph} options={{ backgroundColor: newBackgroundColor }} />);
+    rerender(
+      <Ogma
+        ref={ref}
+        graph={graph}
+        options={{ backgroundColor: newBackgroundColor }}
+      />
+    );
 
     expect(ref.current?.getOptions().backgroundColor).toBe(newBackgroundColor);
   });
@@ -108,7 +118,12 @@ describe("Ogma", () => {
     };
 
     const { rerender } = render(
-      <Ogma ref={ref} graph={mockData} onAddNodes={mockOnNodesAdded} onReady={onReady} />,
+      <Ogma
+        ref={ref}
+        graph={mockData}
+        onAddNodes={mockOnNodesAdded}
+        onReady={onReady}
+      />,
       div
     );
 

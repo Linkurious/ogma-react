@@ -7,7 +7,6 @@ afterEach(() => {
   cleanup();
 });
 
-// @ts-expect-error
 const customRender = (ui: React.ReactElement, options = {}) =>
   render(ui, {
     // wrap provider(s) here if needed

@@ -1,4 +1,10 @@
-import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
+import {
+  useEffect,
+  useState,
+  Ref,
+  useImperativeHandle,
+  forwardRef
+} from "react";
 import {
   NeighborGenerationOptions,
   NeighborGeneration as NeighborGenerationTransformation
@@ -12,14 +18,18 @@ interface NeighborGenerationPropsC<ND, ED>
     NeighborGenerationOptions<ND, ED>,
     TransformationProps<ND, ED, NeighborGenerationOptions<ND, ED>> {}
 
-export type NeighborGenerationProps<ND, ED> = Omit<NeighborGenerationPropsC<ND, ED>, "enabled">;
+export type NeighborGenerationProps<ND, ED> = Omit<
+  NeighborGenerationPropsC<ND, ED>,
+  "enabled"
+>;
 
 function NeighborGenerationComponent<ND = unknown, ED = unknown>(
   props: NeighborGenerationProps<ND, ED>,
   ref: Ref<NeighborGenerationTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
-  const [transformation, setTransformation] = useState<NeighborGenerationTransformation<ND, ED>>();
+  const [transformation, setTransformation] =
+    useState<NeighborGenerationTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
 
@@ -45,7 +55,12 @@ function NeighborGenerationComponent<ND = unknown, ED = unknown>(
 
   useEffect(() => {
     transformation?.setOptions(withAnimation(ogma, props));
-  }, [props.edgeGenerator, props.nodeGenerator, props.neighborIdFunction, props.selector]);
+  }, [
+    props.edgeGenerator,
+    props.nodeGenerator,
+    props.neighborIdFunction,
+    props.selector
+  ]);
 
   return null;
 }
@@ -56,4 +71,6 @@ type NeighborGenerationType = <ND, ED>(
   }
 ) => React.ReactElement | null;
 
-export const NeighborGeneration = forwardRef(NeighborGenerationComponent) as NeighborGenerationType;
+export const NeighborGeneration = forwardRef(
+  NeighborGenerationComponent
+) as NeighborGenerationType;

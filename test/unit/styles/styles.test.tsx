@@ -36,7 +36,11 @@ describe("styles", async () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
     await ogma.view.afterNextFrame();
-    expect(ogma.getNodes().getAttribute("color")).toStrictEqual(["red", "red", "red"]);
+    expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
+      "red",
+      "red",
+      "red"
+    ]);
   });
 
   it("Uses selector for NodeStyle", async () => {
@@ -44,14 +48,21 @@ describe("styles", async () => {
     act(() =>
       div.render(
         <Ogma graph={graph} ref={ref}>
-          <NodeStyle attributes={{ color: "red" }} selector={(node) => Number(node.getId()) < 2} />
+          <NodeStyle
+            attributes={{ color: "red" }}
+            selector={(node) => Number(node.getId()) < 2}
+          />
         </Ogma>
       )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
     await ogma.view.afterNextFrame();
-    expect(ogma.getNodes().getAttribute("color")).toStrictEqual(["red", "red", "green"]);
+    expect(ogma.getNodes().getAttribute("color")).toStrictEqual([
+      "red",
+      "red",
+      "green"
+    ]);
   });
 
   it("Sets the attributes for selected nodes correctly", async () => {
@@ -87,7 +98,9 @@ describe("styles", async () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
     const node = ogma.getNodes().get(0);
-    await ogma.mouse.move(ogma.view.graphToScreenCoordinates(node.getPosition()));
+    await ogma.mouse.move(
+      ogma.view.graphToScreenCoordinates(node.getPosition())
+    );
     await ogma.view.afterNextFrame();
     await ogma.view.afterNextFrame();
     expect(node.getAttribute("color")).toStrictEqual("red");
@@ -136,7 +149,10 @@ describe("styles", async () => {
     await waitFor(() => expect(ref.current).toBeTruthy());
     await ref.current!.view.afterNextFrame();
 
-    expect(ref.current!.getEdges().getAttribute("color")).toStrictEqual(["red", "red"]);
+    expect(ref.current!.getEdges().getAttribute("color")).toStrictEqual([
+      "red",
+      "red"
+    ]);
   });
 
   it("Uses selector for EdgeStyle", async () => {
@@ -155,7 +171,10 @@ describe("styles", async () => {
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     await ref.current!.view.afterNextFrame();
-    expect(ref.current!.getEdges().getAttribute("color")).toStrictEqual(["grey", "green"]);
+    expect(ref.current!.getEdges().getAttribute("color")).toStrictEqual([
+      "grey",
+      "green"
+    ]);
   });
 
   it("Sets the attributes for selected edges correctly", async () => {

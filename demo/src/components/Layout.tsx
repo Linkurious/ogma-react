@@ -14,7 +14,10 @@ export function LayoutService() {
 
   useEffect(() => {
     // register listener
-    ogma.events.on(["addNodes", "transformationEnabled", "transformationDisabled"], onNodesAdded);
+    ogma.events.on(
+      ["addNodes", "transformationEnabled", "transformationDisabled"],
+      onNodesAdded
+    );
 
     // cleanup
     return () => {

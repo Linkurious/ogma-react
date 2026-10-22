@@ -40,12 +40,19 @@ export function Controls({
     <>
       <div className="control-buttons">
         {!drawerShown && (
-          <button onClick={() => setDrawerShown(!drawerShown)} title="Show controls">
+          <button
+            onClick={() => setDrawerShown(!drawerShown)}
+            title="Show controls"
+          >
             <MenuIcon width={18} />
           </button>
         )}
       </div>
-      <Drawer isOpen={drawerShown} onClosed={() => setDrawerShown(false)} className="controls">
+      <Drawer
+        isOpen={drawerShown}
+        onClosed={() => setDrawerShown(false)}
+        className="controls"
+      >
         <h2>Controls</h2>
         <div className="controls-section">
           <Toggle

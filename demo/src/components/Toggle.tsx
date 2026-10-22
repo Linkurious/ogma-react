@@ -8,7 +8,12 @@ interface ToggleProps {
   className?: string;
 }
 
-export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, label, className }) => {
+export const Toggle: React.FC<ToggleProps> = ({
+  checked,
+  onChange,
+  label,
+  className
+}) => {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       if (typeof onChange === "function") onChange(evt.target.checked);

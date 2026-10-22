@@ -1,20 +1,35 @@
-import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
-import { NodeGroupingOptions, NodeGrouping as NodeGroupingTransformation } from "@linkurious/ogma";
+import {
+  useEffect,
+  useState,
+  Ref,
+  useImperativeHandle,
+  forwardRef
+} from "react";
+import {
+  NodeGroupingOptions,
+  NodeGrouping as NodeGroupingTransformation
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 import { TransformationProps } from "./types";
 
 interface NodeGroupingPropsC<ND, ED>
-  extends NodeGroupingOptions<ND, ED>, TransformationProps<ND, ED, NodeGroupingOptions<ND, ED>> {}
+  extends
+    NodeGroupingOptions<ND, ED>,
+    TransformationProps<ND, ED, NodeGroupingOptions<ND, ED>> {}
 
-export type NodeGroupingProps<ND, ED> = Omit<NodeGroupingPropsC<ND, ED>, "enabled">;
+export type NodeGroupingProps<ND, ED> = Omit<
+  NodeGroupingPropsC<ND, ED>,
+  "enabled"
+>;
 
 function NodeGroupingComponent<ND = unknown, ED = unknown>(
   props: NodeGroupingProps<ND, ED>,
   ref?: Ref<NodeGroupingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
-  const [transformation, setTransformation] = useState<NodeGroupingTransformation<ND, ED>>();
+  const [transformation, setTransformation] =
+    useState<NodeGroupingTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
   useEffect(() => {
@@ -59,4 +74,6 @@ type NodeGroupingType = <ND, ED>(
   }
 ) => React.ReactElement | null;
 
-export const NodeGrouping = forwardRef(NodeGroupingComponent) as NodeGroupingType;
+export const NodeGrouping = forwardRef(
+  NodeGroupingComponent
+) as NodeGroupingType;

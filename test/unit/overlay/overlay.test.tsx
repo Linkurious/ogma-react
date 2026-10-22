@@ -23,7 +23,9 @@ describe("Overlay", () => {
       </Ogma>
     );
 
-    expect(ref.current?.element.style.transform).toContain("translate(100px, 200px)");
+    expect(ref.current?.element.style.transform).toContain(
+      "translate(100px, 200px)"
+    );
   });
 
   it("should handle position function", () => {
@@ -35,7 +37,9 @@ describe("Overlay", () => {
       </Ogma>
     );
 
-    expect(ref.current?.element.style.transform).toContain("translate(50px, 50px)");
+    expect(ref.current?.element.style.transform).toContain(
+      "translate(50px, 50px)"
+    );
   });
 
   it("should handle position changes", () => {
@@ -45,13 +49,17 @@ describe("Overlay", () => {
         <Overlay position={{ x: 0, y: 0 }} ref={ref} />
       </Ogma>
     );
-    expect(ref.current?.element.style.transform).toContain("translate(0px, 0px)");
+    expect(ref.current?.element.style.transform).toContain(
+      "translate(0px, 0px)"
+    );
     rerender(
       <Ogma>
         <Overlay position={{ x: 100, y: 100 }} ref={ref} />
       </Ogma>
     );
-    expect(ref.current?.element.style.transform).toContain("translate(100px, 100px)");
+    expect(ref.current?.element.style.transform).toContain(
+      "translate(100px, 100px)"
+    );
   });
 
   it("should handle index", () => {
@@ -89,7 +97,11 @@ describe("Overlay", () => {
     const ref = React.createRef<OgmaOverlay>();
     render(
       <Ogma>
-        <Overlay position={{ x: 0, y: 0 }} ref={ref} size={{ width: 100, height: 100 }} />
+        <Overlay
+          position={{ x: 0, y: 0 }}
+          ref={ref}
+          size={{ width: 100, height: 100 }}
+        />
       </Ogma>
     );
 
@@ -111,14 +123,22 @@ describe("Overlay", () => {
     const ref = React.createRef<OgmaOverlay>();
     const { rerender } = render(
       <Ogma>
-        <Overlay position={{ x: 0, y: 0 }} className="initial-class" ref={ref} />
+        <Overlay
+          position={{ x: 0, y: 0 }}
+          className="initial-class"
+          ref={ref}
+        />
       </Ogma>
     );
     expect(ref.current?.element.className).toContain("initial-class");
 
     rerender(
       <Ogma>
-        <Overlay position={{ x: 0, y: 0 }} className="updated-class" ref={ref} />
+        <Overlay
+          position={{ x: 0, y: 0 }}
+          className="updated-class"
+          ref={ref}
+        />
       </Ogma>
     );
     expect(ref.current?.element.className).toContain("updated-class");
@@ -136,7 +156,9 @@ describe("Overlay", () => {
     );
 
     expect(ref.current?.element.querySelector(".child")).toBeDefined();
-    expect(ref.current?.element.querySelector(".child")?.textContent).toEqual("Child Content");
+    expect(ref.current?.element.querySelector(".child")?.textContent).toEqual(
+      "Child Content"
+    );
   });
 
   it("should clean up on unmount", async () => {

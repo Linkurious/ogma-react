@@ -23,5 +23,8 @@ export interface TransformationProps<
   onDisabled?: (transformation: Transformation<ND, ED, C>) => void;
   onDestroyed?: (transformation: Transformation<ND, ED, C>) => void;
   onUpdated?: (transformation: Transformation<ND, ED, C>) => void;
-  onSetIndex?: (transformation: Transformation<ND, ED, C>, index: number) => void;
+  onSetIndex?: (
+    transformation: Transformation<ND, ED, C>,
+    index: number
+  ) => void;
 }

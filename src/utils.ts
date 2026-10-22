@@ -1,6 +1,10 @@
 import { Ogma, EventTypes } from "@linkurious/ogma";
 import { OgmaProps } from "./ogma";
-import { getEventNameFromProp, EventHandlers, forEachEventHandler } from "./types";
+import {
+  getEventNameFromProp,
+  EventHandlers,
+  forEachEventHandler
+} from "./types";
 
 export function handleEventProps<ND, ED>(
   ogma: Ogma<ND, ED>,

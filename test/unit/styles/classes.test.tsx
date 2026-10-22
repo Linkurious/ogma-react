@@ -51,7 +51,9 @@ describe("StyleClass", () => {
         </Ogma>
       );
     });
-    expect(mockCreateClass).toHaveBeenCalledWith(expect.objectContaining({ name: "test" }));
+    expect(mockCreateClass).toHaveBeenCalledWith(
+      expect.objectContaining({ name: "test" })
+    );
   });
 
   it("updates the style class when props change", async () => {

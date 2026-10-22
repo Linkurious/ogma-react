@@ -1,4 +1,10 @@
-import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
+import {
+  useEffect,
+  useState,
+  Ref,
+  useImperativeHandle,
+  forwardRef
+} from "react";
 import {
   NodeCollapsingOptions,
   NodeCollapsing as NodeCollapsingTransformation
@@ -12,14 +18,18 @@ interface NodeCollapsingPropsC<ND, ED>
     NodeCollapsingOptions<ND, ED>,
     TransformationProps<ND, ED, NodeCollapsingOptions<ND, ED>> {}
 
-export type NodeCollapsingProps<ND, ED> = Omit<NodeCollapsingPropsC<ND, ED>, "enabled">;
+export type NodeCollapsingProps<ND, ED> = Omit<
+  NodeCollapsingPropsC<ND, ED>,
+  "enabled"
+>;
 
 export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
   props: NodeCollapsingProps<ND, ED>,
   ref: Ref<NodeCollapsingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
-  const [transformation, setTransformation] = useState<NodeCollapsingTransformation<ND, ED>>();
+  const [transformation, setTransformation] =
+    useState<NodeCollapsingTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
 
@@ -56,4 +66,6 @@ type NodeCollapsingType = <ND, ED>(
   }
 ) => React.ReactElement | null;
 
-export const NodeCollapsing = forwardRef(NodeCollapsingComponent) as NodeCollapsingType;
+export const NodeCollapsing = forwardRef(
+  NodeCollapsingComponent
+) as NodeCollapsingType;

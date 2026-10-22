@@ -5,7 +5,13 @@ import {
   StyleRule,
   HoverNodeOptions
 } from "@linkurious/ogma";
-import { useEffect, Ref, forwardRef, useState, useImperativeHandle } from "react";
+import {
+  useEffect,
+  Ref,
+  forwardRef,
+  useState,
+  useImperativeHandle
+} from "react";
 import { useOgma } from "../context";
 
 interface NodeRuleProps<ND, ED> {
@@ -87,10 +93,13 @@ type NodeStyleComponentType = <ND, ED>(
  * This component wraps around Ogma [`NodeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addNodeRule). It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the nodes.
  */
-export const NodeStyle = Object.assign(NodeStyleComponent as NodeStyleComponentType, {
-  Hovered,
-  Selected
-});
+export const NodeStyle = Object.assign(
+  NodeStyleComponent as NodeStyleComponentType,
+  {
+    Hovered,
+    Selected
+  }
+);
 
 // backward compatibility
 export { NodeStyle as NodeStyleRule };

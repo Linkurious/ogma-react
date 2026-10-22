@@ -1,11 +1,22 @@
-import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
-import { NodeFilterOptions, NodeFilter as NodeFilterTransformation } from "@linkurious/ogma";
+import {
+  useEffect,
+  useState,
+  Ref,
+  useImperativeHandle,
+  forwardRef
+} from "react";
+import {
+  NodeFilterOptions,
+  NodeFilter as NodeFilterTransformation
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
 import { toggle, useTransformationCallbacks, withAnimation } from "./utils";
 
 interface NodeFilterPropsC<ED, ND>
-  extends NodeFilterOptions<ED, ND>, TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
+  extends
+    NodeFilterOptions<ED, ND>,
+    TransformationProps<ND, ED, NodeFilterOptions<ED, ND>> {}
 
 export type NodeFilterProps<ND, ED> = Omit<NodeFilterPropsC<ND, ED>, "enabled">;
 
@@ -14,7 +25,8 @@ function NodeFilterComponent<ND = unknown, ED = unknown>(
   ref?: Ref<NodeFilterTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
-  const [transformation, setTransformation] = useState<NodeFilterTransformation<ND, ED>>();
+  const [transformation, setTransformation] =
+    useState<NodeFilterTransformation<ND, ED>>();
 
   useImperativeHandle(ref, () => transformation!, [transformation]);
 

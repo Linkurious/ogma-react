@@ -1,6 +1,16 @@
-import { StyleClassDefinition, StyleClass as OgmaStyleClass } from "@linkurious/ogma";
+import {
+  StyleClassDefinition,
+  StyleClass as OgmaStyleClass
+} from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { forwardRef, Ref, useEffect, useImperativeHandle, useState, memo } from "react";
+import {
+  forwardRef,
+  Ref,
+  useEffect,
+  useImperativeHandle,
+  useState,
+  memo
+} from "react";
 
 interface StyleProps<ND, ED> extends StyleClassDefinition<ND, ED> {
   name: string;
@@ -20,9 +30,13 @@ const styleClassComponent = forwardRef(
     ref?: Ref<OgmaStyleClass<ND, ED>>
   ) => {
     const ogma = useOgma<ND, ED>();
-    const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(null);
+    const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(
+      null
+    );
 
-    useImperativeHandle(ref, () => styleClass as OgmaStyleClass<ND, ED>, [styleClass]);
+    useImperativeHandle(ref, () => styleClass as OgmaStyleClass<ND, ED>, [
+      styleClass
+    ]);
 
     useEffect(() => {
       const style = {
@@ -75,7 +89,10 @@ const styleClassComponent = forwardRef(
   }
 );
 
-const arePropsEqual = <ND, ED>(prev: StyleProps<ND, ED>, next: StyleProps<ND, ED>) => {
+const arePropsEqual = <ND, ED>(
+  prev: StyleProps<ND, ED>,
+  next: StyleProps<ND, ED>
+) => {
   return (
     prev.name === next.name &&
     prev.edgeAttributes === next.edgeAttributes &&
@@ -95,4 +112,7 @@ type StyleClassComponentType = <ND, ED>(
  * This component wraps around Ogma [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle) API. It allows you to add a class style to the
  * Ogma instance to calculate the visual appearance attributes of the nodes and edges.
  */
-export const StyleClass = memo(styleClassComponent, arePropsEqual) as StyleClassComponentType;
+export const StyleClass = memo(
+  styleClassComponent,
+  arePropsEqual
+) as StyleClassComponentType;

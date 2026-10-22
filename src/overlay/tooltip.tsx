@@ -1,4 +1,11 @@
-import { useEffect, useState, ReactNode, Ref, forwardRef, useImperativeHandle } from "react";
+import {
+  useEffect,
+  useState,
+  ReactNode,
+  Ref,
+  forwardRef,
+  useImperativeHandle
+} from "react";
 
 import {
   Overlay as OverlayLayer,
@@ -9,7 +16,12 @@ import {
   Edge
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
-import { getEventNameFromTooltipEvent, getOffset, getTranslate, isOverflowing } from "./utils";
+import {
+  getEventNameFromTooltipEvent,
+  getOffset,
+  getTranslate,
+  isOverflowing
+} from "./utils";
 import { Placement, TooltipEventFunctions } from "./types";
 import { createPortal } from "react-dom";
 
@@ -35,7 +47,11 @@ interface TooltipProps<K extends keyof TooltipEventFunctions> {
 
 const offScreenPos: Point = { x: -9999, y: -9999 };
 
-const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, ED = unknown>(
+const TooltipComponent = <
+  K extends keyof TooltipEventFunctions,
+  ND = unknown,
+  ED = unknown
+>(
   {
     eventName,
     position,
@@ -48,16 +64,23 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
   ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma<ND, ED>();
-  const [target, setTarget] = useState<OgmaNode<ND, ED> | Edge<ED, ND> | Point>();
+  const [target, setTarget] = useState<
+    OgmaNode<ND, ED> | Edge<ED, ND> | Point
+  >();
   const [point, setPoint] = useState<Point>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
 
   useImperativeHandle(ref, () => layer as OverlayLayer, [layer]);
 
-  function showTooltip(target: OgmaNode<ND, ED> | Edge<ED, ND> | "background", point: Point) {
+  function showTooltip(
+    target: OgmaNode<ND, ED> | Edge<ED, ND> | "background",
+    point: Point
+  ) {
     // If the position is not set, use the point provided
     if (!position) {
-      const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
+      const zoom = ogma.geo.enabled()
+        ? ogma.geo.getZoom()!
+        : ogma.view.getZoom();
       const offset = getOffset(target, zoom, placement);
       const pos = {
         x: point.x + offset.x,
@@ -216,7 +239,8 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     }
     if (placement || bodyClass) {
       // Update the class of the layer based on the placement
-      layer.element.firstElementChild!.className = "ogma-popup--body " + bodyClass;
+      layer.element.firstElementChild!.className =
+        "ogma-popup--body " + bodyClass;
     }
     if (size) {
       // Update the size of the layer if it exists
@@ -232,11 +256,20 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     const window = element.ownerDocument.defaultView!;
 
     // Check if the tooltip is overflowing and adjust the placement if needed
-    const newPlacement = isOverflowing(bb, window.innerWidth, window.innerHeight);
+    const newPlacement = isOverflowing(
+      bb,
+      window.innerWidth,
+      window.innerHeight
+    );
     if (newPlacement) {
       // Recalculate the offset with the new placement
-      const zoom = ogma.geo.enabled() ? ogma.geo.getZoom()! : ogma.view.getZoom();
-      const t = target instanceof OgmaNode || target instanceof Edge ? target : "background";
+      const zoom = ogma.geo.enabled()
+        ? ogma.geo.getZoom()!
+        : ogma.view.getZoom();
+      const t =
+        target instanceof OgmaNode || target instanceof Edge
+          ? target
+          : "background";
       const offset = getOffset(t, zoom, newPlacement);
 
       layer?.setPosition({
@@ -266,7 +299,9 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     }
     return createPortal(content, layer.element.firstElementChild!);
   } else {
-    return children ? createPortal(children, layer.element.firstElementChild!) : null;
+    return children
+      ? createPortal(children, layer.element.firstElementChild!)
+      : null;
   }
 };
 
