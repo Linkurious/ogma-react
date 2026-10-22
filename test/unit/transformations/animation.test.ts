@@ -41,7 +41,7 @@ describe("withAnimation", () => {
   });
 
   it("strips both keys when neither is set", () => {
-    expect(withAnimation(v6, { a: 1 })).toEqual({ a: 1 });
+    expect(withAnimation(v6, { animate: undefined, a: 1 })).toEqual({ a: 1 });
     expect(withAnimation(v5, { animate: true, a: 1 })).toEqual({ a: 1 });
   });
 });
