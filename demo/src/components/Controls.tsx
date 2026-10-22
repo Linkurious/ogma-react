@@ -107,11 +107,7 @@ export function Controls({
           </div>
         </div>
         <div className="controls-section">
-          <Toggle
-            checked={useClass}
-            onChange={setUseClass}
-            label="Use class"
-          />
+          <Toggle checked={useClass} onChange={setUseClass} label="Use class" />
         </div>
       </Drawer>
     </>

@@ -12,7 +12,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   isOpen,
   children,
   onClosed,
-  className,
+  className
 }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(isOpen);
 

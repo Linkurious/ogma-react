@@ -16,76 +16,78 @@ interface StyleProps<ND, ED> extends StyleClassDefinition<ND, ED> {
   name: string;
 }
 
-const styleClassComponent = forwardRef(<ND = unknown, ED = unknown>(
-  {
-    name,
-    edgeAttributes,
-    edgeDependencies,
-    edgeOutput,
-    nodeAttributes,
-    nodeDependencies,
-    nodeOutput
-  }: StyleProps<ND, ED>,
-  ref?: Ref<OgmaStyleClass<ND, ED>>
-) => {
-  const ogma = useOgma<ND, ED>();
-  const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(
-    null
-  );
-
-  useImperativeHandle(ref, () => styleClass as OgmaStyleClass<ND, ED>, [
-    styleClass
-  ]);
-
-  useEffect(() => {
-    const style = {
+const styleClassComponent = forwardRef(
+  <ND = unknown, ED = unknown>(
+    {
+      name,
       edgeAttributes,
       edgeDependencies,
       edgeOutput,
       nodeAttributes,
       nodeDependencies,
       nodeOutput
-    };
+    }: StyleProps<ND, ED>,
+    ref?: Ref<OgmaStyleClass<ND, ED>>
+  ) => {
+    const ogma = useOgma<ND, ED>();
+    const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(
+      null
+    );
 
-    async function setup() {
-      const newStyleClass = ogma.styles.createClass({ name, ...style });
-      await ogma.view.afterNextFrame();
-      setStyleClass(newStyleClass);
-    }
-    setup();
+    useImperativeHandle(ref, () => styleClass as OgmaStyleClass<ND, ED>, [
+      styleClass
+    ]);
 
-    return () => {
-      async function cleanup() {
-        // Only destroy if we have a reference and it still exists
-        const currentClass = ogma.styles.getClass(name);
-        if (currentClass) await currentClass.destroy();
-        setStyleClass(null);
+    useEffect(() => {
+      const style = {
+        edgeAttributes,
+        edgeDependencies,
+        edgeOutput,
+        nodeAttributes,
+        nodeDependencies,
+        nodeOutput
+      };
+
+      async function setup() {
+        const newStyleClass = ogma.styles.createClass({ name, ...style });
+        await ogma.view.afterNextFrame();
+        setStyleClass(newStyleClass);
       }
-      cleanup();
-    };
-  }, []);
+      setup();
 
-  useEffect(() => {
-    if (!styleClass) return;
-    styleClass.update({
+      return () => {
+        async function cleanup() {
+          // Only destroy if we have a reference and it still exists
+          const currentClass = ogma.styles.getClass(name);
+          if (currentClass) await currentClass.destroy();
+          setStyleClass(null);
+        }
+        cleanup();
+      };
+    }, []);
+
+    useEffect(() => {
+      if (!styleClass) return;
+      styleClass.update({
+        edgeAttributes,
+        edgeDependencies,
+        edgeOutput,
+        nodeAttributes,
+        nodeDependencies,
+        nodeOutput
+      });
+    }, [
       edgeAttributes,
       edgeDependencies,
       edgeOutput,
       nodeAttributes,
       nodeDependencies,
       nodeOutput
-    });
-  }, [
-    edgeAttributes,
-    edgeDependencies,
-    edgeOutput,
-    nodeAttributes,
-    nodeDependencies,
-    nodeOutput
-  ]);
+    ]);
 
-  return null;
-});
+    return null;
+  }
+);
 
 const arePropsEqual = <ND, ED>(
   prev: StyleProps<ND, ED>,
@@ -107,7 +109,12 @@ type StyleClassComponentType = <ND, ED>(
 ) => React.ReactElement | null;
 
 /**
- * This component wraps around Ogma [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle) API. It allows you to add a class style to the
- * Ogma instance to calculate the visual appearance attributes of the nodes and edges.
+ * This component wraps around Ogma
+ * [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle)
+ * API. It allows you to add a class style to the Ogma instance to calculate
+ * the visual appearance attributes of the nodes and edges.
  */
-export const StyleClass = memo(styleClassComponent, arePropsEqual) as StyleClassComponentType;
+export const StyleClass = memo(
+  styleClassComponent,
+  arePropsEqual
+) as StyleClassComponentType;

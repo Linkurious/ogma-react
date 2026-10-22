@@ -41,7 +41,8 @@
     "build:demo": "vite build demo",
     "build:lib": "vite build && npm run build:files",
     "build:files": "scripts/prepublish.mjs && cp README.md dist",
-    "format": "prettier -w src/**/*.{ts,tsx} demo/**/*.{ts,tsx} test/**/*.{ts,tsx}",
+    "format": "oxfmt --write src demo test",
+    "format:check": "oxfmt --check src demo test",
     "lint": "oxlint -A no-unsafe-optional-chaining src demo test",
     "lint:fix": "oxlint -A no-unsafe-optional-chaining --fix src demo test",
     "test": "vitest",
@@ -55,12 +56,9 @@
     "upload": "npm run doc:publish",
     "prepare": "husky"
   },
-  "prettier": {
-    "trailingComma": "none"
-  },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "prettier --write",
+      "oxfmt --write",
       "oxlint -A no-unsafe-optional-chaining --fix"
     ]
   },
@@ -71,10 +69,10 @@
   },
   "devDependencies": {
     "@linkurious/code-tools": "0.2.0",
+    "@linkurious/eslint-config-ogma": "3.0.0-beta",
     "@linkurious/ogma-styles": "0.0.8",
     "@next/bundle-analyzer": "14.2.35",
     "@playwright/test": "1.58.1",
-    "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/lodash.throttle": "4.1.9",
@@ -92,8 +90,8 @@
     "jsdom": "28.0.0",
     "leaflet": "1.9.4",
     "lint-staged": "16.2.7",
+    "oxfmt": "0.73.0",
     "oxlint": "1.88.0",
-    "prettier": "3.8.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-feather": "2.0.10",

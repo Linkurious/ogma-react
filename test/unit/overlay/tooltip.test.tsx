@@ -192,14 +192,15 @@ describe("Tooltip", () => {
 
       expect(ref.current?.isHidden()).toBe(false);
 
-      // Hide the tooltip by simulating its counterpart event (e.g., moving the mouse away for hover)
+      // Hide the tooltip by simulating its counterpart event
+      // (e.g., moving the mouse away for hover)
       await act(hideTooltip);
 
       expect(ref.current?.isHidden()).toBe(true);
     }
   });
 
-  it("should render the tooltip dynamically based on the event target", async () => {
+  it("should render the tooltip based on the event target", async () => {
     const ogmaRef = createRef<OgmaLib>();
 
     render(

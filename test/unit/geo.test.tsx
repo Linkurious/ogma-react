@@ -1,7 +1,6 @@
 import { Ogma as OgmaLib } from "@linkurious/ogma";
-import { Ogma } from "../../src";
+import { Ogma, Geo } from "../../src";
 import { createRef } from "react";
-import { Geo } from "../../src";
 import { render } from "./utils";
 
 import * as L from "leaflet";

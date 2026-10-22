@@ -13,9 +13,9 @@ import {
   Ogma as OgmaLib,
   Options as OgmaOptions,
   RawGraph,
-  EventTypes
+  EventTypes,
+  Theme
 } from "@linkurious/ogma";
-import { Theme } from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import { EventHandlerProps, EventHandlers } from "./types";
 import { isContentEqual, handleEventProps } from "./utils";

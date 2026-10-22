@@ -72,7 +72,8 @@ type EdgeGroupingType = <ND, ED>(
 ) => React.ReactElement | null;
 
 /**
- * Edge grouping transformation component. It wraps around Ogma [`EdgeGrouping` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeGrouping).
+ * Edge grouping transformation component. It wraps around Ogma
+ * [`EdgeGrouping` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeGrouping).
  */
 export const EdgeGrouping = forwardRef(
   EdgeGroupingComponent
