@@ -5,7 +5,7 @@ import {
   useState,
   type ReactElement,
   type Ref,
-  type RefAttributes,
+  type RefAttributes
 } from "react";
 import { useOgma } from "../context";
 // TODO: Add transformation callbacks support via useTransformationCallbacks from "./utils" if needed.
@@ -42,7 +42,7 @@ export type NodeDrilldownProps<ND, ED> = Omit<NodeDrilldownPropsBase<ND, ED>, "e
 
 function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   props: NodeDrilldownProps<ND, ED>,
-  ref: Ref<Drilldown<ND, ED> | null>,
+  ref: Ref<Drilldown<ND, ED> | null>
 ) {
   const ogma = useOgma<ND, ED>();
 
@@ -56,7 +56,7 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
     const { disabled, ...rest } = props;
     const drilldown = ogma.transformations.addDrillDown({
       ...withAnimation(ogma, rest),
-      enabled: !disabled,
+      enabled: !disabled
     });
     // TODO: Drilldown may internally manage a set of transformations, so we currently do not
     //       wire it through generic transformation-callback helpers (e.g. useTransformationCallbacks).
@@ -105,14 +105,14 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
     props.onUpdated,
     props.padding,
     props.parentPath,
-    props.showContents,
+    props.showContents
   ]);
 
   return null;
 }
 
 export type NodeDrilldownComponentType = <ND = unknown, ED = unknown>(
-  props: NodeDrilldownProps<ND, ED> & RefAttributes<Drilldown<ND, ED> | null>,
+  props: NodeDrilldownProps<ND, ED> & RefAttributes<Drilldown<ND, ED> | null>
 ) => ReactElement | null;
 
 export const NodeDrilldown = forwardRef(NodeDrilldownComponent) as NodeDrilldownComponentType;

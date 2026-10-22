@@ -9,7 +9,7 @@ export function LayoutService() {
     (_evt: { nodes: NodeList }) => {
       ogma.events.once("idle", () => ogma.layouts.force({ locate: true }));
     },
-    [ogma],
+    [ogma]
   );
 
   useEffect(() => {

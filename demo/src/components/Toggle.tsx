@@ -13,7 +13,7 @@ export const Toggle: React.FC<ToggleProps> = ({ checked, onChange, label, classN
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       if (typeof onChange === "function") onChange(evt.target.checked);
     },
-    [onChange],
+    [onChange]
   );
 
   return (

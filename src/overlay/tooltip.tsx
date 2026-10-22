@@ -6,7 +6,7 @@ import {
   Point,
   MouseOverEvent,
   Node as OgmaNode,
-  Edge,
+  Edge
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { getEventNameFromTooltipEvent, getOffset, getTranslate, isOverflowing } from "./utils";
@@ -43,9 +43,9 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
     placement = "top",
     bodyClass = "ogma-tooltip--body",
     translate = { x: 0, y: 0 },
-    size,
+    size
   }: TooltipProps<K>,
-  ref?: Ref<OverlayLayer>,
+  ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma<ND, ED>();
   const [target, setTarget] = useState<OgmaNode<ND, ED> | Edge<ED, ND> | Point>();
@@ -61,7 +61,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
       const offset = getOffset(target, zoom, placement);
       const pos = {
         x: point.x + offset.x,
-        y: point.y + offset.y,
+        y: point.y + offset.y
       };
       setPoint(point);
       layer?.setPosition(pos);
@@ -92,7 +92,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
         </div>
       </div>`,
       size: size || { width: "auto", height: "auto" },
-      scaled: false,
+      scaled: false
     });
     setLayer(currentLayer);
   }, []);
@@ -118,7 +118,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
             // Show the tooltip where the mouse is currently at
             const pos = ogma.view.screenToGraphCoordinates({
               x: evt.x,
-              y: evt.y,
+              y: evt.y
             });
             setTarget(evt.target);
             showTooltip(evt.target, pos);
@@ -147,7 +147,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
           if (!evt.target) {
             const pos = ogma.view.screenToGraphCoordinates({
               x: evt.x,
-              y: evt.y,
+              y: evt.y
             });
             setTarget(pos);
             showTooltip("background", pos);
@@ -163,7 +163,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
             // Show the tooltip where the mouse is currently at
             const pos = ogma.view.screenToGraphCoordinates({
               x: evt.x,
-              y: evt.y,
+              y: evt.y
             });
             setTarget(evt.target);
             showTooltip(evt.target, pos);
@@ -241,7 +241,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
 
       layer?.setPosition({
         x: point!.x + offset.x,
-        y: point!.y + offset.y,
+        y: point!.y + offset.y
       });
 
       // Update the transform of the element to reflect the new placement
@@ -271,7 +271,7 @@ const TooltipComponent = <K extends keyof TooltipEventFunctions, ND = unknown, E
 };
 
 type TooltipComponentType = <_ND, _ED, K extends keyof TooltipEventFunctions>(
-  props: TooltipProps<K> & React.RefAttributes<OverlayLayer>,
+  props: TooltipProps<K> & React.RefAttributes<OverlayLayer>
 ) => React.ReactElement | null;
 
 /**

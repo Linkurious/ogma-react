@@ -5,7 +5,7 @@ import {
   ReactElement,
   Ref,
   forwardRef,
-  useImperativeHandle,
+  useImperativeHandle
 } from "react";
 
 import { Overlay as OverlayLayer, Size, Point } from "@linkurious/ogma";
@@ -66,9 +66,9 @@ const PopupComponent = <ND = unknown, ED = unknown>(
     contentClass = POPUP_CONTENT_CLASS,
     popupBodyClass = POPUP_BODY_CLASS,
     size,
-    closeOnEsc = true,
+    closeOnEsc = true
   }: PopupProps,
-  ref?: Ref<OverlayLayer>,
+  ref?: Ref<OverlayLayer>
 ) => {
   const ogma = useOgma<ND, ED>();
   const [layer, setLayer] = useState<OverlayLayer | null>(null);
@@ -93,7 +93,7 @@ const PopupComponent = <ND = unknown, ED = unknown>(
           </div>
         </div>`,
         size: size || { width: "auto", height: "auto" },
-        scaled: false,
+        scaled: false
       });
 
       onClick = (evt: MouseEvent) => {
@@ -163,7 +163,7 @@ const PopupComponent = <ND = unknown, ED = unknown>(
 };
 
 type PopupType = <_ND, _ED>(
-  props: PopupProps & { ref?: Ref<OverlayLayer> },
+  props: PopupProps & { ref?: Ref<OverlayLayer> }
 ) => React.ReactElement | null;
 
 /**

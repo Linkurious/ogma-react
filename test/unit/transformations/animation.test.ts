@@ -28,11 +28,11 @@ describe("withAnimation", () => {
   it("emits only the option the installed Ogma understands", () => {
     expect(withAnimation(v6, { duration: 0, a: 1 })).toEqual({
       animate: false,
-      a: 1,
+      a: 1
     });
     expect(withAnimation(v5, { animate: false, a: 1 })).toEqual({
       duration: 0,
-      a: 1,
+      a: 1
     });
   });
 

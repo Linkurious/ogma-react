@@ -30,7 +30,7 @@ export function Controls({
   setOutlines,
   addNode,
   useClass,
-  setUseClass,
+  setUseClass
 }: ControlsProps) {
   //const ogma = useOgma();
   const [drawerShown, setDrawerShown] = useState(false);

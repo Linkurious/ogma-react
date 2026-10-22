@@ -11,7 +11,7 @@ export type NodeGroupingProps<ND, ED> = Omit<NodeGroupingPropsC<ND, ED>, "enable
 
 function NodeGroupingComponent<ND = unknown, ED = unknown>(
   props: NodeGroupingProps<ND, ED>,
-  ref?: Ref<NodeGroupingTransformation<ND, ED>>,
+  ref?: Ref<NodeGroupingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] = useState<NodeGroupingTransformation<ND, ED>>();
@@ -20,7 +20,7 @@ function NodeGroupingComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeGrouping({
       ...withAnimation(ogma, props),
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
@@ -47,7 +47,7 @@ function NodeGroupingComponent<ND = unknown, ED = unknown>(
     props.padding,
     props.selector,
     props.showContents,
-    props.separateEdgesByDirection,
+    props.separateEdgesByDirection
   ]);
 
   return null;
@@ -56,7 +56,7 @@ function NodeGroupingComponent<ND = unknown, ED = unknown>(
 type NodeGroupingType = <ND, ED>(
   props: NodeGroupingProps<ND, ED> & {
     ref?: Ref<NodeGroupingTransformation<ND, ED>>;
-  },
+  }
 ) => React.ReactElement | null;
 
 export const NodeGrouping = forwardRef(NodeGroupingComponent) as NodeGroupingType;

@@ -17,7 +17,7 @@ interface CanvasLayerProps {
 
 const CanvasLayerComponent = <ND = unknown, ED = unknown>(
   { noClear = false, isStatic = false, render, index, visible = true }: CanvasLayerProps,
-  ref?: Ref<OgmaCanvasLayer>,
+  ref?: Ref<OgmaCanvasLayer>
 ) => {
   const ogma = useOgma<ND, ED>();
   const [layer, setLayer] = useState<OgmaCanvasLayer | null>(null);
@@ -48,7 +48,7 @@ const CanvasLayerComponent = <ND = unknown, ED = unknown>(
 };
 
 type CanvasLayerType = <_ND, _ED>(
-  props: CanvasLayerProps & { ref?: Ref<OgmaCanvasLayer> },
+  props: CanvasLayerProps & { ref?: Ref<OgmaCanvasLayer> }
 ) => React.ReactElement | null;
 
 /**

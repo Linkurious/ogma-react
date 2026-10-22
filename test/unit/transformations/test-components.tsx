@@ -21,7 +21,7 @@ import {
   NodeCollapsingProps,
   NodeDrilldownProps,
   NodeDrilldown,
-  Drilldown,
+  Drilldown
 } from "../../../src";
 import { createRef, forwardRef, Ref, useState } from "react";
 
@@ -31,17 +31,17 @@ function EdgeFilterTestC(filter: Partial<EdgeFilterProps<unknown, unknown>> = {}
   const [props, setProps] = useState<EdgeFilterProps<unknown, unknown>>({
     criteria: (edge) => edge.getId() === 0,
     disabled: false,
-    ...filter,
+    ...filter
   });
   function updateFilter() {
     setProps({
-      criteria: (edge) => edge.getId() === 1,
+      criteria: (edge) => edge.getId() === 1
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -59,17 +59,17 @@ function NodeFilterTestC(filter: Partial<NodeFilterProps<unknown, unknown>> = {}
   const [props, setProps] = useState<NodeFilterProps<unknown, unknown>>({
     criteria: (node) => node.getId() === 0,
     disabled: false,
-    ...filter,
+    ...filter
   });
   function updateFilter() {
     setProps({
-      criteria: (node) => node.getId() === 1,
+      criteria: (node) => node.getId() === 1
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -92,23 +92,23 @@ function EdgeGroupingTestC(grouping: Partial<EdgeGroupingProps<unknown, unknown>
     generator(_, groupId) {
       return {
         id: groupId,
-        data: { key: "value" },
+        data: { key: "value" }
       };
     },
     disabled: false,
-    ...grouping,
+    ...grouping
   });
   function updateGrouping() {
     setProps({
       ...props,
       selector: () => true,
-      groupIdFunction: (edge) => `group-${+edge.getId() % 2}`,
+      groupIdFunction: (edge) => `group-${+edge.getId() % 2}`
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -137,23 +137,23 @@ function NodeGroupingTestC(grouping: Partial<NodeGroupingProps<unknown, unknown>
     nodeGenerator: (_, groupId) => {
       return {
         id: groupId,
-        data: { key: "value" },
+        data: { key: "value" }
       };
     },
     disabled: false,
-    ...grouping,
+    ...grouping
   });
   function updateGrouping() {
     setProps({
       ...props,
       selector: () => true,
-      groupIdFunction: (node) => `group-${+node.getId() % 2}`,
+      groupIdFunction: (node) => `group-${+node.getId() % 2}`
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -182,7 +182,7 @@ function NodeGroupingTestC(grouping: Partial<NodeGroupingProps<unknown, unknown>
 
 function DrilldownTestC(
   drilldown: Partial<NodeDrilldownProps<unknown, unknown>> = {},
-  drilldownRef: Ref<Drilldown<any, any> | null>,
+  drilldownRef: Ref<Drilldown<any, any> | null>
 ) {
   const [props, setProps] = useState<NodeDrilldownProps<unknown, unknown>>({
     onGetSubgraph: (node) => {
@@ -191,27 +191,27 @@ function DrilldownTestC(
         { id: `${id} - 1` },
         { id: `${id} - 2` },
         { id: `${id} - 3` },
-        { id: `${id} - 4` },
+        { id: `${id} - 4` }
       ];
       const edges = [
         {
           source: `${id} - 1`,
-          target: `${id} - 2`,
+          target: `${id} - 2`
         },
         {
           source: `1 - 1`,
-          target: `${id} - 2`,
-        },
+          target: `${id} - 2`
+        }
       ];
       return Promise.resolve({ nodes, edges });
     },
     disabled: false,
-    ...drilldown,
+    ...drilldown
   });
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -244,24 +244,24 @@ function DrilldownTestC(
 }
 
 function NeighborGenerationTestC(
-  generator: Partial<NeighborGenerationProps<unknown, unknown>> = {},
+  generator: Partial<NeighborGenerationProps<unknown, unknown>> = {}
 ) {
   const [props, setProps] = useState<NeighborGenerationProps<unknown, unknown>>({
     selector: (node) => +node.getId() % 2 === 0,
     neighborIdFunction: () => `even`,
     disabled: false,
-    ...generator,
+    ...generator
   });
   function updateGenerator() {
     setProps({
       ...props,
-      selector: () => true,
+      selector: () => true
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -286,18 +286,18 @@ function NeighborMergingTestC(generator: Partial<NeighborMergingProps<unknown, u
     selector: (node) => +node.getId() === 1,
     dataFunction: () => ({ value: 1 }),
     disabled: false,
-    ...generator,
+    ...generator
   });
   function updateGenerator() {
     setProps({
       ...props,
-      selector: (node) => +node.getId() === 0,
+      selector: (node) => +node.getId() === 0
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (
@@ -323,20 +323,20 @@ function NodeCollapsingTestC(generator: Partial<NodeCollapsingProps<unknown, unk
       return { data: { key1: "value1" } };
     },
     disabled: false,
-    ...generator,
+    ...generator
   });
   function updateCollapse() {
     setProps({
       ...props,
       edgeGenerator: () => {
         return { data: { key2: "value2" } };
-      },
+      }
     });
   }
   function toggle() {
     setProps({
       ...props,
-      disabled: !props.disabled,
+      disabled: !props.disabled
     });
   }
   return (

@@ -15,9 +15,9 @@ const styleClassComponent = forwardRef(
       edgeOutput,
       nodeAttributes,
       nodeDependencies,
-      nodeOutput,
+      nodeOutput
     }: StyleProps<ND, ED>,
-    ref?: Ref<OgmaStyleClass<ND, ED>>,
+    ref?: Ref<OgmaStyleClass<ND, ED>>
   ) => {
     const ogma = useOgma<ND, ED>();
     const [styleClass, setStyleClass] = useState<OgmaStyleClass<ND, ED> | null>(null);
@@ -31,7 +31,7 @@ const styleClassComponent = forwardRef(
         edgeOutput,
         nodeAttributes,
         nodeDependencies,
-        nodeOutput,
+        nodeOutput
       };
 
       async function setup() {
@@ -60,7 +60,7 @@ const styleClassComponent = forwardRef(
         edgeOutput,
         nodeAttributes,
         nodeDependencies,
-        nodeOutput,
+        nodeOutput
       });
     }, [
       edgeAttributes,
@@ -68,11 +68,11 @@ const styleClassComponent = forwardRef(
       edgeOutput,
       nodeAttributes,
       nodeDependencies,
-      nodeOutput,
+      nodeOutput
     ]);
 
     return null;
-  },
+  }
 );
 
 const arePropsEqual = <ND, ED>(prev: StyleProps<ND, ED>, next: StyleProps<ND, ED>) => {
@@ -88,7 +88,7 @@ const arePropsEqual = <ND, ED>(prev: StyleProps<ND, ED>, next: StyleProps<ND, ED
 };
 
 type StyleClassComponentType = <ND, ED>(
-  props: StyleProps<ND, ED> & { ref?: Ref<OgmaStyleClass<ND, ED>> },
+  props: StyleProps<ND, ED> & { ref?: Ref<OgmaStyleClass<ND, ED>> }
 ) => React.ReactElement | null;
 
 /**

@@ -17,7 +17,7 @@ const MASK_SELECTOR = ".position-control";
 
 const getScreenshotOptions = (page: Page) => ({
   maxDiffPixels: TOLERATED_DIFFERENCE,
-  mask: [page.locator(MASK_SELECTOR)],
+  mask: [page.locator(MASK_SELECTOR)]
 });
 
 let page: Page;
@@ -37,7 +37,7 @@ test.beforeEach(async () => {
 
   await expect(page).toHaveScreenshot(initialState, {
     ...getScreenshotOptions(page),
-    timeout: 10000,
+    timeout: 10000
   });
 });
 
@@ -53,7 +53,7 @@ test("mouse hover", async () => {
 
   await expect(page).toHaveScreenshot("node-hovered.png", {
     ...getScreenshotOptions(page),
-    timeout: 5000,
+    timeout: 5000
   });
 
   // Reset hover state by moving the mouse away
@@ -62,7 +62,7 @@ test("mouse hover", async () => {
     // Only the position is different compared to the initial screenshot
     maxDiffPixels: 45 + TOLERATED_DIFFERENCE,
     mask: getScreenshotOptions(page).mask,
-    timeout: 5000,
+    timeout: 5000
   });
 });
 
@@ -78,7 +78,7 @@ test("tooltip", async () => {
   await page.mouse.move(pos.x, pos.y);
   await page.waitForTimeout(1000);
   await page.mouse.click(pos.x, pos.y, {
-    button: "right",
+    button: "right"
   });
 
   await expect(page).toHaveScreenshot("tooltip-opened.png", getScreenshotOptions(page));
@@ -89,7 +89,7 @@ test("tooltip", async () => {
     // Only the position is different compared to the initial screenshot
     maxDiffPixels: 45 + TOLERATED_DIFFERENCE,
     mask: getScreenshotOptions(page).mask,
-    timeout: 5000,
+    timeout: 5000
   });
 });
 
@@ -99,7 +99,7 @@ test("tooltip repositioning", async () => {
     const ogma = window.ogma;
     const coords = ogma.view.screenToGraphCoordinates({
       x: window.innerWidth - 10,
-      y: window.innerHeight / 2,
+      y: window.innerHeight / 2
     });
     ogma.getNodes().get(0).setAttributes(coords);
     return { x: window.innerWidth - 10, y: window.innerHeight / 2 };
@@ -109,7 +109,7 @@ test("tooltip repositioning", async () => {
   await page.mouse.move(pos.x, pos.y);
   await page.waitForTimeout(1000);
   await page.mouse.click(pos.x, pos.y, {
-    button: "right",
+    button: "right"
   });
 
   await expect(page).toHaveScreenshot("tooltip-repositioned.png", getScreenshotOptions(page));

@@ -25,7 +25,7 @@ describe("Drilldown", () => {
       "0 - 2",
       "0 - 3",
       "0 - 4",
-      "ogma-group-0",
+      "ogma-group-0"
     ]);
   });
 });

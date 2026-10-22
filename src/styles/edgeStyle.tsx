@@ -3,7 +3,7 @@ import {
   EdgeSelector,
   EdgeAttributesValue,
   StyleRule,
-  HoverEdgeOptions,
+  HoverEdgeOptions
 } from "@linkurious/ogma";
 import { useEffect, useState, Ref, forwardRef, useImperativeHandle } from "react";
 import { useOgma } from "../context";
@@ -26,7 +26,7 @@ interface SelectedEdgeProps<ND, ED> {
 const EdgeStyleComponent = forwardRef(
   <ND = unknown, ED = unknown>(
     { selector, attributes }: EdgeRuleProps<ND, ED>,
-    ref?: Ref<StyleRule<ND, ED>>,
+    ref?: Ref<StyleRule<ND, ED>>
   ) => {
     const ogma = useOgma() as OgmaLib<ND, ED>;
     const [rule, setRule] = useState<StyleRule<ND, ED>>();
@@ -45,12 +45,12 @@ const EdgeStyleComponent = forwardRef(
       };
     }, [selector, attributes]);
     return null;
-  },
+  }
 );
 
 const Hovered = <ND = unknown, ED = unknown>({
   attributes,
-  fullOverwrite,
+  fullOverwrite
 }: HoveredEdgeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
@@ -66,7 +66,7 @@ const Hovered = <ND = unknown, ED = unknown>({
 
 const Selected = <ND = unknown, ED = unknown>({
   attributes,
-  fullOverwrite,
+  fullOverwrite
 }: SelectedEdgeProps<ND, ED>) => {
   const ogma = useOgma() as OgmaLib<ND, ED>;
 
@@ -81,7 +81,7 @@ const Selected = <ND = unknown, ED = unknown>({
 };
 
 type EdgeStyleComponentType = <ND, ED>(
-  props: EdgeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> },
+  props: EdgeRuleProps<ND, ED> & { ref?: Ref<StyleRule<ND, ED>> }
 ) => React.ReactElement | null;
 
 /**
@@ -90,7 +90,7 @@ type EdgeStyleComponentType = <ND, ED>(
  */
 export const EdgeStyle = Object.assign(EdgeStyleComponent as EdgeStyleComponentType, {
   Hovered,
-  Selected,
+  Selected
 });
 
 // backward compatibility

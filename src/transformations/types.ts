@@ -16,7 +16,7 @@ export interface TransformationOptions extends AnimationProps {
 export interface TransformationProps<
   ND,
   ED,
-  C extends TransformationContext = TransformationContext,
+  C extends TransformationContext = TransformationContext
 > extends AnimationProps {
   disabled?: boolean;
   onEnabled?: (transformation: Transformation<ND, ED, C>) => void;

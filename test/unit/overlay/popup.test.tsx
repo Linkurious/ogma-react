@@ -25,7 +25,7 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div,
+      div
     );
 
     expect(ref.current).toBeDefined();
@@ -42,7 +42,7 @@ describe("Popup", () => {
           <div className="custom-child-div">{text}</div>
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect(ref.current?.element.querySelector(".ogma-popup--body")).toBeInstanceOf(HTMLElement);
     expect(ref.current?.element.querySelector(".ogma-popup--close")).toBeDefined();
@@ -58,7 +58,7 @@ describe("Popup", () => {
       <Ogma graph={graph}>
         <Popup position={{ x: 0, y: 0 }} ref={ref} isOpen contentClass="content" content={text} />
       </Ogma>,
-      div,
+      div
     );
     expect(ref.current?.element.querySelector(".content")).toBeInstanceOf(HTMLDivElement);
     expect(ref.current?.element.querySelector(".content")!.textContent).toBe(text);
@@ -89,10 +89,10 @@ describe("Popup", () => {
           Popup
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect((ref.current?.element as HTMLDivElement).style.transform).toContain(
-      `translate(150px, 150px) rotate(0rad) translate(0px, 0px)`,
+      `translate(150px, 150px) rotate(0rad) translate(0px, 0px)`
     );
   });
 
@@ -111,7 +111,7 @@ describe("Popup", () => {
           Popup
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect(ref.current?.element.classList.contains("custom-class")).toBe(true);
   });
@@ -131,10 +131,10 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect(ref.current?.element.querySelector(".custom-close-button")).toBeInstanceOf(
-      HTMLSpanElement,
+      HTMLSpanElement
     );
   });
 
@@ -153,10 +153,10 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--bottom")).toBe(
-      true,
+      true
     );
   });
 
@@ -175,10 +175,10 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--left")).toBe(
-      true,
+      true
     );
   });
 
@@ -197,10 +197,10 @@ describe("Popup", () => {
           content
         </Popup>
       </Ogma>,
-      div,
+      div
     );
     expect((ref.current?.element as HTMLDivElement).classList.contains("ogma-popup--right")).toBe(
-      true,
+      true
     );
   });
 });

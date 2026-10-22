@@ -1,7 +1,7 @@
 import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
 import {
   NeighborGenerationOptions,
-  NeighborGeneration as NeighborGenerationTransformation,
+  NeighborGeneration as NeighborGenerationTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -16,7 +16,7 @@ export type NeighborGenerationProps<ND, ED> = Omit<NeighborGenerationPropsC<ND, 
 
 function NeighborGenerationComponent<ND = unknown, ED = unknown>(
   props: NeighborGenerationProps<ND, ED>,
-  ref: Ref<NeighborGenerationTransformation<ND, ED>>,
+  ref: Ref<NeighborGenerationTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] = useState<NeighborGenerationTransformation<ND, ED>>();
@@ -26,7 +26,7 @@ function NeighborGenerationComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNeighborGeneration({
       ...withAnimation(ogma, props),
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -53,7 +53,7 @@ function NeighborGenerationComponent<ND = unknown, ED = unknown>(
 type NeighborGenerationType = <ND, ED>(
   props: NeighborGenerationProps<ND, ED> & {
     ref?: Ref<NeighborGenerationTransformation<ND, ED>>;
-  },
+  }
 ) => React.ReactElement | null;
 
 export const NeighborGeneration = forwardRef(NeighborGenerationComponent) as NeighborGenerationType;

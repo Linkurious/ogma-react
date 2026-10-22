@@ -1,7 +1,7 @@
 import { useEffect, useState, Ref, useImperativeHandle, forwardRef } from "react";
 import {
   NodeCollapsingOptions,
-  NodeCollapsing as NodeCollapsingTransformation,
+  NodeCollapsing as NodeCollapsingTransformation
 } from "@linkurious/ogma";
 import { useOgma } from "../context";
 import { TransformationProps } from "./types";
@@ -16,7 +16,7 @@ export type NodeCollapsingProps<ND, ED> = Omit<NodeCollapsingPropsC<ND, ED>, "en
 
 export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
   props: NodeCollapsingProps<ND, ED>,
-  ref: Ref<NodeCollapsingTransformation<ND, ED>>,
+  ref: Ref<NodeCollapsingTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] = useState<NodeCollapsingTransformation<ND, ED>>();
@@ -26,7 +26,7 @@ export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeCollapsing({
       ...withAnimation(ogma, props),
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     useTransformationCallbacks(props, newTransformation, ogma);
     setTransformation(newTransformation);
@@ -53,7 +53,7 @@ export function NodeCollapsingComponent<ND = unknown, ED = unknown>(
 type NodeCollapsingType = <ND, ED>(
   props: NodeCollapsingProps<ND, ED> & {
     ref?: Ref<NodeCollapsingTransformation<ND, ED>>;
-  },
+  }
 ) => React.ReactElement | null;
 
 export const NodeCollapsing = forwardRef(NodeCollapsingComponent) as NodeCollapsingType;

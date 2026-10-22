@@ -20,7 +20,7 @@ describe("Tooltip", () => {
           content
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     expect(ref.current).toBeDefined();
@@ -36,7 +36,7 @@ describe("Tooltip", () => {
           <div className="custom-child-div">{text}</div>
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     expect(ref.current?.element).toBeInstanceOf(HTMLDivElement);
@@ -58,7 +58,7 @@ describe("Tooltip", () => {
         </Tooltip>
         ,
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -100,7 +100,7 @@ describe("Tooltip", () => {
           content
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref1.current).toBeTruthy());
@@ -121,7 +121,7 @@ describe("Tooltip", () => {
           await ogma.mouse.move({ x: -10000, y: -10000 });
           await ogma.view.afterNextFrame();
           await ogma.view.afterNextFrame();
-        },
+        }
       },
       {
         ref: ref2,
@@ -133,7 +133,7 @@ describe("Tooltip", () => {
           await ogma.mouse.move({ x: -10000, y: -10000 });
           await ogma.view.afterNextFrame();
           await ogma.view.afterNextFrame();
-        },
+        }
       },
       {
         ref: ref3,
@@ -144,7 +144,7 @@ describe("Tooltip", () => {
         hideTooltip: async () => {
           await ogma.mouse.click(ogma.view.graphToScreenCoordinates(node.getPosition()));
           await ogma.view.afterNextFrame();
-        },
+        }
       },
       {
         ref: ref4,
@@ -155,7 +155,7 @@ describe("Tooltip", () => {
         hideTooltip: async () => {
           await ogma.mouse.click({ x: -10000, y: -10000 });
           await ogma.view.afterNextFrame();
-        },
+        }
       },
       {
         ref: ref5,
@@ -166,8 +166,8 @@ describe("Tooltip", () => {
         hideTooltip: async () => {
           await ogma.mouse.click({ x: -10000, y: -10000 });
           await ogma.view.afterNextFrame();
-        },
-      },
+        }
+      }
     ];
 
     for (const { ref, showTooltip, hideTooltip } of Object.values(events)) {
@@ -192,7 +192,7 @@ describe("Tooltip", () => {
           {(node) => <div className="custom-child-div">{node.getId()}</div>}
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -210,7 +210,7 @@ describe("Tooltip", () => {
       });
 
       expect(ref.current?.element.querySelector(".custom-child-div")!.textContent).toBe(
-        `${node.getId()}`,
+        `${node.getId()}`
       );
     }
   });
@@ -224,7 +224,7 @@ describe("Tooltip", () => {
           Static tooltip content
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -252,7 +252,7 @@ describe("Tooltip", () => {
           Static tooltip content
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -277,7 +277,7 @@ describe("Tooltip", () => {
         <Tooltip ref={ref} eventName="backgroundClick" position={newPosition} placement="bottom">
           Static tooltip content
         </Tooltip>
-      </Ogma>,
+      </Ogma>
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -302,7 +302,7 @@ describe("Tooltip", () => {
           Sized tooltip content
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     expect(ref.current?.element.style.width).toBe("300px");
@@ -316,7 +316,7 @@ describe("Tooltip", () => {
           Sized tooltip content
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     expect(ref.current?.element.style.width).toBe("300px");
@@ -327,7 +327,7 @@ describe("Tooltip", () => {
         <Tooltip ref={ref} eventName="backgroundClick" size={{ width: 400, height: 300 }}>
           Sized tooltip content
         </Tooltip>
-      </Ogma>,
+      </Ogma>
     );
 
     expect(ref.current?.element.style.width).toBe("400px");
@@ -354,7 +354,7 @@ describe("Tooltip", () => {
           a
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -368,16 +368,16 @@ describe("Tooltip", () => {
     });
 
     expect((ref.current?.element.firstElementChild as HTMLDivElement).style.transform).toBe(
-      "translate(calc(-50% + 0px),calc(-100% + 0px))",
+      "translate(calc(-50% + 0px),calc(-100% + 0px))"
     );
     expect((ref2.current?.element.firstElementChild as HTMLDivElement).style.transform).toBe(
-      "translate(0px,calc(-50% + 0px))",
+      "translate(0px,calc(-50% + 0px))"
     );
     expect((ref3.current?.element.firstElementChild as HTMLDivElement).style.transform).toBe(
-      "translate(calc(-50% + 0px),0px)",
+      "translate(calc(-50% + 0px),0px)"
     );
     expect((ref4.current?.element.firstElementChild as HTMLDivElement).style.transform).toBe(
-      "translate(calc(-100% + 0px),calc(-50% + 0px))",
+      "translate(calc(-100% + 0px),calc(-50% + 0px))"
     );
   });
 
@@ -402,7 +402,7 @@ describe("Tooltip", () => {
           a
         </Tooltip>
       </Ogma>,
-      div,
+      div
     );
 
     await waitFor(() => expect(ref.current).toBeTruthy());
@@ -416,16 +416,16 @@ describe("Tooltip", () => {
     });
 
     expect((ref.current?.element.firstElementChild as HTMLDivElement).style.transform).toBe(
-      `translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`,
+      `translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`
     );
     expect((ref2.current?.element.firstElementChild as HTMLDivElement)!.style.transform).toBe(
-      `translate(calc(-50% + ${translate.x}px),${translate.y}px)`,
+      `translate(calc(-50% + ${translate.x}px),${translate.y}px)`
     );
     expect((ref3.current?.element.firstElementChild as HTMLDivElement)!.style.transform).toBe(
-      `translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`,
+      `translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`
     );
     expect((ref4.current?.element.firstElementChild! as HTMLDivElement)!.style.transform).toBe(
-      `translate(${translate.x}px,calc(-50% + ${translate.y}px))`,
+      `translate(${translate.x}px,calc(-50% + ${translate.y}px))`
     );
   });
 
@@ -435,7 +435,7 @@ describe("Tooltip", () => {
         <Tooltip ref={ref} eventName="backgroundClick" bodyClass="custom-tooltip">
           Tooltip content
         </Tooltip>
-      </Ogma>,
+      </Ogma>
     );
     expect(ref.current?.element.querySelector(".custom-tooltip")).toBeDefined();
   });

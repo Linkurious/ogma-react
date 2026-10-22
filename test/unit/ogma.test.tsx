@@ -10,12 +10,12 @@ const graph: RawGraph = {
   nodes: [
     { id: 0, attributes: { color: "red", x: 0, y: 0 } },
     { id: 1, attributes: { color: "green", x: 25, y: 0 } },
-    { id: 2, attributes: { color: "green", x: 25, y: 0 } },
+    { id: 2, attributes: { color: "green", x: 25, y: 0 } }
   ],
   edges: [
     { source: 0, target: 1 },
-    { source: 0, target: 2 },
-  ],
+    { source: 0, target: 2 }
+  ]
 };
 
 describe("Ogma", () => {
@@ -53,7 +53,7 @@ describe("Ogma", () => {
       };
       render(
         <Ogma graph={graph} onReady={onReady} options={{ backgroundColor, minimumWidth }} />,
-        div,
+        div
       );
     });
   });
@@ -63,7 +63,7 @@ describe("Ogma", () => {
     const ref = React.createRef<OgmaLib>();
     const { rerender } = render(
       <Ogma ref={ref} graph={graph} options={{ backgroundColor }} />,
-      div,
+      div
     );
 
     expect(ref.current?.getOptions().backgroundColor).toBe(backgroundColor);
@@ -86,7 +86,7 @@ describe("Ogma", () => {
         <Ogma graph={graph}>
           <Component />
         </Ogma>,
-        div,
+        div
       );
     });
   });
@@ -95,8 +95,8 @@ describe("Ogma", () => {
     const mockData = {
       nodes: [
         { id: 0, attributes: { color: "red", x: 0, y: 0 } },
-        { id: 1, attributes: { color: "green", x: 25, y: 0 } },
-      ],
+        { id: 1, attributes: { color: "green", x: 25, y: 0 } }
+      ]
     } as RawGraph;
 
     const mockOnNodesAdded = vi.fn(() => {});
@@ -109,7 +109,7 @@ describe("Ogma", () => {
 
     const { rerender } = render(
       <Ogma ref={ref} graph={mockData} onAddNodes={mockOnNodesAdded} onReady={onReady} />,
-      div,
+      div
     );
 
     // Wait for Ogma to initialize
@@ -126,7 +126,7 @@ describe("Ogma", () => {
 
     ref.current?.addNode({
       id: 3,
-      attributes: { color: "yellow", x: 25, y: 25 },
+      attributes: { color: "yellow", x: 25, y: 25 }
     });
 
     // add another node - handler should not be called
@@ -136,7 +136,7 @@ describe("Ogma", () => {
 
     ref.current?.addNode({
       id: 4,
-      attributes: { color: "purple", x: 50, y: 50 },
+      attributes: { color: "purple", x: 50, y: 50 }
     });
 
     // Check if the handler was called again
@@ -145,7 +145,7 @@ describe("Ogma", () => {
 
   it("should set the theme of the graph correctly with the prop changes", async () => {
     const mockData = {
-      nodes: [{ id: 0, attributes: { x: 0, y: 0 } }],
+      nodes: [{ id: 0, attributes: { x: 0, y: 0 } }]
     } as RawGraph;
 
     const theme: Theme = afternoonNap as Theme<unknown, unknown>;
@@ -157,7 +157,7 @@ describe("Ogma", () => {
 
     const { rerender } = render(
       <Ogma ref={ref} graph={mockData} theme={theme} onReady={onReady} />,
-      div,
+      div
     );
 
     await waitFor(() => ready);

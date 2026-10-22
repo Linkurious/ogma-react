@@ -19,8 +19,8 @@ describe("styles", async () => {
       div.render(
         <Ogma graph={graph}>
           <NodeStyle attributes={{ color: "red" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
   });
 
@@ -30,8 +30,8 @@ describe("styles", async () => {
       div.render(
         <Ogma graph={graph} ref={ref}>
           <NodeStyle attributes={{ color: "red" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
@@ -45,8 +45,8 @@ describe("styles", async () => {
       div.render(
         <Ogma graph={graph} ref={ref}>
           <NodeStyle attributes={{ color: "red" }} selector={(node) => Number(node.getId()) < 2} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
@@ -61,8 +61,8 @@ describe("styles", async () => {
         <Ogma graph={graph} ref={ref}>
           <NodeStyle.Selected attributes={{ color: "red" }} fullOverwrite />
           <NodeStyle attributes={{ color: "grey" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
@@ -81,8 +81,8 @@ describe("styles", async () => {
         <Ogma graph={graph} ref={ref}>
           <NodeStyle.Hovered attributes={{ color: "red" }} />
           <NodeStyle attributes={{ color: "grey" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
@@ -119,8 +119,8 @@ describe("styles", async () => {
       div.render(
         <Ogma graph={graph}>
           <EdgeStyle attributes={{ color: "red" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
   });
 
@@ -130,8 +130,8 @@ describe("styles", async () => {
       div.render(
         <Ogma graph={graph} ref={ref}>
           <EdgeStyle attributes={{ color: "red" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     await ref.current!.view.afterNextFrame();
@@ -150,8 +150,8 @@ describe("styles", async () => {
             attributes={{ color: "green" }}
             selector={(edge) => Number(edge.getId()) > 0}
           />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     await ref.current!.view.afterNextFrame();
@@ -165,8 +165,8 @@ describe("styles", async () => {
         <Ogma graph={graph} ref={ref}>
           <EdgeStyle.Selected attributes={{ color: "red" }} fullOverwrite />
           <EdgeStyle attributes={{ color: "grey" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
@@ -185,8 +185,8 @@ describe("styles", async () => {
         <Ogma graph={graph} ref={ref}>
           <EdgeStyle.Hovered attributes={{ color: "red" }} />
           <EdgeStyle attributes={{ color: "grey" }} />
-        </Ogma>,
-      ),
+        </Ogma>
+      )
     );
     await waitFor(() => expect(ref.current).toBeTruthy());
     const ogma = ref.current!;
@@ -195,7 +195,7 @@ describe("styles", async () => {
     const dest = edge.getTarget();
     const midpoint = {
       x: (src.getPosition().x + dest.getPosition().x) / 2,
-      y: (src.getPosition().y + dest.getPosition().y) / 2,
+      y: (src.getPosition().y + dest.getPosition().y) / 2
     };
     await ogma.mouse.move(ogma.view.graphToScreenCoordinates(midpoint));
     await ogma.view.afterNextFrame();

@@ -7,9 +7,15 @@ import {
   useImperativeHandle,
   ReactNode,
   Ref,
-  memo,
+  memo
 } from "react";
-import { Ogma as OgmaLib, Options as OgmaOptions, RawGraph, EventTypes,Theme } from "@linkurious/ogma";
+import {
+  Ogma as OgmaLib,
+  Options as OgmaOptions,
+  RawGraph,
+  EventTypes,
+  Theme
+} from "@linkurious/ogma";
 import { OgmaContext } from "./context";
 import { EventHandlerProps, EventHandlers } from "./types";
 import { isContentEqual, handleEventProps } from "./utils";
@@ -35,7 +41,7 @@ export const OgmaComponent = <ND, ED>(props: OgmaProps<ND, ED>, ref?: Ref<OgmaLi
     graph,
     onReady,
     theme,
-    className = "ogma-container",
+    className = "ogma-container"
   } = props;
   const eventHandlersRef = useRef<EventHandlers<ND, ED>>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -54,7 +60,7 @@ export const OgmaComponent = <ND, ED>(props: OgmaProps<ND, ED>, ref?: Ref<OgmaLi
     const instance = new OgmaLib<ND, ED>({
       container: containerRef.current,
       graph,
-      options,
+      options
     });
     setGraphData(graph);
     setOgmaOptions(options);
@@ -113,7 +119,7 @@ export const OgmaComponent = <ND, ED>(props: OgmaProps<ND, ED>, ref?: Ref<OgmaLi
       {ogma && (
         <OgmaContext.Provider
           value={{
-            ogma: ogma,
+            ogma: ogma
           }}
         >
           {children}
@@ -124,7 +130,7 @@ export const OgmaComponent = <ND, ED>(props: OgmaProps<ND, ED>, ref?: Ref<OgmaLi
 };
 
 type OgmaComponentType = <ND, ED>(
-  props: OgmaProps<ND, ED> & { ref?: Ref<OgmaLib<ND, ED>> },
+  props: OgmaProps<ND, ED> & { ref?: Ref<OgmaLib<ND, ED>> }
 ) => React.ReactElement | null;
 
 export const Ogma = memo(forwardRef(OgmaComponent)) as OgmaComponentType;

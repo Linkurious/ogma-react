@@ -9,26 +9,26 @@ const mockDestroy = vi.fn();
 const mockUpdate = vi.fn();
 const mockCreateClass = vi.fn(() => ({
   update: mockUpdate,
-  destroy: mockDestroy,
+  destroy: mockDestroy
 }));
 const mockGetClass = vi.fn(() => ({
-  destroy: mockDestroy,
+  destroy: mockDestroy
 }));
 const mockOgma = {
   styles: {
     createClass: mockCreateClass,
-    getClass: mockGetClass,
+    getClass: mockGetClass
   },
   view: {
-    afterNextFrame: () => Promise.resolve(),
-  },
+    afterNextFrame: () => Promise.resolve()
+  }
 };
 
 vi.mock("../../../src/context", async (importOriginal) => {
   const actual = (await importOriginal()) as {};
   return {
     ...actual,
-    useOgma: () => mockOgma,
+    useOgma: () => mockOgma
   };
 });
 
@@ -48,7 +48,7 @@ describe("StyleClass", () => {
             nodeAttributes={{}}
             nodeOutput={{}}
           />
-        </Ogma>,
+        </Ogma>
       );
     });
     expect(mockCreateClass).toHaveBeenCalledWith(expect.objectContaining({ name: "test" }));
@@ -64,7 +64,7 @@ describe("StyleClass", () => {
           nodeAttributes={{}}
           nodeOutput={{}}
         />
-      </Ogma>,
+      </Ogma>
     );
     await act(async () => {
       rerender(
@@ -76,11 +76,11 @@ describe("StyleClass", () => {
             nodeAttributes={{}}
             nodeOutput={{}}
           />
-        </Ogma>,
+        </Ogma>
       );
     });
     expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({ edgeAttributes: { color: "blue" } }),
+      expect.objectContaining({ edgeAttributes: { color: "blue" } })
     );
   });
 
@@ -94,7 +94,7 @@ describe("StyleClass", () => {
           nodeAttributes={{}}
           nodeOutput={{}}
         />
-      </Ogma>,
+      </Ogma>
     );
     await act(async () => {
       unmount();

@@ -1,5 +1,5 @@
 import { Ogma as OgmaLib } from "@linkurious/ogma";
-import { Ogma,Geo } from "../../src";
+import { Ogma, Geo } from "../../src";
 import { createRef } from "react";
 import { render } from "./utils";
 
@@ -12,7 +12,7 @@ describe("Geo Mode", () => {
     render(
       <Ogma ref={ref}>
         <Geo enabled />
-      </Ogma>,
+      </Ogma>
     );
     expect(ref.current?.geo.enabled()).toBe(true);
   });

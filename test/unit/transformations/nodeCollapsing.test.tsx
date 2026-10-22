@@ -28,7 +28,7 @@ describe("Node Collapsing", () => {
     render(<NodeCollapsingTest />, div);
     await (ref.current as OgmaLib).transformations.afterNextUpdate();
     expect(ref.current?.getEdges().get(0).getData()).toEqual({
-      key1: "value1",
+      key1: "value1"
     });
     await act(() => userEvent.click(screen.getByText("setCollapse")));
     await ref.current?.transformations.afterNextUpdate();

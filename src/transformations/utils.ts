@@ -24,7 +24,7 @@ export function withAnimation<ND, ED, P extends AnimationProps>(ogma: Ogma<ND, E
   if (arg === undefined) return rest as P;
   return {
     ...rest,
-    [isOgma6(ogma) ? "animate" : "duration"]: arg,
+    [isOgma6(ogma) ? "animate" : "duration"]: arg
   } as unknown as P;
 }
 
@@ -32,7 +32,7 @@ export function toggle<ND, ED>(
   ogma: Ogma<ND, ED>,
   transformation: Transformation<ND, ED>,
   disabled: boolean,
-  props: AnimationProps,
+  props: AnimationProps
 ) {
   if (disabled === transformation.isEnabled()) {
     const arg = animationArg(ogma, props);
@@ -44,7 +44,7 @@ export function toggle<ND, ED>(
 export function useTransformationCallbacks<ND, ED>(
   props: TransformationProps<ND, ED>,
   transformation: Transformation<ND, ED>,
-  ogma: Ogma<ND, ED>,
+  ogma: Ogma<ND, ED>
 ) {
   const enabledListener = ({ target }: { target: Transformation<ND, ED> }) => {
     if (target !== transformation) return;
@@ -60,7 +60,7 @@ export function useTransformationCallbacks<ND, ED>(
   };
   const setIndexListener = ({
     target,
-    index,
+    index
   }: {
     target: Transformation<ND, ED>;
     index: number;

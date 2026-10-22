@@ -16,8 +16,8 @@ export function forEachEventHandler<ND, ED>(
   handlers: EventHandlers<ND, ED>,
   callback: <K extends EventNames<ND, ED>>(
     eventName: K,
-    handler: (event: EventTypes<ND, ED>[K]) => void,
-  ) => void,
+    handler: (event: EventTypes<ND, ED>[K]) => void
+  ) => void
 ) {
   // Type-safe iteration
   (Object.keys(handlers) as EventNames<ND, ED>[]).forEach((eventName) => {

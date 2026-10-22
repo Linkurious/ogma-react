@@ -11,7 +11,7 @@ export type EdgeGroupingProps<ND, ED> = Omit<EdgeGroupingPropsC<ND, ED>, "enable
 
 function EdgeGroupingComponent<ND = unknown, ED = unknown>(
   props: EdgeGroupingProps<ED, ND>,
-  ref?: Ref<EdgeGroupingTransformation<ED, ND>>,
+  ref?: Ref<EdgeGroupingTransformation<ED, ND>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] = useState<EdgeGroupingTransformation<ED, ND>>();
@@ -21,7 +21,7 @@ function EdgeGroupingComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addEdgeGrouping({
       ...withAnimation(ogma, props),
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -48,7 +48,7 @@ function EdgeGroupingComponent<ND = unknown, ED = unknown>(
 type EdgeGroupingType = <ND, ED>(
   props: EdgeGroupingProps<ND, ED> & {
     ref?: Ref<EdgeGroupingTransformation<ND, ED>>;
-  },
+  }
 ) => React.ReactElement | null;
 
 /**

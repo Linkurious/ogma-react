@@ -11,7 +11,7 @@ export type NodeFilterProps<ND, ED> = Omit<NodeFilterPropsC<ND, ED>, "enabled">;
 
 function NodeFilterComponent<ND = unknown, ED = unknown>(
   props: NodeFilterProps<ND, ED>,
-  ref?: Ref<NodeFilterTransformation<ND, ED>>,
+  ref?: Ref<NodeFilterTransformation<ND, ED>>
 ) {
   const ogma = useOgma<ND, ED>();
   const [transformation, setTransformation] = useState<NodeFilterTransformation<ND, ED>>();
@@ -21,7 +21,7 @@ function NodeFilterComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     const newTransformation = ogma.transformations.addNodeFilter({
       ...withAnimation(ogma, props),
-      enabled: !props.disabled,
+      enabled: !props.disabled
     });
     // @ts-expect-error transformation is generic
     useTransformationCallbacks(props, newTransformation, ogma);
@@ -48,7 +48,7 @@ function NodeFilterComponent<ND = unknown, ED = unknown>(
 type NodeFilterType = <ND, ED>(
   props: NodeFilterProps<ND, ED> & {
     ref?: Ref<NodeFilterTransformation<ND, ED>>;
-  },
+  }
 ) => React.ReactElement | null;
 
 /**

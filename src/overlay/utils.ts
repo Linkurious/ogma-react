@@ -7,7 +7,7 @@ export function getContent(
   ogma: OgmaLib,
   position: Point,
   content?: Content,
-  children?: ReactNode,
+  children?: ReactNode
 ): string {
   if (typeof content === "string") return content;
   else if (typeof content === "function") return renderToString(content(ogma, position));
@@ -24,7 +24,7 @@ export const getContainerClass = (popupClass: string, placement: Placement) =>
 
 export function getCloseButton(
   closeButton: string | ReactNode | null = "&times;",
-  closeButtonClass: string,
+  closeButtonClass: string
 ) {
   if (closeButton) {
     const closeButtonElement =
@@ -35,7 +35,7 @@ export function getCloseButton(
 }
 
 export function getEventNameFromTooltipEvent(
-  eventName: keyof TooltipEventFunctions,
+  eventName: keyof TooltipEventFunctions
 ): "mouseover" | "click" | "doubleclick" {
   if (eventName.endsWith("Doubleclick")) {
     return "doubleclick";
@@ -79,7 +79,7 @@ function getStrokeWidth(strokeType: "inner" | "outer", target: OgmaNode | Edge, 
 export function getOffset(
   target: OgmaNode | Edge | "background",
   zoom: number,
-  placement: Placement,
+  placement: Placement
 ): Point {
   // Get the offset of the layer based on the placement
   const offsetAmount = getOffsetAmount(target, zoom);
@@ -120,7 +120,7 @@ export function isOverflowing(bb: DOMRect, clientWidth: number, clientHeight: nu
 export function getTranslate(
   newPlacement: Placement | null,
   placement: Placement,
-  translate: { x: number; y: number },
+  translate: { x: number; y: number }
 ) {
   switch (newPlacement || placement) {
     case "top":
