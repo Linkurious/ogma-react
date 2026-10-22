@@ -132,7 +132,8 @@ export default function App() {
 
         <NodeStyle<ND, ED>
           attributes={{
-            radius: (n) => (n?.getData("multiplier") || 1) * nodeSize, // the label is the value os the property name.
+            // the label is the value os the property name.
+            radius: (n) => (n?.getData("multiplier") || 1) * nodeSize,
             text: {
               content: (node: OgmaNode) => node?.getData("properties.name"),
               font: "IBM Plex Sans",

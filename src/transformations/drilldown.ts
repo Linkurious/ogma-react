@@ -8,7 +8,8 @@ import {
   type RefAttributes
 } from "react";
 import { useOgma } from "../context";
-// TODO: Add transformation callbacks support via useTransformationCallbacks from "./utils" if needed.
+// TODO: Add transformation callbacks support via
+// useTransformationCallbacks from "./utils" if needed.
 import type { TransformationProps } from "./types";
 import { animationArg, withAnimation } from "./utils";
 
@@ -40,7 +41,8 @@ interface LegacyDrilldownProps {
 }
 
 /**
- * Public props: we intentionally hide `enabled` and expose `disabled` (from TransformationProps).
+ * Public props: we intentionally hide `enabled` and expose `disabled` (from
+ * TransformationProps).
  */
 export type NodeDrilldownProps<ND, ED> = Omit<
   NodeDrilldownPropsBase<ND, ED>,
@@ -69,10 +71,12 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
       ...withAnimation(ogma, rest),
       enabled: !disabled
     });
-    // TODO: Drilldown may internally manage a set of transformations, so we currently do not
-    //       wire it through generic transformation-callback helpers (e.g. useTransformationCallbacks).
-    //       If/when we add React-level transformation callbacks specific to drilldown, revisit this
-    //       effect to ensure callbacks are correctly registered and cleaned up.
+    // TODO: Drilldown may internally manage a set of transformations, so we
+    //       currently do not wire it through generic transformation-callback
+    //       helpers (e.g. useTransformationCallbacks).
+    //       If/when we add React-level transformation callbacks specific to
+    //       drilldown, revisit this effect to ensure callbacks are correctly
+    //       registered and cleaned up.
     setTransformation(drilldown);
     return () => {
       drilldown.destroy();
@@ -98,7 +102,8 @@ function NodeDrilldownComponent<ND = unknown, ED = unknown>(
   useEffect(() => {
     // Extract the disabled prop from the rest
     // to avoid overwriting the above enable/disable logic
-    const { disabled, ...rest } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { disabled, ...rest } = props;
     transformation?.setOptions(withAnimation(ogma, rest));
   }, [
     props.copyData,

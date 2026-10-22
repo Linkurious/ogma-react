@@ -20,12 +20,16 @@ export function animationArg<ND, ED>(
   return arg as EnableArg;
 }
 
-/** Replace `animate`/`duration` in the options with the one the installed Ogma understands. */
+/**
+ * Replace `animate`/`duration` in the options with the one the installed Ogma
+ * understands.
+ */
 export function withAnimation<ND, ED, P extends AnimationProps>(
   ogma: Ogma<ND, ED>,
   props: P
 ): P {
-  const { animate, duration, ...rest } = props; // eslint-disable-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { animate, duration, ...rest } = props;
   const arg = animationArg(ogma, props);
   if (arg === undefined) return rest as P;
   return {

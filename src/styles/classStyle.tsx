@@ -109,8 +109,10 @@ type StyleClassComponentType = <ND, ED>(
 ) => React.ReactElement | null;
 
 /**
- * This component wraps around Ogma [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle) API. It allows you to add a class style to the
- * Ogma instance to calculate the visual appearance attributes of the nodes and edges.
+ * This component wraps around Ogma
+ * [`StyleClass`](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addClassStyle)
+ * API. It allows you to add a class style to the Ogma instance to calculate
+ * the visual appearance attributes of the nodes and edges.
  */
 export const StyleClass = memo(
   styleClassComponent,
