@@ -70,7 +70,7 @@
   "devDependencies": {
     "@linkurious/code-tools": "0.2.0",
     "@linkurious/eslint-config-ogma": "3.0.0-beta",
-    "@linkurious/ogma-styles": "0.0.8",
+    "@linkurious/ogma-styles": "0.1.0",
     "@next/bundle-analyzer": "14.2.35",
     "@playwright/test": "1.58.1",
     "@testing-library/react": "16.3.2",
