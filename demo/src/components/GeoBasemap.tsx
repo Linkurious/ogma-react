@@ -15,7 +15,7 @@ import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 export type GeoProvider = "maplibre" | "mapbox" | "deck";
-export type GeoMap = maplibregl.Map | MapboxMap | Deck;
+export type MapInstance = maplibregl.Map | MapboxMap | Deck;
 
 // public token (pk.…) in a .env.local file: VITE_MAPBOX_TOKEN=pk.xxx
 export const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as
@@ -48,11 +48,11 @@ const osmLayer = new TileLayer({
 interface GeoBasemapProps {
   provider: GeoProvider;
   /** Called with the map instance once it is ready to be bound to Ogma */
-  onMap: (map: GeoMap) => void;
+  onMap: (map: MapInstance) => void;
 }
 
 /**
- * Creates and owns the map for the chosen provider. <Geo /> only binds it.
+ * Creates and owns the map for the chosen provider. <GeoMap /> only binds it.
  */
 export function GeoBasemap({ provider, onMap }: GeoBasemapProps) {
   const deckRef = useRef<DeckGLRef>(null);

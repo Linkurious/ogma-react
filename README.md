@@ -744,11 +744,17 @@ Node drilldown transformation. See [`ogma.transformations.addDrillDown()`](https
 
 ### `<Geo />`
 
-Geo mode component. You create and own the map instance (Mapbox GL, MapLibre GL or deck.gl) and pass it to `<Geo />`, which binds it to the Ogma instance. The map is never removed by the component, so you are responsible for disposing of it.
+`<Geo />` retains the legacy Ogma-owned geo mode API and accepts `GeoModeOptions` directly. Use `enabled` to enable or disable geo mode.
+
+### `<GeoMap />`
+
+`<GeoMap />` binds a caller-created map instance (Mapbox GL, MapLibre GL or deck.gl) to the Ogma instance. The map is never removed by the component, so you are responsible for disposing of it.
 
 `mapbox-gl`, `maplibre-gl` and `@deck.gl/core` are optional peer dependencies: install only the one you use.
 
 #### Props
+
+`<GeoMap />` props:
 
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
@@ -773,7 +779,7 @@ function App() {
         setMap(new mapboxgl.Map({ container: ogma.getContainer()!, style: "..." }));
       }}
     >
-      <Geo
+      <GeoMap
         provider="mapbox"
         map={map}
         enabled={true}
@@ -796,5 +802,3 @@ To avoid this issue, we highly recommend not using `<React.StrictMode/>` in your
 ## License
 
 Apache 2.0
-
-

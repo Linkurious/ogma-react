@@ -16,14 +16,14 @@ import {
   EdgeStyle,
   StyleClass,
   NodeGrouping,
-  Geo,
+  GeoMap,
   NodeGroupingProps,
   useEvent,
   Tooltip
 } from "../../src";
 import {
   GeoBasemap,
-  GeoMap,
+  MapInstance,
   GeoProvider,
   MAPBOX_TOKEN
 } from "./components/GeoBasemap";
@@ -55,7 +55,7 @@ export default function App() {
   const [geoEnabled, setGeoEnabled] = useState(false);
   const [geoProvider, setGeoProviderState] = useState<GeoProvider>("maplibre");
   // the map of the selected provider, created by <GeoBasemap />
-  const [map, setMap] = useState<GeoMap>();
+  const [map, setMap] = useState<MapInstance>();
   // only create a map once geo mode was turned on
   const [geoUsed, setGeoUsed] = useState(false);
   const toggleGeo = useCallback((value: boolean) => {
@@ -206,7 +206,7 @@ export default function App() {
         </Tooltip>
         <GraphOutlines visible={outlines} />
         {/* Geo mode */}
-        <Geo
+        <GeoMap
           provider={geoProvider}
           map={map}
           enabled={geoEnabled}

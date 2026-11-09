@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { GeoModeOptions } from "@linkurious/ogma";
 import {
   Geo as OgmaGeo,
   GeoOptions,
@@ -15,6 +16,9 @@ type DeckProvider = Parameters<typeof createDeckAdapter>[0];
 // a real deck.gl `Deck` doesn't structurally match Ogma's DeckProvider type
 // (protected members, differing `redraw` signature), so only require setProps
 type DeckInstance = { setProps(props: any): void };
+export interface GeoModeProps extends GeoModeOptions {
+  enabled?: boolean;
+}
 
 interface BaseGeoProps<ND, ED> extends GeoOptions<ND, ED> {
   /** On/off toggle */
@@ -23,15 +27,18 @@ interface BaseGeoProps<ND, ED> extends GeoOptions<ND, ED> {
   onReady?: (geo: OgmaGeo<ND, ED>) => void;
 }
 
-export type GeoProps<ND = unknown, ED = unknown> = BaseGeoProps<ND, ED> & {
+export type GeoMapProps<ND = unknown, ED = unknown> = BaseGeoProps<ND, ED> & {
   /** Library the `map` was created with */
   provider: "mapbox" | "maplibre" | "deck";
   /** Map (or deck.gl `Deck`) instance created by the user */
   map: MapboxMap | MaplibreMap | DeckInstance | null | undefined;
 };
 
+/** @deprecated Use GeoMapProps. */
+export type GeoProps<ND = unknown, ED = unknown> = GeoMapProps<ND, ED>;
+
 function createAdapter(
-  provider: GeoProps["provider"],
+  provider: GeoMapProps["provider"],
   map: unknown
 ): ProviderAdapter {
   switch (provider) {
@@ -47,16 +54,16 @@ function createAdapter(
 }
 
 /**
- * Geo mode component. The map (Mapbox GL, MapLibre GL or deck.gl) is created
+ * Map-backed geo component. The map (Mapbox GL, MapLibre GL or deck.gl) is created
  * and owned by the caller; this component only binds it to the Ogma instance.
  */
-export function Geo<ND = unknown, ED = unknown>({
+export function GeoMap<ND = unknown, ED = unknown>({
   enabled = false,
   map,
   provider,
   onReady,
   ...options
-}: GeoProps<ND, ED>) {
+}: GeoMapProps<ND, ED>) {
   const ogma = useOgma<ND, ED>();
   const [geo, setGeo] = useState<OgmaGeo<ND, ED> | null>(null);
   // last pending enable/disable transition, so teardown never overlaps it
@@ -110,6 +117,20 @@ export function Geo<ND = unknown, ED = unknown>({
     options.sizeRatio,
     options.minNodeSize
   ]);
+
+  return null;
+}
+
+/**
+ * Legacy geo mode component, retained for compatibility with the Ogma-owned map API.
+ */
+export function Geo({ enabled = false, ...options }: GeoModeProps) {
+  const ogma = useOgma();
+
+  useEffect(() => {
+    if (enabled) ogma.geo.enable(options);
+    else ogma.geo.disable();
+  }, [enabled]);
 
   return null;
 }

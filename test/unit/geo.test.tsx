@@ -1,6 +1,7 @@
 import { vi } from "vitest";
 import { Geo as OgmaGeo } from "@linkurious/ogma/geo";
-import { Ogma, Geo } from "../../src";
+import { Ogma as OgmaLib } from "@linkurious/ogma";
+import { Ogma, Geo, GeoMap } from "../../src";
 import { render } from "./utils";
 import { waitFor } from "@testing-library/react";
 
@@ -31,7 +32,7 @@ describe("Geo Mode", () => {
     const onReady = vi.fn();
     render(
       <Ogma>
-        <Geo provider="mapbox" map={map} enabled onReady={onReady} />
+        <GeoMap provider="mapbox" map={map} enabled onReady={onReady} />
       </Ogma>
     );
     await waitFor(() => expect(onReady).toHaveBeenCalledTimes(1));
@@ -44,9 +45,33 @@ describe("Geo Mode", () => {
     const onReady = vi.fn();
     render(
       <Ogma>
-        <Geo provider="maplibre" map={undefined} enabled onReady={onReady} />
+        <GeoMap provider="maplibre" map={undefined} enabled onReady={onReady} />
       </Ogma>
     );
     expect(onReady).not.toHaveBeenCalled();
+  });
+
+  it("supports the legacy Ogma-owned geo mode API", async () => {
+    const options = { latitudePath: "lat", longitudePath: "lng" };
+    const enable = vi.fn(async () => {});
+    const disable = vi.fn(async () => {});
+    const onOgmaReady = (ogma: OgmaLib) => {
+      vi.spyOn(ogma.geo, "enable").mockImplementation(enable);
+      vi.spyOn(ogma.geo, "disable").mockImplementation(disable);
+    };
+
+    const { rerender } = render(
+      <Ogma onReady={onOgmaReady}>
+        <Geo {...options} enabled />
+      </Ogma>
+    );
+    await waitFor(() => expect(enable).toHaveBeenCalledWith(options));
+
+    rerender(
+      <Ogma onReady={onOgmaReady}>
+        <Geo {...options} />
+      </Ogma>
+    );
+    await waitFor(() => expect(disable).toHaveBeenCalledWith());
   });
 });
