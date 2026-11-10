@@ -10,8 +10,6 @@ fs.readFile("package.json", "utf8")
       scripts: undefined,
       eslintConfig: undefined,
       browserslist: undefined,
-      jest: undefined,
-      "jest-junit": undefined,
       peerDependencies: base.peerDependencies,
       private: undefined,
       files: base.files.map((f) => f.replace("dist/", "")),

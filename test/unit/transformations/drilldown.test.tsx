@@ -18,6 +18,14 @@ describe("Drilldown", () => {
     await act(() => userEvent.click(screen.getByText("toggle")));
     await ref.current?.transformations.afterNextUpdate();
     await ref.current?.transformations.afterNextUpdate();
-    expect(ref.current?.getNodes().getId()).toEqual(["0 - 1", 1, 2, "0 - 2", "0 - 3", "0 - 4", "ogma-group-0"]);
+    expect(ref.current?.getNodes().getId()).toEqual([
+      "0 - 1",
+      1,
+      2,
+      "0 - 2",
+      "0 - 3",
+      "0 - 4",
+      "ogma-group-0"
+    ]);
   });
 });

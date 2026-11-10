@@ -1,0 +1,5 @@
+{
+  "extends": ["@linkurious/eslint-config-ogma/oxfmt"],
+  "printWidth": 80,
+  "trailingComma": "none"
+}

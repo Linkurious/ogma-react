@@ -62,7 +62,7 @@ describe("Layer", () => {
     expect(ref.current?.element.className).toContain("updated-class");
     expect(ref.current?.element.className).not.toContain("initial-class");
   });
- 
+
   it("should handle index", () => {
     const ref = React.createRef<OgmaLayer>();
     render(
@@ -100,8 +100,7 @@ describe("Layer", () => {
     const ref = React.createRef<OgmaLayer>();
     const { unmount } = render(
       <Ogma>
-        <Layer ref={ref}>
-        </Layer>
+        <Layer ref={ref}></Layer>
       </Ogma>
     );
     expect(ref.current).toBeDefined();

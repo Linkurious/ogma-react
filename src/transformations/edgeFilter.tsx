@@ -63,6 +63,7 @@ type EdgeFilterType = <ND, ED>(
 ) => React.ReactElement | null;
 
 /**
- * Edge Filter transformation component. It wraps around Ogma [`EdgeFilter` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeFilter).
+ * Edge Filter transformation component. It wraps around Ogma
+ * [`EdgeFilter` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-transformations-addEdgeFilter).
  */
 export const EdgeFilter = forwardRef(EdgeFilterComponent) as EdgeFilterType;

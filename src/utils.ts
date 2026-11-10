@@ -49,7 +49,9 @@ export function handleEventProps<ND, ED>(
 
     // If it's a new handler or changed handler, add it
     if (!existingHandler || existingHandler !== handler) {
-      // console.log(555, "add handler", eventName, existingHandler === handler);
+      // console.log(
+      //   555, "add handler", eventName, existingHandler === handler
+      // );
       ogma.events.on(eventName, handler);
       // @ts-expect-error type union
       previousEventHandlers[eventName] = handler;

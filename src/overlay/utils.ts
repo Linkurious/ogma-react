@@ -151,11 +151,17 @@ export function getTranslate(
 ) {
   switch (newPlacement || placement) {
     case "top":
-      return `translate(calc(-50% + ${translate.x}px),calc(-100% + ${translate.y}px))`;
+      return (
+        `translate(calc(-50% + ${translate.x}px),` +
+        `calc(-100% + ${translate.y}px))`
+      );
     case "bottom":
       return `translate(calc(-50% + ${translate.x}px),${translate.y}px)`;
     case "left":
-      return `translate(calc(-100% + ${translate.x}px),calc(-50% + ${translate.y}px))`;
+      return (
+        `translate(calc(-100% + ${translate.x}px),` +
+        `calc(-50% + ${translate.y}px))`
+      );
     default:
       return `translate(${translate.x}px,calc(-50% + ${translate.y}px))`;
   }

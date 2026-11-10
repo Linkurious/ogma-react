@@ -12,7 +12,7 @@ export const Toggle: React.FC<ToggleProps> = ({
   checked,
   onChange,
   label,
-  className,
+  className
 }) => {
   const handleChange = React.useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {

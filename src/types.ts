@@ -1,6 +1,4 @@
-import {
-  EventTypes
-} from "@linkurious/ogma";
+import { EventTypes } from "@linkurious/ogma";
 
 export type EventNames<ND, ED> = keyof EventTypes<ND, ED>;
 

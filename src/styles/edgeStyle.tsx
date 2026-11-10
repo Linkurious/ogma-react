@@ -91,7 +91,9 @@ type EdgeStyleComponentType = <ND, ED>(
 ) => React.ReactElement | null;
 
 /**
- * This component wraps around Ogma [`EdgeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addEdgeRule). It allows you to add a node style rule to the
+ * This component wraps around Ogma
+ * [`EdgeStyle` API](https://doc.linkurio.us/ogma/latest/api.html#Ogma-styles-addEdgeRule).
+ * It allows you to add a node style rule to the
  * Ogma instance to calculate the visual appearance attributes of the edges.
  */
 export const EdgeStyle = Object.assign(

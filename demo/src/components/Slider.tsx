@@ -14,7 +14,7 @@ export const Slider: React.FC<SliderProps> = ({
   max = 0,
   min = 1,
   value = 0,
-  step = 0.1,
+  step = 0.1
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (typeof onChange === "function") onChange(Number(event.target.value));

@@ -158,7 +158,7 @@ describe("Ogma", () => {
     expect(mockOnNodesAdded).toHaveBeenCalledTimes(2);
   });
 
-  it("should set the theme of the graph correctly with the prop changes", async () => {
+  it("should set the graph theme on prop changes", async () => {
     const mockData = {
       nodes: [{ id: 0, attributes: { x: 0, y: 0 } }]
     } as RawGraph;

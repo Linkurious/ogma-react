@@ -311,7 +311,8 @@ type TooltipComponentType = <_ND, _ED, K extends keyof TooltipEventFunctions>(
 
 /**
  * Tooltip layer is a custom component to render some dynamic data on top of
- * your visualisation. The position adapts to the target of the event (or is static)
+ * your visualisation. The position adapts to the target of the event (or is
+ * static)
  * and is customisable. See in in action in our
 [example](linkurious.github.io/ogma-react/)
  */

@@ -68,7 +68,9 @@ type CanvasLayerType = <_ND, _ED>(
 ) => React.ReactElement | null;
 
 /**
- * A canvas layer that can be added to the Ogma instance. See the [Ogma documentation](https://doc.linkurio.us/ogma/latest/api.html#Ogma-layers-addCanvasLayer) for more information.
+ * A canvas layer that can be added to the Ogma instance. See the
+ * [Ogma documentation](https://doc.linkurio.us/ogma/latest/api.html#Ogma-layers-addCanvasLayer)
+ * for more information.
  *
  * Useful to perform drawings in sync with the view. In the drawing function you
  * are given the CanvasRenderingContext2D, that is automatically scaled and

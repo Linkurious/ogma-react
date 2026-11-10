@@ -188,7 +188,6 @@ function NodeGroupingTestC(
   );
 }
 
-
 function DrilldownTestC(
   drilldown: Partial<NodeDrilldownProps<unknown, unknown>> = {},
   drilldownRef: Ref<Drilldown<any, any> | null>
