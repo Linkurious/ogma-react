@@ -7,7 +7,14 @@ import {
   Theme
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
-import { useEffect, useState, createRef, useCallback, useMemo } from "react";
+import {
+  useEffect,
+  useState,
+  createRef,
+  useCallback,
+  useMemo,
+  useRef
+} from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 // components
 import {
@@ -62,10 +69,16 @@ export default function App() {
     setGeoEnabled(value);
     if (value) setGeoUsed(true);
   }, []);
+  // provider requested by the user, applied once the old geo binding is gone
+  const requestedProvider = useRef<GeoProvider>("maplibre");
   const setGeoProvider = useCallback((value: GeoProvider) => {
-    // the previous map is disposed of by its component, unbind it first
+    // unbind the old map but keep its basemap mounted until teardown ends
+    if (value === requestedProvider.current) return;
+    requestedProvider.current = value;
     setMap(undefined);
-    setGeoProviderState(value);
+  }, []);
+  const onGeoDestroyed = useCallback(() => {
+    setGeoProviderState(requestedProvider.current);
   }, []);
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
@@ -210,6 +223,7 @@ export default function App() {
         <GeoMap
           provider={geoProvider}
           map={map}
+          onDestroyed={onGeoDestroyed}
           enabled={geoEnabled}
           latitudePath="properties.latitude"
           longitudePath="properties.longitude"

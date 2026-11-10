@@ -25,6 +25,8 @@ interface BaseGeoProps<ND, ED> extends GeoOptions<ND, ED> {
   enabled?: boolean;
   /** Called once the geo binding is created */
   onReady?: (geo: OgmaGeo<ND, ED>) => void;
+  /** Called once the binding has been fully disabled and destroyed */
+  onDestroyed?: () => void;
 }
 
 export type GeoMapProps<ND = unknown, ED = unknown> = BaseGeoProps<ND, ED> & {
@@ -62,12 +64,17 @@ export function GeoMap<ND = unknown, ED = unknown>({
   map,
   provider,
   onReady,
+  onDestroyed,
   ...options
 }: GeoMapProps<ND, ED>) {
   const ogma = useOgma<ND, ED>();
   const [geo, setGeo] = useState<OgmaGeo<ND, ED> | null>(null);
   // last pending enable/disable transition, so teardown never overlaps it
   const pending = useRef<Promise<unknown>>(Promise.resolve());
+  // the binding currently owned by this component (guards stale transitions)
+  const current = useRef<OgmaGeo<ND, ED> | null>(null);
+  const onDestroyedRef = useRef(onDestroyed);
+  onDestroyedRef.current = onDestroyed;
 
   // (re)create the binding whenever the map or the provider type changes
   useEffect(() => {
@@ -77,27 +84,32 @@ export function GeoMap<ND = unknown, ED = unknown>({
       createAdapter(provider, map),
       options
     );
+    current.current = instance;
     setGeo(instance);
     onReady?.(instance);
     return () => {
       // disable first and swallow the error if Ogma was already destroyed
-      const destroy = () =>
-        instance
-          .disable()
-          .catch(() => {})
-          .then(() => {
-            if (!instance.enabled()) instance.destroy();
-          });
-      pending.current.then(destroy);
+      if (current.current === instance) current.current = null;
+      const teardown = pending.current
+        .then(() => instance.disable())
+        .catch(() => {})
+        .then(() => {
+          if (!instance.enabled()) instance.destroy();
+        })
+        .catch(() => {})
+        .then(() => onDestroyedRef.current?.());
+      // later transitions (e.g. a replacement binding) wait for full teardown
+      pending.current = teardown;
       setGeo(null);
     };
   }, [ogma, map, provider]);
 
   useEffect(() => {
     if (!geo) return;
-    const run = pending.current.then(() =>
-      enabled ? geo.enable() : geo.disable()
-    );
+    const run = pending.current.then(() => {
+      if (current.current !== geo) return;
+      return enabled ? geo.enable() : geo.disable();
+    });
     pending.current = run.catch(() => {});
   }, [geo, enabled]);
 

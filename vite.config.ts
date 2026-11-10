@@ -26,13 +26,20 @@ export default defineConfig({
       }
     },
     rollupOptions: {
-      external: ["@linkurious/ogma", "react", "react-dom", "react-dom/server"],
+      external: [
+        "@linkurious/ogma",
+        "@linkurious/ogma/geo",
+        "react",
+        "react-dom",
+        "react-dom/server"
+      ],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
           "react-dom/server": "ReactDOMServer",
-          "@linkurious/ogma": "Ogma"
+          "@linkurious/ogma": "Ogma",
+          "@linkurious/ogma/geo": "OgmaGeo"
         }
       }
     }
