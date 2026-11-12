@@ -17,7 +17,8 @@ const MASK_SELECTOR = ".position-control";
 
 const getScreenshotOptions = (page: Page) => ({
   maxDiffPixels: TOLERATED_DIFFERENCE,
-  mask: [page.locator(MASK_SELECTOR)]
+  mask: [page.locator(MASK_SELECTOR)],
+  timeout: 5000
 });
 
 // Geo snapshots must not depend on live tile servers: the MapLibre style is
@@ -61,8 +62,7 @@ test.beforeEach(async () => {
   await page.waitForTimeout(1200);
 
   await expect(page).toHaveScreenshot(initialState, {
-    ...getScreenshotOptions(page),
-    timeout: 10000
+    ...getScreenshotOptions(page)
   });
 });
 
@@ -77,8 +77,7 @@ test("mouse hover", async () => {
   await page.mouse.move(pos.x, pos.y);
 
   await expect(page).toHaveScreenshot("node-hovered.png", {
-    ...getScreenshotOptions(page),
-    timeout: 5000
+    ...getScreenshotOptions(page)
   });
 
   // Reset hover state by moving the mouse away
