@@ -20,10 +20,35 @@ const getScreenshotOptions = (page: Page) => ({
   mask: [page.locator(MASK_SELECTOR)]
 });
 
+// Geo snapshots must not depend on live tile servers: the MapLibre style is
+// replaced by a flat, source-less one and every other tile request is dropped.
+const OFFLINE_STYLE = {
+  version: 8,
+  sources: {},
+  layers: [
+    {
+      id: "background",
+      type: "background",
+      paint: { "background-color": "#dfe8e4" }
+    }
+  ]
+};
+
+async function stubMapNetwork(page: Page) {
+  await page.route("https://demotiles.maplibre.org/**", (route) =>
+    route.fulfill({ json: OFFLINE_STYLE })
+  );
+  // deck.gl raster tiles (OpenStreetMap)
+  await page.route("https://tile.openstreetmap.org/**", (route) =>
+    route.abort()
+  );
+}
+
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
+  await stubMapNetwork(page);
 });
 
 test.beforeEach(async () => {

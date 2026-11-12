@@ -10,7 +10,7 @@ body {
   --brand-color: #0094ff;
   --brand-color-darker: #0074cc;
   --overlay-text-color: var(--brand-color);
-  --fontFamily: 'IBM Plex Sans', sans-serif;
+  --fontFamily: "IBM Plex Sans", sans-serif;
   --border-radius: 5px;
 }
 
@@ -26,7 +26,7 @@ body {
 
 code {
   font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .App {
@@ -72,6 +72,13 @@ code {
 .geo-basemap {
   position: absolute;
   inset: 0;
+}
+
+/* deck.gl appends its canvas in the normal flow, after its widget container */
+.geo-basemap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .geo-basemap[hidden] {

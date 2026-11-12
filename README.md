@@ -744,45 +744,53 @@ Node drilldown transformation. See [`ogma.transformations.addDrillDown()`](https
 
 ### `<Geo />`
 
-`<Geo />` retains the legacy Ogma-owned geo mode API and accepts `GeoModeOptions` directly. Use `enabled` to enable or disable geo mode.
+Binds a map **you create** (MapLibre GL, Mapbox GL or deck.gl) to Ogma, so the graph is drawn on top of it. It comes from a separate entry point, because it needs Ogma `>= 6.1` (`@linkurious/ogma/geo`):
 
-### `<GeoMap />`
+```tsx
+import { Geo } from "@linkurious/ogma-react/geo";
+```
 
-`<GeoMap />` binds a caller-created map instance (Mapbox GL, MapLibre GL or deck.gl) to the Ogma instance. The map is never removed by the component, so you are responsible for disposing of it.
-
-`mapbox-gl`, `maplibre-gl` and `@deck.gl/core` are optional peer dependencies: install only the one you use.
+`maplibre-gl`, `mapbox-gl` and `@deck.gl/core` are optional peer dependencies: install only the one you use. The component never removes your map, you are responsible for disposing of it. Nothing is bound until `map` is defined, so it is safe to pass `undefined` while the basemap loads.
 
 #### Props
 
-`<GeoMap />` props:
-
 | Prop         | Type                           | Default | Description |
 | ------------ | ------------------------------ | ------- | ----------- |
-| `provider`   | `"mapbox" \| "maplibre" \| "deck"` | | Library the `map` was created with |
-| `map`        | `mapboxgl.Map \| maplibregl.Map \| Deck` | | Map instance created by the user. Nothing is bound until it is defined |
+| `provider`   | `"maplibre" \| "mapbox" \| "deck"` | | Library the `map` was created with. Selects the new API (see below) |
+| `map`        | `maplibregl.Map \| mapboxgl.Map \| Deck` | | Map created by you. Its type must match `provider` |
 | `enabled?`   | `boolean`    | `false`  | On/off toggle |
 | `onReady?`   | `(geo: Geo) => void` | | Called when the binding is created |
-| `...rest`    | `GeoOptions` | | `latitudePath`, `longitudePath`, `getCoordinates`, `projection`, `syncCamera`, `syncOnDrag`, `sizeRatio`, ... See `GeoOptions` in `@linkurious/ogma/geo` |
+| `onDestroyed?` | `() => void` | | Called once the binding is disabled and destroyed (map or provider changed, or unmount) |
+| `...rest`    | `GeoOptions` | | `latitudePath`, `longitudePath`, `getCoordinates`, `projection`, `syncCamera`, `syncOnDrag`, `sizeRatio`, ... See `GeoOptions` in `@linkurious/ogma/geo`. Changes are applied with `setOptions` (shallow comparison, so keep functions such as `getCoordinates` stable) |
 
-#### Example
+#### Example: MapLibre with vector tiles
 
 ```tsx
-import mapboxgl from "mapbox-gl";
+import { useState } from "react";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { Ogma } from "@linkurious/ogma-react";
+import { Geo } from "@linkurious/ogma-react/geo";
 
 function App() {
-  const [map, setMap] = useState<mapboxgl.Map>();
+  const [map, setMap] = useState<maplibregl.Map>();
 
   return (
     <Ogma
       graph={...}
+      options={{ background: null }} // let the map show through
       onReady={(ogma) => {
-        setMap(new mapboxgl.Map({ container: ogma.getContainer()!, style: "..." }));
+        const map = new maplibregl.Map({
+          container: ogma.getContainer()!,
+          style: "https://demotiles.maplibre.org/style.json" // vector tiles
+        });
+        map.on("load", () => setMap(map));
       }}
     >
-      <GeoMap
-        provider="mapbox"
+      <Geo
+        provider="maplibre"
         map={map}
-        enabled={true}
+        enabled
         longitudePath="data.lng"
         latitudePath="data.lat"
       />
@@ -790,6 +798,25 @@ function App() {
   );
 }
 ```
+
+Mapbox works the same way with `provider="mapbox"` and a `mapboxgl.Map`. deck.gl has no basemap of its own: pass a `Deck` instance with `provider="deck"` (for instance with raster OpenStreetMap tiles in a `TileLayer`). Bundlers such as Vite may need the MapLibre worker URL configured, see the [MapLibre docs](https://maplibre.org/maplibre-gl-js/docs/).
+
+Changing `map` or `provider` tears the old binding down (`onDestroyed` fires) and creates a new one. Keep the previous map alive until `onDestroyed`, if you remove it.
+
+#### Why the component serializes its transitions
+
+Ogma's `enable()` / `disable()` are asynchronous, and `new Geo(...)` throws while a previous binding is still alive (it owns a position layer until `destroy()`). The component therefore runs creation, enable, disable and teardown on a single queue, so a replacement binding is never built while the old one is shutting down. Errors from that queue are ignored, as they are expected when Ogma was destroyed first. Without this, every consumer would need its own provider-switching choreography.
+
+#### Legacy mode and migration
+
+Without a `provider`, `<Geo />` falls back to the legacy behavior (Ogma creates and owns a Leaflet map through `ogma.geo`), so `/geo` is a drop-in replacement for the root `Geo`:
+
+```diff
+- import { Geo } from "@linkurious/ogma-react";
++ import { Geo } from "@linkurious/ogma-react/geo"; // requires Ogma >= 6.1
+```
+
+`<Geo />` exported from `@linkurious/ogma-react` (root) is the legacy component and is **deprecated**: Ogma will drop the `ogma.geo` namespace. The root import keeps working with Ogma `>= 5.3.9` and does not load `@linkurious/ogma/geo`. In the next major version the root `Geo` will become the new component and `/geo` will remain as a re-export for one release.
 
 
 ## `<React.StrictMode/>` incompatibility

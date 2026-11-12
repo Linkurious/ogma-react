@@ -7,14 +7,7 @@ import {
   Theme
 } from "@linkurious/ogma";
 import { morningBreeze } from "@linkurious/ogma-styles";
-import {
-  useEffect,
-  useState,
-  createRef,
-  useCallback,
-  useMemo,
-  useRef
-} from "react";
+import { useEffect, useState, createRef, useCallback, useMemo } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 // components
 import {
@@ -23,17 +16,12 @@ import {
   EdgeStyle,
   StyleClass,
   NodeGrouping,
-  GeoMap,
   NodeGroupingProps,
   useEvent,
   Tooltip
 } from "../../src";
-import {
-  GeoBasemap,
-  MapInstance,
-  GeoProvider,
-  MAPBOX_TOKEN
-} from "./components/GeoBasemap";
+import { Geo, GeoProvider, GeoMapSource } from "../../src/geo";
+import { GeoBasemap, MapInstance, MAPBOX_TOKEN } from "./components/GeoBasemap";
 
 // custom components:
 // layout component, to be applied on certain events
@@ -60,26 +48,22 @@ export default function App() {
   // grouping and geo states
   const [nodeGrouping, setNodeGrouping] = useState(true);
   const [geoEnabled, setGeoEnabled] = useState(false);
-  const [geoProvider, setGeoProviderState] = useState<GeoProvider>("maplibre");
-  // the map of the selected provider, created by <GeoBasemap />
-  const [map, setMap] = useState<MapInstance>();
-  // only create a map once geo mode was turned on
-  const [geoUsed, setGeoUsed] = useState(false);
-  const toggleGeo = useCallback((value: boolean) => {
-    setGeoEnabled(value);
-    if (value) setGeoUsed(true);
-  }, []);
-  // provider requested by the user, applied once the old geo binding is gone
-  const requestedProvider = useRef<GeoProvider>("maplibre");
-  const setGeoProvider = useCallback((value: GeoProvider) => {
-    // unbind the old map but keep its basemap mounted until teardown ends
-    if (value === requestedProvider.current) return;
-    requestedProvider.current = value;
-    setMap(undefined);
-  }, []);
-  const onGeoDestroyed = useCallback(() => {
-    setGeoProviderState(requestedProvider.current);
-  }, []);
+  const [geoProvider, setGeoProvider] = useState<GeoProvider>("maplibre");
+  // maps created by <GeoBasemap />, one per provider that was used so far
+  const [maps, setMaps] = useState<Partial<Record<GeoProvider, MapInstance>>>(
+    {}
+  );
+  const [mounted, setMounted] = useState<GeoProvider[]>([]);
+  const onMap = useCallback(
+    (provider: GeoProvider, map: MapInstance) =>
+      setMaps((prev) => ({ ...prev, [provider]: map })),
+    []
+  );
+  // only create a basemap once its provider is used while geo mode is on
+  useEffect(() => {
+    if (geoEnabled && !mounted.includes(geoProvider))
+      setMounted([...mounted, geoProvider]);
+  }, [geoEnabled, geoProvider, mounted]);
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.5);
@@ -150,11 +134,14 @@ export default function App() {
     <div className="App">
       <Logo />
       {/* Geo mode: the map lives behind the (transparent) Ogma canvas */}
-      {geoUsed && (
-        <div className="geo-basemap" hidden={!geoEnabled}>
-          <GeoBasemap key={geoProvider} provider={geoProvider} onMap={setMap} />
-        </div>
-      )}
+      {mounted.map((provider) => (
+        <GeoBasemap
+          key={provider}
+          provider={provider}
+          hidden={!geoEnabled || provider !== geoProvider}
+          onMap={onMap}
+        />
+      ))}
       <Ogma<ND, ED>
         ref={ogmaInstanceRef}
         graph={graph}
@@ -220,10 +207,11 @@ export default function App() {
         </Tooltip>
         <GraphOutlines visible={outlines} />
         {/* Geo mode */}
-        <GeoMap
-          provider={geoProvider}
-          map={map}
-          onDestroyed={onGeoDestroyed}
+        <Geo
+          {...({
+            provider: geoProvider,
+            map: maps[geoProvider]
+          } as GeoMapSource)}
           enabled={geoEnabled}
           latitudePath="properties.latitude"
           longitudePath="properties.longitude"
@@ -238,7 +226,7 @@ export default function App() {
         outlines={outlines}
         setOutlines={setOutlines}
         geoEnabled={geoEnabled}
-        setGeoEnabled={toggleGeo}
+        setGeoEnabled={setGeoEnabled}
         geoProvider={geoProvider}
         setGeoProvider={setGeoProvider}
         mapboxAvailable={!!MAPBOX_TOKEN}

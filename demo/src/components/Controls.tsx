@@ -3,7 +3,7 @@ import { Drawer } from "./Drawer";
 import { Toggle } from "./Toggle";
 import { Slider } from "./Slider";
 import { Menu as MenuIcon } from "react-feather";
-import type { GeoProvider } from "./GeoBasemap";
+import type { GeoProvider } from "../../../src/geo";
 import "./Controls.css";
 
 interface ControlsProps {
