@@ -204,7 +204,7 @@ describe("Tooltip", () => {
     const ogmaRef = createRef<OgmaLib>();
 
     render(
-      <Ogma ref={ogmaRef} graph={graph}>
+      <Ogma ref={ogmaRef} graph={graph} options={{ renderer: "canvas" }}>
         <Tooltip eventName="nodeClick" ref={ref}>
           {(node) => <div className="custom-child-div">{node.getId()}</div>}
         </Tooltip>

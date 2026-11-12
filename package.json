@@ -21,6 +21,12 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "default": "./dist/index.mjs"
+    },
+    "./geo": {
+      "types": "./dist/geo.d.ts",
+      "import": "./dist/geo.mjs",
+      "require": "./dist/geo.cjs",
+      "default": "./dist/geo.mjs"
     }
   },
   "files": [
@@ -39,7 +45,7 @@
     "build": "npm ls @linkurious/ogma && npm run build:lib && npm run build:ts",
     "build:ts": "npm run typecheck && npm run types",
     "build:demo": "vite build demo",
-    "build:lib": "vite build && npm run build:files",
+    "build:lib": "vite build && ENTRY=geo vite build && npm run build:files",
     "build:files": "scripts/prepublish.mjs && cp README.md dist",
     "format": "oxfmt --write src demo test",
     "format:check": "oxfmt --check src demo test",
@@ -49,7 +55,7 @@
     "test:unit": "vitest run --coverage --reporter=junit --reporter=default --outputFile reports/unit/junit-test-results.xml",
     "e2e:tests": "playwright test",
     "typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.build.json",
-    "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner --no-check",
+    "types": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner --no-check && dts-bundle-generator -o ./dist/geo.d.ts ./src/geo.tsx --no-banner --no-check",
     "postversion": "sync_versions",
     "doc:publish": "npm run build:demo && gh-pages -t --nojekyll -d demo/dist",
     "bump:patch": "npm version patch --no-git-tag-version",
@@ -63,11 +69,29 @@
     ]
   },
   "peerDependencies": {
-    "@linkurious/ogma": ">=5.3.9 || ^6.0.0",
+    "@deck.gl/core": ">=8.0.0",
+    "@linkurious/ogma": "6.1.0",
+    "mapbox-gl": ">=2.0.0",
+    "maplibre-gl": ">=2.0.0",
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
+  "peerDependenciesMeta": {
+    "@deck.gl/core": {
+      "optional": true
+    },
+    "mapbox-gl": {
+      "optional": true
+    },
+    "maplibre-gl": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@deck.gl/core": "9.4.0",
+    "@deck.gl/geo-layers": "9.4.0",
+    "@deck.gl/layers": "9.4.0",
+    "@deck.gl/mesh-layers": "9.4.0",
     "@linkurious/code-tools": "0.2.0",
     "@linkurious/eslint-config-ogma": "3.0.0-beta",
     "@linkurious/ogma-styles": "0.0.8",
@@ -90,6 +114,8 @@
     "jsdom": "28.0.0",
     "leaflet": "1.9.4",
     "lint-staged": "16.2.7",
+    "mapbox-gl": "3.34.2",
+    "maplibre-gl": "6.15.0",
     "oxfmt": "0.73.0",
     "oxlint": "1.88.0",
     "react": "19.2.4",

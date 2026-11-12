@@ -65,3 +65,33 @@ code {
   padding: 10px;
   border-radius: 5px;
 }
+.App {
+  position: relative;
+}
+
+.geo-basemap {
+  position: absolute;
+  inset: 0;
+}
+
+/* deck.gl appends its canvas in the normal flow, after its widget container */
+.geo-basemap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.geo-basemap[hidden] {
+  display: none;
+}
+
+.ogma-container {
+  position: relative;
+  z-index: 1;
+}
+
+.geo-provider {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+}
