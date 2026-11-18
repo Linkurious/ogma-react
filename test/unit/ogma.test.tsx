@@ -47,7 +47,7 @@ describe("Ogma", () => {
     return new Promise((resolve) => {
       const onReady = (ogma: OgmaLib) => {
         const options = ogma.getOptions();
-        expect(options.backgroundColor).toBe(backgroundColor);
+        expect(options.background).toBe(backgroundColor);
         expect(options.minimumWidth).toBe(minimumWidth);
         return resolve(null);
       };
@@ -55,7 +55,7 @@ describe("Ogma", () => {
         <Ogma
           graph={graph}
           onReady={onReady}
-          options={{ backgroundColor, minimumWidth }}
+          options={{ background: backgroundColor, minimumWidth }}
         />,
         div
       );
@@ -66,22 +66,26 @@ describe("Ogma", () => {
     const backgroundColor = "red";
     const ref = React.createRef<OgmaLib>();
     const { rerender } = render(
-      <Ogma ref={ref} graph={graph} options={{ backgroundColor }} />,
+      <Ogma
+        ref={ref}
+        graph={graph}
+        options={{ background: backgroundColor }}
+      />,
       div
     );
 
-    expect(ref.current?.getOptions().backgroundColor).toBe(backgroundColor);
+    expect(ref.current?.getOptions().background).toBe(backgroundColor);
 
     const newBackgroundColor = "blue";
     rerender(
       <Ogma
         ref={ref}
         graph={graph}
-        options={{ backgroundColor: newBackgroundColor }}
+        options={{ background: newBackgroundColor }}
       />
     );
 
-    expect(ref.current?.getOptions().backgroundColor).toBe(newBackgroundColor);
+    expect(ref.current?.getOptions().background).toBe(newBackgroundColor);
   });
 
   it("passes the ogma instance to children", () => {

@@ -9,8 +9,6 @@ import {
 import { morningBreeze } from "@linkurious/ogma-styles";
 import { useEffect, useState, createRef, useCallback, useMemo } from "react";
 import { LoadingOverlay } from "./components/LoadingOverlay";
-// for geo mode
-import * as L from "leaflet";
 // components
 import {
   Ogma,
@@ -18,11 +16,12 @@ import {
   EdgeStyle,
   StyleClass,
   NodeGrouping,
-  Geo,
   NodeGroupingProps,
   useEvent,
   Tooltip
 } from "../../src";
+import { Geo, GeoProvider, GeoMapSource } from "../../src/geo";
+import { GeoBasemap, MapInstance, MAPBOX_TOKEN } from "./components/GeoBasemap";
 
 // custom components:
 // layout component, to be applied on certain events
@@ -33,9 +32,6 @@ import { GraphOutlines } from "./components/GraphOutlines";
 import { Controls } from "./components/Controls";
 import { MousePosition } from "./components/MousePosition";
 import { Logo } from "./components/Logo";
-
-// to enable geo mode integration
-OgmaLib.libraries["leaflet"] = L;
 
 type ND = unknown;
 type ED = unknown;
@@ -52,6 +48,22 @@ export default function App() {
   // grouping and geo states
   const [nodeGrouping, setNodeGrouping] = useState(true);
   const [geoEnabled, setGeoEnabled] = useState(false);
+  const [geoProvider, setGeoProvider] = useState<GeoProvider>("maplibre");
+  // maps created by <GeoBasemap />, one per provider that was used so far
+  const [maps, setMaps] = useState<Partial<Record<GeoProvider, MapInstance>>>(
+    {}
+  );
+  const [mounted, setMounted] = useState<GeoProvider[]>([]);
+  const onMap = useCallback(
+    (provider: GeoProvider, map: MapInstance) =>
+      setMaps((prev) => ({ ...prev, [provider]: map })),
+    []
+  );
+  // only create a basemap once its provider is used while geo mode is on
+  useEffect(() => {
+    if (geoEnabled && !mounted.includes(geoProvider))
+      setMounted([...mounted, geoProvider]);
+  }, [geoEnabled, geoProvider, mounted]);
   // styling states
   const [nodeSize, setNodeSize] = useState(5);
   const [edgeWidth, setEdgeWidth] = useState(0.5);
@@ -121,15 +133,24 @@ export default function App() {
   return (
     <div className="App">
       <Logo />
+      {/* Geo mode: the map lives behind the (transparent) Ogma canvas */}
+      {mounted.map((provider) => (
+        <GeoBasemap
+          key={provider}
+          provider={provider}
+          hidden={!geoEnabled || provider !== geoProvider}
+          onMap={onMap}
+        />
+      ))}
       <Ogma<ND, ED>
         ref={ogmaInstanceRef}
         graph={graph}
+        options={geoEnabled ? { background: null } : { background: "#ffffff" }}
         onAddNodes={onAddNodes}
         onReady={onReady}
         theme={morningBreeze as Theme<ND, ED>}
       >
         {/* Styling */}
-
         <NodeStyle<ND, ED>
           attributes={{
             // the label is the value os the property name.
@@ -141,7 +162,6 @@ export default function App() {
             }
           }}
         />
-
         <NodeStyle.Hovered<ND, ED>
           attributes={{
             radius: (n) => (n?.getData("multiplier") || 1) * nodeSize * 1.5,
@@ -153,7 +173,6 @@ export default function App() {
           }}
           fullOverwrite={false}
         />
-
         <EdgeStyle<ND, ED> attributes={{ width: edgeWidth }} />
         {useClass && (
           <StyleClass<ND, ED>
@@ -161,7 +180,6 @@ export default function App() {
             nodeAttributes={styleClassNodeAttributes}
           />
         )}
-
         <EdgeStyle.Hovered<ND, ED>
           attributes={{
             width: (e) => e.getData("weight") * edgeWidth,
@@ -169,10 +187,8 @@ export default function App() {
           }}
           fullOverwrite={false}
         />
-
         {/* Layout */}
         <LayoutService />
-
         {/* Grouping */}
         <NodeGrouping<ND, ED>
           ref={groupingRef}
@@ -180,7 +196,6 @@ export default function App() {
           groupIdFunction={groupingOptions.groupIdFunction}
           nodeGenerator={groupingOptions.nodeGenerator}
         />
-
         <Tooltip<ND, ED, "nodeRightclick">
           eventName="nodeRightclick"
           bodyClass="ogma-tooltip"
@@ -191,12 +206,15 @@ export default function App() {
           }}
         </Tooltip>
         <GraphOutlines visible={outlines} />
-
         {/* Geo mode */}
         <Geo
+          {...({
+            provider: geoProvider,
+            map: maps[geoProvider]
+          } as GeoMapSource)}
           enabled={geoEnabled}
-          longitudePath="properties.longitude"
           latitudePath="properties.latitude"
+          longitudePath="properties.longitude"
         />
         <MousePosition />
       </Ogma>
@@ -209,6 +227,9 @@ export default function App() {
         setOutlines={setOutlines}
         geoEnabled={geoEnabled}
         setGeoEnabled={setGeoEnabled}
+        geoProvider={geoProvider}
+        setGeoProvider={setGeoProvider}
+        mapboxAvailable={!!MAPBOX_TOKEN}
         addNode={addNode}
         useClass={useClass}
         setUseClass={setUseClass}

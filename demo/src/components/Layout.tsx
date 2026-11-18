@@ -1,16 +1,15 @@
-import { NodeList } from "@linkurious/ogma";
 import { useCallback, useEffect } from "react";
 import { useOgma } from "../../../src";
 
 // custom layout service based on the event of the nodes being added
 export function LayoutService() {
   const ogma = useOgma();
-  const onNodesAdded = useCallback(
-    (_evt: { nodes: NodeList }) => {
-      ogma.events.once("idle", () => ogma.layouts.force({ locate: true }));
-    },
-    [ogma]
-  );
+  const onNodesAdded = useCallback(() => {
+    ogma.events.once("idle", () => {
+      ogma.getNodes().setAttributes({ x: 0, y: 0 });
+      ogma.layouts.force({ locate: true });
+    });
+  }, [ogma]);
 
   useEffect(() => {
     // register listener

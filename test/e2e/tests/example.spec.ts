@@ -17,13 +17,39 @@ const MASK_SELECTOR = ".position-control";
 
 const getScreenshotOptions = (page: Page) => ({
   maxDiffPixels: TOLERATED_DIFFERENCE,
-  mask: [page.locator(MASK_SELECTOR)]
+  mask: [page.locator(MASK_SELECTOR)],
+  timeout: 5000
 });
+
+// Geo snapshots must not depend on live tile servers: the MapLibre style is
+// replaced by a flat, source-less one and every other tile request is dropped.
+const OFFLINE_STYLE = {
+  version: 8,
+  sources: {},
+  layers: [
+    {
+      id: "background",
+      type: "background",
+      paint: { "background-color": "#dfe8e4" }
+    }
+  ]
+};
+
+async function stubMapNetwork(page: Page) {
+  await page.route("https://demotiles.maplibre.org/**", (route) =>
+    route.fulfill({ json: OFFLINE_STYLE })
+  );
+  // deck.gl raster tiles (OpenStreetMap)
+  await page.route("https://tile.openstreetmap.org/**", (route) =>
+    route.abort()
+  );
+}
 
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
+  await stubMapNetwork(page);
 });
 
 test.beforeEach(async () => {
@@ -36,8 +62,7 @@ test.beforeEach(async () => {
   await page.waitForTimeout(1200);
 
   await expect(page).toHaveScreenshot(initialState, {
-    ...getScreenshotOptions(page),
-    timeout: 10000
+    ...getScreenshotOptions(page)
   });
 });
 
@@ -52,8 +77,7 @@ test("mouse hover", async () => {
   await page.mouse.move(pos.x, pos.y);
 
   await expect(page).toHaveScreenshot("node-hovered.png", {
-    ...getScreenshotOptions(page),
-    timeout: 5000
+    ...getScreenshotOptions(page)
   });
 
   // Reset hover state by moving the mouse away

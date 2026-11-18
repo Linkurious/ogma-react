@@ -110,7 +110,7 @@ describe("Popup", () => {
       div
     );
     expect((ref.current?.element as HTMLDivElement).style.transform).toContain(
-      `translate(150px, 150px) rotate(0rad) translate(0px, 0px)`
+      `translate(${pos.x}px, ${pos.y}px)`
     );
   });
 
