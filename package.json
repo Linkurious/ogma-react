@@ -70,7 +70,7 @@
   },
   "peerDependencies": {
     "@deck.gl/core": ">=8.0.0",
-    "@linkurious/ogma": "6.1.0",
+    "@linkurious/ogma": ">=5.3.9 || ^6.0.0",
     "mapbox-gl": ">=2.0.0",
     "maplibre-gl": ">=2.0.0",
     "react": ">=17.0.0",
@@ -94,6 +94,7 @@
     "@deck.gl/mesh-layers": "9.4.0",
     "@linkurious/code-tools": "0.2.0",
     "@linkurious/eslint-config-ogma": "3.0.0-beta",
+    "@linkurious/ogma": "6.1.0",
     "@linkurious/ogma-styles": "0.0.8",
     "@next/bundle-analyzer": "14.2.35",
     "@playwright/test": "1.58.1",

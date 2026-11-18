@@ -20,7 +20,8 @@ type MaplibreMap = Parameters<typeof createMaplibreAdapter>[0];
 type DeckProvider = Parameters<typeof createDeckAdapter>[0];
 // A real deck.gl `Deck` doesn't structurally match Ogma's DeckProvider type
 // (protected members, differing `redraw` signature), so only require setProps.
-// TODO: report upstream to Ogma and link the issue here.
+// TODO: report upstream to Ogma (DeckProvider rejects a real deck.gl `Deck`) and
+// link the issue here once filed.
 type DeckInstance = { setProps(props: any): void };
 
 /** `provider` and `map` are linked: the map must come from the matching library. */
