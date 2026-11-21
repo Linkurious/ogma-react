@@ -88,10 +88,10 @@
     }
   },
   "devDependencies": {
-    "@deck.gl/core": "9.4.0",
-    "@deck.gl/geo-layers": "9.4.0",
-    "@deck.gl/layers": "9.4.0",
-    "@deck.gl/mesh-layers": "9.4.0",
+    "@deck.gl/core": "9.4.1",
+    "@deck.gl/geo-layers": "9.4.1",
+    "@deck.gl/layers": "9.4.1",
+    "@deck.gl/mesh-layers": "9.4.1",
     "@linkurious/code-tools": "0.2.0",
     "@linkurious/eslint-config-ogma": "3.0.0-beta",
     "@linkurious/ogma": "6.1.0",
